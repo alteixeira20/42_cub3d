@@ -6,7 +6,7 @@
 #    By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/11 15:11:22 by paalexan          #+#    #+#              #
-#    Updated: 2025/08/12 17:04:39 by paalexan         ###   ########.fr        #
+#    Updated: 2025/08/13 16:31:10 by jopedro-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -73,6 +73,12 @@ SRC				+= $(VALIDATION_DIR)/validation.c
 SRC				+= $(ERROR_DIR)/error.c
 SRC				+= $(CLEANUP_DIR)/cleanup.c
 SRC				+= $(CLEANUP_DIR)/debug.c
+SRC				+= $(SRC_DIR)/draw.c
+SRC				+= $(SRC_DIR)/input.c
+SRC				+= $(SRC_DIR)/loop.c
+SRC				+= $(SRC_DIR)/render_init.c
+SRC				+= $(SRC_DIR)/render_textures.c
+SRC				+= $(SRC_DIR)/update.c
 
 # **************************************************************************** #
 #                                                                              #
@@ -92,6 +98,11 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 #                                                                              #
 # **************************************************************************** #
 
+MLIBX = ./minilibx-linux/libmlx.a
+MLIBX_DIR = ./minilibx-linux
+MLXFLAGS = -L ./minilibx-linux -lmlx -Ilmlx -lXext -lX11 -lm -lz
+
+
 all: $(LIBFT) $(NAME)
 
 $(LIBFT):
@@ -105,7 +116,10 @@ $(LIBFT):
 $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
 
-$(NAME): $(OBJ_DIR) $(LIBFT) $(OBJS) 
+$(MLIBX):
+	$(MAKE) -C $(MLIBX_DIR)
+
+$(NAME): $(OBJ_DIR) $(MLX_FLAGS) $(LIBFT) $(OBJS) 
 	@$(CC) $(CFLAGS) $(DFLAGS) $(OBJS) $(LIBFT) -o $(NAME)
 	@echo "$(PREFIX) $(B)Executable$(D) compiled $(SUCCESS)."
 

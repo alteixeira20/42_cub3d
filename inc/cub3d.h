@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 15:38:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/08/12 19:03:24 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/08/13 16:27:46 by jopedro-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,13 @@
 # include <unistd.h>
 # include <fcntl.h>
 # include <stdbool.h>
+# include <math.h>
 
 // Custom
 # include "../libft/libft/libft.h"
 # include "../libft/gnl/get_next_line_bonus.h"
 # include "../libft/printf/ft_printf_bonus.h"
-
+# include "../minilibx-linux/mlx.h"
 /* ************************************************************************** */
 /*                                                                            */
 /*                                   Macros                                   */
@@ -51,6 +52,20 @@
 # define MAX_MAP_WIDTH	8192
 # define MAX_MAP_HEIGHT	8192
 # define MAX_LINE_LEN	16384
+
+// Window Resolution
+# define SCR_W 1920
+# define SCR_H 1080
+
+#ifndef KEY_ESC
+# define KEY_ESC 65307
+# define KEY_W 119
+# define KEY_A 97
+# define KEY_S 115
+# define KEY_D 100
+# define KEY_LEFT 65361
+# define KEY_RIGHT 65363
+#endif
 
 // Error Messages
 # define ERR_USAGE					"usage: ./cub3d <file.cub>"
@@ -97,6 +112,16 @@ typedef struct s_texture
 	bool	is_set;
 }	t_texture;
 
+typedef struct s_input
+{
+	int	forward;
+	int	backward;
+	int	left;
+	int	right;
+	int	turn_l;
+	int	turn_r;
+}	t_input;
+
 // Player Status
 typedef struct s_player
 {
@@ -127,6 +152,31 @@ typedef struct s_map_buffer
 	int		capacity;
 }	t_map_buffer;
 
+typedef struct s_img
+{
+	void	*img;
+	char	*addr;
+	int		bpp;
+	int		line_len;
+	int		endian;
+	int		w;
+	int		h;
+}	t_img;
+
+/* Runtime texture image (for NO, SO, WE, EA) */
+typedef struct s_rttex
+{
+	t_img	img;
+}	t_rttex;
+
+/* Rendering context */
+typedef struct s_render
+{
+	void	*mlx;
+	void	*win;
+	t_img	frame;
+}	t_render;
+
 // Game Settings
 typedef struct s_game
 {
@@ -139,6 +189,9 @@ typedef struct s_game
 	t_map			map;
 	t_player		player;
 	t_map_buffer	tmp;
+	t_render	render;
+	t_rttex		tex_rt[4];
+	t_input			inp;
 }	t_game;
 
 // Parser Helper Struct
@@ -148,6 +201,40 @@ typedef struct s_parser_ctx
 	t_game			*game;
 	t_map_buffer	*buf;
 }	t_parser_ctx;
+
+
+typedef enum e_texid
+{
+	TEX_NO = 0,
+	TEX_SO = 1,
+	TEX_WE = 2,
+	TEX_EA = 3
+}	t_texid;
+
+typedef struct s_ray
+{
+	int		map_x;
+	int		map_y;
+	int		step_x;
+	int		step_y;
+	int		side;
+	double	camera_x;
+	double	ray_dir_x;
+	double	ray_dir_y;
+	double	side_dist_x;
+	double	side_dist_y;
+	double	delta_x;
+	double	delta_y;
+	double	perp_dist;
+	int		line_h;
+	int		draw_start;
+	int		draw_end;
+	int		tex_id;
+	double	wall_x;
+	int		tex_x;
+	double	step;
+	double	tex_pos;
+}	t_ray;
 
 /* ************************************************************************** */
 /*                                                                            */
@@ -198,5 +285,20 @@ void	clean_game(t_game *game);
 void	clean_map_buffer(t_map_buffer *buf);
 void	clean_str_array(char **arr, int count);
 void	print_parse(const t_game *game);
+
+int		render_init(t_game *g);
+void	render_destroy(t_game *g);
+void	draw_frame(t_game *g);
+
+int		textures_load(t_game *cube);
+void	textures_destroy(t_game *cube);
+
+void	draw_frame(t_game *cube);
+
+int		game_loop(void *param);
+int		key_press(int keycode, t_game *cube);
+int		key_release(int keycode, t_game *cube);
+int		win_close(t_game *cube);
+void	update_player(t_game *cube);
 
 #endif

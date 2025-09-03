@@ -3,38 +3,58 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: jopedro- <jopedro-@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/12 00:08:15 by paalexan          #+#    #+#             */
-/*   Updated: 2025/08/12 17:05:19 by paalexan         ###   ########.fr       */
+/*   Created: 2025/08/13 16:19:18 by jopedro-          #+#    #+#             */
+/*   Updated: 2025/08/13 16:19:28 by jopedro-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub3d.h"
 
-int	main(int argc, char **argv)
+static int	setup_after_parse(t_game *cube)
 {
-	t_game	game;
-	int		status;
-
-	if (argc != 2)
+	if (render_init(cube) != 0)
+		return (-1);
+	if (textures_load(cube) != 0)
 	{
-		print_error(ERR_USAGE);
-		return (1);
+		render_destroy(cube);
+		return (-1);
 	}
-	if (!has_cub_extension(argv[1]))
-	{
-		print_error(ERR_INVALID_EXT);
-		return (1);
-	}
-	game_init(&game);
-	status = parse_all(argv[1], &game);
-	if (status != 0)
-	{
-		clean_game(&game);
-		return (1);
-	}
-	print_parse(&game);
-	clean_game(&game);
 	return (0);
 }
+
+static void	register_hooks(t_game *cube)
+{
+	mlx_hook(cube->render.win, 2, 1L << 0, key_press, cube);
+	mlx_hook(cube->render.win, 3, 1L << 1, key_release, cube);
+	mlx_hook(cube->render.win, 17, 0, win_close, cube);
+	mlx_loop_hook(cube->render.mlx, game_loop, cube);
+}
+
+static int	startup(t_game *cube, const char *path)
+{
+	game_init(cube);
+	if (!has_cub_extension(path))
+		return (print_error(ERR_INVALID_EXT), -1);
+	if (parse_all(path, cube) != 0)
+		return (-1);
+	if (setup_after_parse(cube) != 0)
+		return (-1);
+	register_hooks(cube);
+	return (0);
+}
+
+int	main(int argc, char **argv)
+{
+	t_game	cube;
+
+	if (argc != 2)
+		return (print_error(ERR_USAGE), 1);
+	if (startup(&cube, argv[1]) != 0)
+		return (clean_game(&cube), 1);
+	mlx_loop(cube.render.mlx);
+	clean_game(&cube);
+	return (0);
+}
+
