@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 18:29:58 by paalexan          #+#    #+#             */
-/*   Updated: 2025/08/12 16:59:49 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/03 17:25:08 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ void	clean_game(t_game *game)
 	game->floor_color.is_set = false;
 	game->ceil_color.is_set = false;
 	game->player.is_set = false;
+	textures_destroy(game);
+	render_destroy(game);
 }
 
 void	clean_map_buffer(t_map_buffer *buf)

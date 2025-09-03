@@ -6,7 +6,7 @@
 /*   By: jopedro- <jopedro-@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 15:57:08 by jopedro-          #+#    #+#             */
-/*   Updated: 2025/08/13 15:57:43 by jopedro-         ###   ########.fr       */
+/*   Updated: 2025/09/03 17:56:09 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,4 +76,3 @@ void	textures_destroy(t_game *cube)
 	destroy_one_tex(cube->render.mlx, &cube->tex_rt[2].img);
 	destroy_one_tex(cube->render.mlx, &cube->tex_rt[3].img);
 }
-

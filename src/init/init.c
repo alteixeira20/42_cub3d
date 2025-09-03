@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 18:23:11 by paalexan          #+#    #+#             */
-/*   Updated: 2025/08/12 19:02:23 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/03 16:45:39 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,6 @@ void	game_init(t_game *game)
 	color_init(&game->floor_color);
 	color_init(&game->ceil_color);
 	map_init(&game->map);
+	input_init(&game->inp);
 	player_init(&game->player);
 }

@@ -1,30 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   loop.c                                             :+:      :+:    :+:   */
+/*   init_input.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jopedro- <jopedro-@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/13 16:15:51 by jopedro-          #+#    #+#             */
-/*   Updated: 2025/09/03 17:55:19 by paalexan         ###   ########.fr       */
+/*   Created: 2025/09/03 16:40:59 by paalexan          #+#    #+#             */
+/*   Updated: 2025/09/03 16:46:27 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/cub3d.h"
+#include "../../inc/cub3d.h"
 
-int	game_loop(void *param)
+void	input_init(t_input *inp)
 {
-	t_game	*cube;
-
-	cube = (t_game *)param;
-	update_player(cube);
-	draw_frame(cube);
-	return (0);
-}
-
-int	win_close(t_game *cube)
-{
-	clean_game(cube);
-	exit(0);
-	return (0);
+	inp->forward = 0;
+	inp->backward = 0;
+	inp->left = 0;
+	inp->right = 0;
+	inp->turn_l = 0;
+	inp->turn_r = 0;
 }

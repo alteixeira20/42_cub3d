@@ -6,7 +6,7 @@
 #    By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/11 15:11:22 by paalexan          #+#    #+#              #
-#    Updated: 2025/08/13 16:31:10 by jopedro-         ###   ########.fr        #
+#    Updated: 2025/09/03 18:54:42 by paalexan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@
 # **************************************************************************** #
 
 # Executable
-NAME			= cub3d
+NAME			= cub3D
 
 # Libft Repository
 LIBFT_REPO  	= git@github.com:alteixeira20/42_libft.git
@@ -37,6 +37,15 @@ CC				= cc
 CFLAGS			= -Wall -Werror -Wextra
 DFLAGS			= -g
 MAKE			= make -C
+
+# Minilibx
+MLX_DIR   	= ./minilibx-linux
+MLX       	= $(MLX_DIR)/libmlx.a
+MLX_LIBS  	= -L$(MLX_DIR) -lmlx -lXext -lX11 -lm -lz -lbsd
+
+# Valgrind
+VALGRIND = valgrind --leak-check=full --show-leak-kinds=all \
+           --suppressions=valgrind.supp --track-origins=yes
 
 # **************************************************************************** #
 #                                                                              #
@@ -61,6 +70,7 @@ OBJ_DIR			= obj
 
 SRC				= $(SRC_DIR)/main.c
 SRC				+= $(INIT_DIR)/init.c
+SRC				+= $(INIT_DIR)/init_input.c
 SRC				+= $(PARSER_DIR)/parser.c
 SRC				+= $(PARSER_DIR)/parser_lines.c
 SRC				+= $(PARSER_DIR)/parser_color.c
@@ -74,11 +84,14 @@ SRC				+= $(ERROR_DIR)/error.c
 SRC				+= $(CLEANUP_DIR)/cleanup.c
 SRC				+= $(CLEANUP_DIR)/debug.c
 SRC				+= $(SRC_DIR)/draw.c
+SRC				+= $(SRC_DIR)/raycast.c
+SRC				+= $(SRC_DIR)/raycast_util.c
 SRC				+= $(SRC_DIR)/input.c
 SRC				+= $(SRC_DIR)/loop.c
 SRC				+= $(SRC_DIR)/render_init.c
 SRC				+= $(SRC_DIR)/render_textures.c
 SRC				+= $(SRC_DIR)/update.c
+SRC				+= $(SRC_DIR)/update_util.c
 
 # **************************************************************************** #
 #                                                                              #
@@ -98,12 +111,9 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 #                                                                              #
 # **************************************************************************** #
 
-MLIBX = ./minilibx-linux/libmlx.a
-MLIBX_DIR = ./minilibx-linux
-MLXFLAGS = -L ./minilibx-linux -lmlx -Ilmlx -lXext -lX11 -lm -lz
 
 
-all: $(LIBFT) $(NAME)
+all: $(LIBFT) $(MLX) $(NAME)
 
 $(LIBFT):
 	@if [ ! -d "$(LIBFT_DIR)" ]; then \
@@ -116,12 +126,17 @@ $(LIBFT):
 $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
 
-$(MLIBX):
-	$(MAKE) -C $(MLIBX_DIR)
 
-$(NAME): $(OBJ_DIR) $(MLX_FLAGS) $(LIBFT) $(OBJS) 
-	@$(CC) $(CFLAGS) $(DFLAGS) $(OBJS) $(LIBFT) -o $(NAME)
+$(MLX):
+	@$(MAKE) $(MLX_DIR) --silent > /dev/null 2>&1
+	@echo "$(PREFIX) $(B)MinilibX$(D) compiled $(SUCCESS)."
+
+$(NAME): $(OBJ_DIR) $(MLX) $(LIBFT) $(OBJS)
+	@$(CC) $(CFLAGS) $(DFLAGS) $(OBJS) $(LIBFT) $(MLX_LIBS) -o $(NAME)
 	@echo "$(PREFIX) $(B)Executable$(D) compiled $(SUCCESS)."
+
+valgrind: $(NAME)
+	$(VALGRIND) ./$(NAME) $(ARGS)
 
 clean:
 	@echo "$(PREFIX) $(YEL)clean$(D): removing $(CYA)object files$(D)"

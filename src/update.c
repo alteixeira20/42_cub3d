@@ -6,7 +6,7 @@
 /*   By: jopedro- <jopedro-@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 16:15:05 by jopedro-          #+#    #+#             */
-/*   Updated: 2025/08/13 16:15:09 by jopedro-         ###   ########.fr       */
+/*   Updated: 2025/09/03 19:58:39 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,27 +24,8 @@ static int	is_blocked(t_map *m, double y, double x)
 	return (m->grid[ty][tx] == '1');
 }
 
-static void	move_strafe(t_game *cube, double ms)
+static void	move_lr(t_game *cube, double ny, double nx, double ms)
 {
-	double	nx;
-	double	ny;
-
-	nx = cube->player.pos_x;
-	ny = cube->player.pos_y;
-	if (cube->inp.forward)
-	{
-		if (!is_blocked(&cube->map, ny, nx + cube->player.dir_x * ms))
-			cube->player.pos_x += cube->player.dir_x * ms;
-		if (!is_blocked(&cube->map, ny + cube->player.dir_y * ms, nx))
-			cube->player.pos_y += cube->player.dir_y * ms;
-	}
-	if (cube->inp.backward)
-	{
-		if (!is_blocked(&cube->map, ny, nx - cube->player.dir_x * ms))
-			cube->player.pos_x -= cube->player.dir_x * ms;
-		if (!is_blocked(&cube->map, ny - cube->player.dir_y * ms, nx))
-			cube->player.pos_y -= cube->player.dir_y * ms;
-	}
 	if (cube->inp.left)
 	{
 		if (!is_blocked(&cube->map, ny, nx - cube->player.plane_x * ms))
@@ -61,47 +42,49 @@ static void	move_strafe(t_game *cube, double ms)
 	}
 }
 
-static void	rotate_lr(t_game *cube, double rs)
+static void	move_fb(t_game *cube, double ny, double nx, double ms)
 {
-	double	old_dir_x;
-	double	old_plane_x;
+	if (cube->inp.forward)
+	{
+		if (!is_blocked(&cube->map, ny, nx + cube->player.dir_x * ms))
+			cube->player.pos_x += cube->player.dir_x * ms;
+		if (!is_blocked(&cube->map, ny + cube->player.dir_y * ms, nx))
+			cube->player.pos_y += cube->player.dir_y * ms;
+	}
+	if (cube->inp.backward)
+	{
+		if (!is_blocked(&cube->map, ny, nx - cube->player.dir_x * ms))
+			cube->player.pos_x -= cube->player.dir_x * ms;
+		if (!is_blocked(&cube->map, ny - cube->player.dir_y * ms, nx))
+			cube->player.pos_y -= cube->player.dir_y * ms;
+	}
+}
 
-	if (cube->inp.turn_l)
-	{
-		old_dir_x = cube->player.dir_x;
-		old_plane_x = cube->player.plane_x;
-		cube->player.dir_x = cube->player.dir_x * cos(-rs)
-			- cube->player.dir_y * sin(-rs);
-		cube->player.dir_y = old_dir_x * sin(-rs)
-			+ cube->player.dir_y * cos(-rs);
-		cube->player.plane_x = cube->player.plane_x * cos(-rs)
-			- cube->player.plane_y * sin(-rs);
-		cube->player.plane_y = old_plane_x * sin(-rs)
-			+ cube->player.plane_y * cos(-rs);
-	}
-	if (cube->inp.turn_r)
-	{
-		old_dir_x = cube->player.dir_x;
-		old_plane_x = cube->player.plane_x;
-		cube->player.dir_x = cube->player.dir_x * cos(rs)
-			- cube->player.dir_y * sin(rs);
-		cube->player.dir_y = old_dir_x * sin(rs)
-			+ cube->player.dir_y * cos(rs);
-		cube->player.plane_x = cube->player.plane_x * cos(rs)
-			- cube->player.plane_y * sin(rs);
-		cube->player.plane_y = old_plane_x * sin(rs)
-			+ cube->player.plane_y * cos(rs);
-	}
+static void	move_strafe(t_game *cube, double ms)
+{
+	double	nx;
+	double	ny;
+
+	nx = cube->player.pos_x;
+	ny = cube->player.pos_y;
+	move_fb(cube, ny, nx, ms);
+	move_lr(cube, ny, nx, ms);
 }
 
 void	update_player(t_game *cube)
 {
 	double	ms;
 	double	rs;
+	double	old_dir_x;
+	double	old_plane_x;
 
 	ms = 0.07;
 	rs = 0.05;
+	old_dir_x = cube->player.dir_x;
+	old_plane_x = cube->player.plane_x;
+	if (cube->inp.turn_l)
+		rotate_left(cube, old_dir_x, old_plane_x, rs);
+	if (cube->inp.turn_r)
+		rotate_right(cube, old_dir_x, old_plane_x, rs);
 	move_strafe(cube, ms);
-	rotate_lr(cube, rs);
 }
-

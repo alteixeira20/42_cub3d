@@ -6,7 +6,7 @@
 /*   By: jopedro- <jopedro-@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 15:50:59 by jopedro-          #+#    #+#             */
-/*   Updated: 2025/08/13 16:29:32 by jopedro-         ###   ########.fr       */
+/*   Updated: 2025/09/03 17:57:30 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,11 @@ int	render_init(t_game *cube)
 		return (-1);
 	cube->render.win = mlx_new_window(cube->render.mlx, SCR_W, SCR_H, "cub3D");
 	if (!cube->render.win)
-		return (mlx_destroy_display(cube->render.mlx), free(cube->render.mlx), -1);
+	{
+		mlx_destroy_display(cube->render.mlx);
+		free(cube->render.mlx);
+		return (-1);
+	}
 	if (render_make_frame(&cube->render) != 0)
 	{
 		mlx_destroy_window(cube->render.mlx, cube->render.win);
@@ -70,4 +74,3 @@ void	render_destroy(t_game *cube)
 	cube->render.mlx = NULL;
 	cube->render.win = NULL;
 }
-

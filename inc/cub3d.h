@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 15:38:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/08/13 16:27:46 by jopedro-         ###   ########.fr       */
+/*   Updated: 2025/09/03 18:54:31 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 # include "../libft/gnl/get_next_line_bonus.h"
 # include "../libft/printf/ft_printf_bonus.h"
 # include "../minilibx-linux/mlx.h"
+
 /* ************************************************************************** */
 /*                                                                            */
 /*                                   Macros                                   */
@@ -57,7 +58,6 @@
 # define SCR_W 1920
 # define SCR_H 1080
 
-#ifndef KEY_ESC
 # define KEY_ESC 65307
 # define KEY_W 119
 # define KEY_A 97
@@ -65,7 +65,6 @@
 # define KEY_D 100
 # define KEY_LEFT 65361
 # define KEY_RIGHT 65363
-#endif
 
 // Error Messages
 # define ERR_USAGE					"usage: ./cub3d <file.cub>"
@@ -189,8 +188,8 @@ typedef struct s_game
 	t_map			map;
 	t_player		player;
 	t_map_buffer	tmp;
-	t_render	render;
-	t_rttex		tex_rt[4];
+	t_render		render;
+	t_rttex			tex_rt[4];
 	t_input			inp;
 }	t_game;
 
@@ -201,7 +200,6 @@ typedef struct s_parser_ctx
 	t_game			*game;
 	t_map_buffer	*buf;
 }	t_parser_ctx;
-
 
 typedef enum e_texid
 {
@@ -244,6 +242,7 @@ typedef struct s_ray
 
 // Initialize Game
 void	game_init(t_game *game);
+void	input_init(t_input *inp);
 
 // Parsing
 int		parse_all(const char *path, t_game *game);
@@ -276,6 +275,16 @@ char	map_tile(const t_map *map, int y, int x);
 int		player_x(const t_player *player);
 int		player_y(const t_player *player);
 char	player_dir(const t_player *player);
+void	rotate_left(t_game *cube, double old_dir_x, double old_plane_x, double rs);
+void	rotate_right(t_game *cube, double old_dir_x, double old_plane_x, double rs);
+
+// Raycast
+void	ray_setup(t_game *cube, t_ray *r, int x);
+void	ray_dda(t_game *cube, t_ray *r);
+void	ray_compute_lines(t_game *cube, t_ray *r);
+int		ray_pick_tex(const t_ray *r);
+void	ray_texcoords_setup(t_game *cube, t_ray *r);
+void	ray_set_dir(t_game *cube, t_ray *r);
 
 // Error Handling
 void	print_error(const char *msg);
