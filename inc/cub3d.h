@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 15:38:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/03 18:54:31 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/03 21:56:19 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@
 # define SCR_W 1920
 # define SCR_H 1080
 
+// KeyMap
 # define KEY_ESC 65307
 # define KEY_W 119
 # define KEY_A 97
@@ -65,6 +66,9 @@
 # define KEY_D 100
 # define KEY_LEFT 65361
 # define KEY_RIGHT 65363
+
+// Player Radius
+#define COLL_R 0.20
 
 // Error Messages
 # define ERR_USAGE					"usage: ./cub3d <file.cub>"
