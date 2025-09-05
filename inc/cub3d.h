@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 15:38:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/03 21:56:19 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/05 15:56:44 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -295,13 +295,15 @@ void	print_error(const char *msg);
 
 // Cleanup Game
 void	clean_game(t_game *game);
+void	clean_game_setup(t_game *game);
+void	clean_texture(t_texture *t);
+void	clean_map(t_map *m);
 void	clean_map_buffer(t_map_buffer *buf);
 void	clean_str_array(char **arr, int count);
 void	print_parse(const t_game *game);
 
 int		render_init(t_game *g);
 void	render_destroy(t_game *g);
-void	draw_frame(t_game *g);
 
 int		textures_load(t_game *cube);
 void	textures_destroy(t_game *cube);

@@ -6,38 +6,22 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 18:29:58 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/03 17:25:08 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/05 15:54:51 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/cub3d.h"
 
-static void	clean_texture(t_texture *t)
+void	clean_game_setup(t_game *game)
 {
-	if (t->path)
-	{
-		free(t->path);
-		t->path = NULL;
-	}
-	t->is_set = false;
-}
-
-static void	clean_map(t_map *m)
-{
-	int	y;
-
-	if (!m->grid)
-		return ;
-	y = 0;
-	while (y < m->height)
-	{
-		free(m->grid[y]);
-		y++;
-	}
-	free(m->grid);
-	m->grid = NULL;
-	m->width = 0;
-	m->height = 0;
+	clean_texture(&game->tex_no);
+	clean_texture(&game->tex_so);
+	clean_texture(&game->tex_we);
+	clean_texture(&game->tex_ea);
+	clean_map(&game->map);
+	game->floor_color.is_set = false;
+	game->ceil_color.is_set = false;
+	game->player.is_set = false;
 }
 
 void	clean_game(t_game *game)

@@ -6,7 +6,7 @@
 #    By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/11 15:11:22 by paalexan          #+#    #+#              #
-#    Updated: 2025/09/05 15:38:25 by paalexan         ###   ########.fr        #
+#    Updated: 2025/09/05 16:01:51 by paalexan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -87,6 +87,7 @@ SRC				+= $(PARSER_DIR)/parser_utils.c
 SRC				+= $(VALIDATION_DIR)/validation.c
 SRC				+= $(ERROR_DIR)/error.c
 SRC				+= $(CLEANUP_DIR)/cleanup.c
+SRC				+= $(CLEANUP_DIR)/cleanup_util.c
 SRC				+= $(CLEANUP_DIR)/debug.c
 SRC				+= $(SRC_DIR)/draw.c
 SRC				+= $(SRC_DIR)/raycast.c
@@ -113,6 +114,7 @@ SRC_BONUS		+= $(SRC_BONUS_DIR)/parser/parser_utils.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/validation/validation.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/error/error.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/cleanup/cleanup.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/cleanup/cleanup_util.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/draw.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/input.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/input_mouse.c
@@ -199,16 +201,22 @@ valgrind: $(NAME)
 	$(VALGRIND) ./$(NAME) $(ARGS)
 
 valgrind_invalid:
-	@echo "$(PREFIX) $(YEL)Running Valgrind on invalid maps...$(D)"
+	@echo "$(PREFIX) $(YEL)Running strict Valgrind checks on invalid maps...$(D)"
 	@for map in $(MAP_DIR)/invalid/*.cub; do \
-		if [ -f $$map ]; then \
-			$(VALGRIND) ./$(NAME) $$map > /dev/null 2>&1; \
-			if [ $$? -eq 0 ]; then \
-				echo "$(PREFIX) $$map $(GRN)PASSED$(D)"; \
+		if [ -f "$$map" ]; then \
+			valgrind --leak-check=full \
+				--show-leak-kinds=all \
+				--errors-for-leak-kinds=all \
+				--track-origins=yes \
+				--error-exitcode=42 \
+				./$(NAME_BONUS) "$$map" > /dev/null 2>&1; \
+			VALGRIND_EXIT=$$?; \
+			if [ $$VALGRIND_EXIT -eq 42 ]; then \
+				echo "$(PREFIX) $$map $(RED)FAILED memory check (leak detected)$(D)"; \
 			else \
-				echo "$(PREFIX) $$map $(RED)FAILED$(D)"; \
+				echo "$(PREFIX) $$map $(GRN)PASSED$(D)"; \
 			fi; \
-		fi \
+		fi; \
 	done
 
 clean:
