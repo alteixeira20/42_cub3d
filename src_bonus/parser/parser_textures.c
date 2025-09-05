@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 12:39:20 by paalexan          #+#    #+#             */
-/*   Updated: 2025/08/12 18:31:28 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/05 16:28:58 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,8 @@ int	parse_texture(const char *line, t_game *game)
 {
 	int	i;
 
+	if (!has_xpm_extension(line))
+		return (-1);
 	i = 0;
 	i = skip_spaces(line, i);
 	if (ft_strncmp(line + i, ID_NO, 2) == 0 && line[i + 2] == ' ')

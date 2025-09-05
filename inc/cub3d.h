@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 15:38:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/05 15:56:44 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/05 16:24:31 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -268,6 +268,7 @@ void	set_dir_and_plane(t_game *game, char c);
 
 // Validations
 int		has_cub_extension(const char *str);
+int		has_xpm_extension(const char *str);
 int		validate_map_closed(t_game *game);
 
 // Map Settings

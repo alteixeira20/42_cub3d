@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 18:38:30 by paalexan          #+#    #+#             */
-/*   Updated: 2025/08/12 19:02:10 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/05 16:23:54 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,23 @@ int	has_cub_extension(const char *str)
 		return (0);
 	i -= 3;
 	if (ft_strncmp(&str[i], "cub", 3) != 0)
+		return (0);
+	return (1);
+}
+
+int	has_xpm_extension(const char *str)
+{
+	int		i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	if (i < 4)
+		return (0);
+	if (str[i - 4] != '.')
+		return (0);
+	i -= 3;
+	if (ft_strncmp(&str[i], "xpm", 3) != 0)
 		return (0);
 	return (1);
 }

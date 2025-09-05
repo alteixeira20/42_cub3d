@@ -6,7 +6,7 @@
 /*   By: jopedro- <jopedro-@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 16:19:18 by jopedro-          #+#    #+#             */
-/*   Updated: 2025/09/03 17:56:14 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/05 16:20:13 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	main(int argc, char **argv)
 	if (argc != 2)
 		return (print_error(ERR_USAGE), 1);
 	if (startup(&cube, argv[1]) != 0)
-		return (clean_game(&cube), 1);
+		return (clean_game_setup(&cube), 1);
 	mlx_loop(cube.render.mlx);
 	clean_game(&cube);
 	return (0);
