@@ -6,7 +6,7 @@
 /*   By: jopedro- <jopedro-@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 16:15:05 by jopedro-          #+#    #+#             */
-/*   Updated: 2025/09/04 17:27:20 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/05 16:11:33 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,19 +79,12 @@ static void	move_combined(t_game *cube, double ms)
 void	update_player(t_game *cube)
 {
 	double	ms;
-	double	rs;
-	double	old_dir_x;
-	double	old_plane_x;
 
 	ms = 0.07;
-	rs = 0.05;
 	if (cube->inp.mouse_angle != 0.0)
 	{
 		rotate_angle(cube, cube->inp.mouse_angle);
 		cube->inp.mouse_angle = 0.0;
 	}
-	old_dir_x = cube->player.dir_x;
-	old_plane_x = cube->player.plane_x;
-
 	move_combined(cube, ms);
 }
