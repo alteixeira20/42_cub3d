@@ -6,7 +6,7 @@
 #    By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/11 15:11:22 by paalexan          #+#    #+#              #
-#    Updated: 2025/09/03 18:54:42 by paalexan         ###   ########.fr        #
+#    Updated: 2025/09/05 15:38:25 by paalexan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +18,7 @@
 
 # Executable
 NAME			= cub3D
+NAME_BONUS		= cub3D_bonus
 
 # Libft Repository
 LIBFT_REPO  	= git@github.com:alteixeira20/42_libft.git
@@ -28,7 +29,7 @@ LIBFT         	= $(LIBFT_DIR)/libft.a
 RM            	= rm -rf
 
 # Message Vars
-PREFIX 			= $(B)$(MAG)[Cub3d]$(D)
+PREFIX 			= $(B)$(MAG)[cub3D]$(D)
 SUCCESS 		= $(GRN)successfully$(D)
 FAILED 			= $(RED)failed$(D)
 
@@ -54,13 +55,16 @@ VALGRIND = valgrind --leak-check=full --show-leak-kinds=all \
 # **************************************************************************** #
 
 SRC_DIR 		= src
+SRC_BONUS_DIR 	= src_bonus
 INIT_DIR		= $(SRC_DIR)/init
 PARSER_DIR		= $(SRC_DIR)/parser
 ERROR_DIR		= $(SRC_DIR)/error
 CLEANUP_DIR		= $(SRC_DIR)/cleanup
 VALIDATION_DIR	= $(SRC_DIR)/validation
 
+MAP_DIR			= maps
 OBJ_DIR			= obj
+OBJ_BONUS_DIR	= obj_bonus
 
 # **************************************************************************** #
 #                                                                              #
@@ -68,6 +72,7 @@ OBJ_DIR			= obj
 #                                                                              #
 # **************************************************************************** #
 
+# Mandatory
 SRC				= $(SRC_DIR)/main.c
 SRC				+= $(INIT_DIR)/init.c
 SRC				+= $(INIT_DIR)/init_input.c
@@ -93,6 +98,32 @@ SRC				+= $(SRC_DIR)/render_textures.c
 SRC				+= $(SRC_DIR)/update.c
 SRC				+= $(SRC_DIR)/update_util.c
 
+# Bonus
+SRC_BONUS		= $(SRC_BONUS_DIR)/main.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/init/init.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/init/init_input.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/parser/parser.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/parser/parser_lines.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/parser/parser_color.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/parser/parser_map.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/parser/parser_player.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/parser/parser_player_dir.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/parser/parser_textures.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/parser/parser_utils.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/validation/validation.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/error/error.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/cleanup/cleanup.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/draw.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/input.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/input_mouse.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/loop.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/raycast.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/raycast_util.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/render_init.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/render_textures.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/update.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/update_util.c
+
 # **************************************************************************** #
 #                                                                              #
 #                                   Targets                                    #
@@ -100,8 +131,13 @@ SRC				+= $(SRC_DIR)/update_util.c
 # **************************************************************************** #
 
 OBJS			= $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+OBJS_BONUS		= $(SRC_BONUS:$(SRC_BONUS_DIR)/%.c=$(OBJ_BONUS_DIR)/%.o)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	@mkdir -p $(@D)
+	@$(CC) $(CFLAGS) $(DFLAGS) -c $< -o $@
+
+$(OBJ_BONUS_DIR)/%.o: $(SRC_BONUS_DIR)/%.c
 	@mkdir -p $(@D)
 	@$(CC) $(CFLAGS) $(DFLAGS) -c $< -o $@
 
@@ -126,6 +162,8 @@ $(LIBFT):
 $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
 
+$(OBJ_BONUS_DIR):
+	@mkdir -p $(OBJ_BONUS_DIR)
 
 $(MLX):
 	@$(MAKE) $(MLX_DIR) --silent > /dev/null 2>&1
@@ -135,37 +173,72 @@ $(NAME): $(OBJ_DIR) $(MLX) $(LIBFT) $(OBJS)
 	@$(CC) $(CFLAGS) $(DFLAGS) $(OBJS) $(LIBFT) $(MLX_LIBS) -o $(NAME)
 	@echo "$(PREFIX) $(B)Executable$(D) compiled $(SUCCESS)."
 
+bonus: $(OBJ_BONUS_DIR) $(LIBFT) $(MLX) $(OBJS_BONUS)
+	@$(CC) $(CFLAGS) $(DFLAGS) $(OBJS_BONUS) $(LIBFT) $(MLX_LIBS) -o $(NAME_BONUS)
+	@echo "$(PREFIX) $(B)Bonus Executable$(D) compiled $(SUCCESS)."
+
+maps:
+	@bash -c '\
+		echo "$(PREFIX) $(CYA)Choose map type:$(D)"; \
+		echo "1) Invalid"; \
+		echo "2) Valid"; \
+		read -p "Enter choice: " choice; \
+		if [ "$$choice" = "1" ]; then dir="$(MAP_DIR)/invalid"; \
+		elif [ "$$choice" = "2" ]; then dir="$(MAP_DIR)/valid"; \
+		else echo "Invalid option"; exit 1; fi; \
+		MAPS=($$(find $$dir -name "*.cub")); \
+		select map in "$${MAPS[@]}"; do \
+			[ -z "$$map" ] && echo "Invalid choice" && break; \
+			cp "$$map" "./$$(basename $$map)"; \
+			./$(NAME) "$$(basename $$map)"; \
+			rm "$$(basename $$map)"; \
+			break; \
+		done'
+
 valgrind: $(NAME)
 	$(VALGRIND) ./$(NAME) $(ARGS)
+
+valgrind_invalid:
+	@echo "$(PREFIX) $(YEL)Running Valgrind on invalid maps...$(D)"
+	@for map in $(MAP_DIR)/invalid/*.cub; do \
+		if [ -f $$map ]; then \
+			$(VALGRIND) ./$(NAME) $$map > /dev/null 2>&1; \
+			if [ $$? -eq 0 ]; then \
+				echo "$(PREFIX) $$map $(GRN)PASSED$(D)"; \
+			else \
+				echo "$(PREFIX) $$map $(RED)FAILED$(D)"; \
+			fi; \
+		fi \
+	done
 
 clean:
 	@echo "$(PREFIX) $(YEL)clean$(D): removing $(CYA)object files$(D)"
 	@if [ -d "$(OBJ_DIR)" ]; then \
 		$(RM) $(OBJ_DIR); \
 		echo "$(PREFIX) $(CYA)$(OBJ_DIR)$(D) $(GRN)$(SUCCESS)$(D)"; \
-	else \
-		echo "$(PREFIX) $(GRN)no objects$(D)"; \
+	fi
+	@if [ -d "$(OBJ_BONUS_DIR)" ]; then \
+		$(RM) $(OBJ_BONUS_DIR); \
+		echo "$(PREFIX) $(CYA)$(OBJ_BONUS_DIR)$(D) $(GRN)$(SUCCESS)$(D)"; \
 	fi
 
 fclean: clean
-	@echo "$(PREFIX) $(YEL)fclean$(D): removing $(MAG)$(NAME)$(D) and $(CYA)libft$(D)"
+	@echo "$(PREFIX) $(YEL)fclean$(D): removing executables and $(CYA)libft$(D)"
 	@if [ -f "$(NAME)" ]; then \
 		$(RM) $(NAME); \
 		echo "$(PREFIX) $(MAG)$(NAME)$(D) $(GRN)$(SUCCESS)$(D)"; \
-	else \
-		echo "$(PREFIX) $(GRN)no executable$(D)"; \
+	fi
+	@if [ -f "$(NAME_BONUS)" ]; then \
+		$(RM) $(NAME_BONUS); \
+		echo "$(PREFIX) $(MAG)$(NAME_BONUS)$(D) $(GRN)$(SUCCESS)$(D)"; \
 	fi
 	@if [ -d "$(LIBFT_DIR)" ]; then \
 		$(RM) $(LIBFT_DIR); \
 		echo "$(PREFIX) $(CYA)$(LIBFT_DIR)$(D) $(GRN)$(SUCCESS)$(D)"; \
-	else \
-		echo "$(PREFIX) $(GRN)no libft folder$(D)"; \
 	fi
-
-
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re bonus maps valgrind valgrind_invalid
 
 # **************************************************************************** #
 #                                                                              #
