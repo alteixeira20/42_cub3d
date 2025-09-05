@@ -6,22 +6,11 @@
 /*   By: jopedro- <jopedro-@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 16:13:40 by jopedro-          #+#    #+#             */
-/*   Updated: 2025/09/03 22:52:42 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/05 16:17:45 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub3d_bonus.h"
-
-static void	print_input_state(t_game *cube, const char *action, int key)
-{
-	ft_printf("[%s] Key: %d | W:%d A:%d S:%d D:%d L:%d R:%d\n",
-		action, key,
-		cube->inp.forward,
-		cube->inp.left,
-		cube->inp.backward,
-		cube->inp.right,
-		cube->inp.mouse_angle);
-}
 
 int	key_press(int keycode, t_game *cube)
 {
@@ -35,7 +24,6 @@ int	key_press(int keycode, t_game *cube)
 		cube->inp.right = 1;
 	if (keycode == KEY_ESC)
 		return (win_close(cube), 0);
-	print_input_state(cube, "PRESS", keycode);
 	return (0);
 }
 
@@ -49,6 +37,5 @@ int	key_release(int keycode, t_game *cube)
 		cube->inp.left = 0;
 	if (keycode == KEY_D)
 		cube->inp.right = 0;
-	print_input_state(cube, "RELEASE", keycode);
 	return (0);
 }

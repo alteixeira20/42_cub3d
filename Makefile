@@ -6,7 +6,7 @@
 #    By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/11 15:11:22 by paalexan          #+#    #+#              #
-#    Updated: 2025/09/05 16:10:06 by paalexan         ###   ########.fr        #
+#    Updated: 2025/09/05 16:16:20 by paalexan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -181,18 +181,39 @@ bonus: $(OBJ_BONUS_DIR) $(LIBFT) $(MLX) $(OBJS_BONUS)
 
 maps:
 	@bash -c '\
+		if [ -x "$(NAME_BONUS)" ]; then \
+			echo "$(PREFIX) $(CYA)Choose executable:$(D)"; \
+			echo "1) Mandatory ($(NAME))"; \
+			echo "2) Bonus     ($(NAME_BONUS))"; \
+			read -p "Enter choice: " exe_choice; \
+			if [ "$$exe_choice" = "1" ]; then \
+				BIN="$(NAME)"; \
+			elif [ "$$exe_choice" = "2" ]; then \
+				BIN="$(NAME_BONUS)"; \
+			else \
+				echo "$(RED)Invalid executable choice$(D)"; exit 1; \
+			fi; \
+		else \
+			BIN="$(NAME)"; \
+		fi; \
+		echo ""; \
 		echo "$(PREFIX) $(CYA)Choose map type:$(D)"; \
 		echo "1) Invalid"; \
 		echo "2) Valid"; \
 		read -p "Enter choice: " choice; \
 		if [ "$$choice" = "1" ]; then dir="$(MAP_DIR)/invalid"; \
 		elif [ "$$choice" = "2" ]; then dir="$(MAP_DIR)/valid"; \
-		else echo "Invalid option"; exit 1; fi; \
-		MAPS=($$(find $$dir -name "*.cub")); \
+		else echo "$(RED)Invalid map type$(D)"; exit 1; fi; \
+		echo ""; \
+		MAPS=($$(find $$dir -name "*.cub" | sort)); \
+		if [ "$${#MAPS[@]}" -eq 0 ]; then \
+			echo "$(RED)No maps found in $$dir$(D)"; exit 1; \
+		fi; \
 		select map in "$${MAPS[@]}"; do \
-			[ -z "$$map" ] && echo "Invalid choice" && break; \
+			[ -z "$$map" ] && echo "$(RED)Invalid choice$(D)" && break; \
 			cp "$$map" "./$$(basename $$map)"; \
-			./$(NAME) "$$(basename $$map)"; \
+			echo "$(PREFIX) Running $$BIN with map $$(basename $$map)"; \
+			./$$BIN "$$(basename $$map)"; \
 			rm "$$(basename $$map)"; \
 			break; \
 		done'
