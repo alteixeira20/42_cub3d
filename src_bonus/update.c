@@ -88,3 +88,4 @@ void	update_player(t_game *cube)
 	}
 	move_combined(cube, ms);
 }
+

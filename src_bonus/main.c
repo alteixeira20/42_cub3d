@@ -28,6 +28,7 @@ static void	register_hooks(t_game *cube)
 {
 	mlx_hook(cube->render.win, 2, 1L << 0, key_press, cube);
 	mlx_hook(cube->render.win, 3, 1L << 1, key_release, cube);
+	mlx_hook(cube->render.win, 6, 1L << 6, mouse_move, cube);
 	mlx_hook(cube->render.win, 17, 0, win_close, cube);
 	mlx_loop_hook(cube->render.mlx, game_loop, cube);
 }
@@ -53,6 +54,7 @@ int	main(int argc, char **argv)
 		return (print_error(ERR_USAGE), 1);
 	if (startup(&cube, argv[1]) != 0)
 		return (clean_game_setup(&cube), 1);
+	//mlx_mouse_hide(cube.render.mlx, cube.render.win);
 	mlx_loop(cube.render.mlx);
 	clean_game(&cube);
 	return (0);

@@ -39,3 +39,32 @@ int	key_release(int keycode, t_game *cube)
 		cube->inp.right = 0;
 	return (0);
 }
+
+#include <stdio.h>
+
+int	mouse_move(int x, int y, t_game *cube)
+{
+	static int	init;
+	static int	last_x;
+	int			dx;
+	double		sens;
+	int			cx;
+
+	(void)y;
+	if (!init)
+	{
+		init = 1;
+		last_x = x;
+		return (0);
+	}
+	cx = SCR_W / 2;
+	dx = x - last_x;
+	if (dx != 0)
+	{
+		sens = 0.0000090;
+		cube->inp.mouse_angle = cube->inp.mouse_angle + (double)dx * sens;
+	}
+	last_x = cx;
+	mlx_mouse_move(cube->render.mlx, cube->render.win, SCR_W / 2, SCR_H / 2);
+	return (0);
+}

@@ -117,7 +117,6 @@ SRC_BONUS		+= $(SRC_BONUS_DIR)/cleanup/cleanup.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/cleanup/cleanup_util.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/draw.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/input.c
-SRC_BONUS		+= $(SRC_BONUS_DIR)/input_mouse.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/loop.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/raycast.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/raycast_util.c
