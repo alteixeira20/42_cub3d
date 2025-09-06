@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/cub3d_bonus.h"
+#include "../../inc/cub3d_bonus.h"
 
 void	apply_mouse_yaw(t_game *cube)
 {
@@ -91,4 +91,3 @@ int	mouse_move(int x, int y, void *param)
 	mlx_mouse_move(cube->render.mlx, cube->render.win, cx, cy);
 	return (0);
 }
-

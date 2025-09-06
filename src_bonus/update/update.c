@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/cub3d_bonus.h"
+#include "../../inc/cub3d_bonus.h"
 
 static int	is_blocked(t_map *m, double y, double x)
 {

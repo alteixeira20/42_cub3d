@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/cub3d_bonus.h"
+#include "../../inc/cub3d_bonus.h"
 
 void	draw_crosshair(t_game *cube)
 {

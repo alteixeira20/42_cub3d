@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/cub3d_bonus.h"
+#include "../../inc/cub3d_bonus.h"
 
 static inline unsigned int	get_texel(const t_img *img, int x, int y)
 {

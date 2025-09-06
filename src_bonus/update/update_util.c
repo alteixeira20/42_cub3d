@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/cub3d_bonus.h"
+#include "../../inc/cub3d_bonus.h"
 
 void	rotate_player(t_game *cube, double angle)
 {
@@ -28,4 +28,3 @@ void	rotate_player(t_game *cube, double angle)
 	cube->player.plane_x = cube->player.plane_x * cs - cube->player.plane_y * sn;
 	cube->player.plane_y = old_plane_x * sn + cube->player.plane_y * cs;
 }
-

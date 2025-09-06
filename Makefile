@@ -115,17 +115,17 @@ SRC_BONUS		+= $(SRC_BONUS_DIR)/validation/validation.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/error/error.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/cleanup/cleanup.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/cleanup/cleanup_util.c
-SRC_BONUS		+= $(SRC_BONUS_DIR)/draw.c
-SRC_BONUS		+= $(SRC_BONUS_DIR)/input.c
-SRC_BONUS		+= $(SRC_BONUS_DIR)/input_mouse.c
-SRC_BONUS		+= $(SRC_BONUS_DIR)/UI_crosshair.c
-SRC_BONUS		+= $(SRC_BONUS_DIR)/loop.c
-SRC_BONUS		+= $(SRC_BONUS_DIR)/raycast.c
-SRC_BONUS		+= $(SRC_BONUS_DIR)/raycast_util.c
-SRC_BONUS		+= $(SRC_BONUS_DIR)/render_init.c
-SRC_BONUS		+= $(SRC_BONUS_DIR)/render_textures.c
-SRC_BONUS		+= $(SRC_BONUS_DIR)/update.c
-SRC_BONUS		+= $(SRC_BONUS_DIR)/update_util.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/render/draw.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/render/render_init.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/render/render_textures.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/raycast/raycast.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/raycast/raycast_util.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/input/input_keyboard.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/input/mouse.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/ui/crosshair.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/game/game_loop.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/update/update.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/update/update_util.c
 
 # **************************************************************************** #
 #                                                                              #
