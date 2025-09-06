@@ -1,0 +1,14 @@
+{
+   ignore_x11_writev
+   Memcheck:Param
+   writev(vector[...])
+   fun:writev
+   obj:/usr/lib/x86_64-linux-gnu/libxcb.so.*
+}
+{
+   ignore_x11_send
+   Memcheck:Param
+   writev(vector[...])
+   fun:xcb_writev
+   obj:/usr/lib/x86_64-linux-gnu/libxcb.so.*
+}

@@ -6,11 +6,11 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 18:23:11 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/03 16:45:39 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/05 20:51:33 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/cub3d.h"
+#include "../../inc/cub3d_bonus.h"
 
 static void	color_init(t_color *c)
 {
@@ -59,4 +59,5 @@ void	game_init(t_game *game)
 	map_init(&game->map);
 	input_init(&game->inp);
 	player_init(&game->player);
+	game->paused = false;
 }

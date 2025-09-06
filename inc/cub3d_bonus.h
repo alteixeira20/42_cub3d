@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cub3d.h                                            :+:      :+:    :+:   */
+/*   cub3d_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 15:38:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/05 16:24:31 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/06 12:00:44 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CUB3D_H
-# define CUB3D_H
+#ifndef CUB3D_BONUS_H
+# define CUB3D_BONUS_H
 
 /* ************************************************************************** */
 /*                                                                            */
@@ -66,6 +66,7 @@
 # define KEY_D 100
 # define KEY_LEFT 65361
 # define KEY_RIGHT 65363
+# define KEY_M 109
 
 // Player Radius
 #define COLL_R 0.20
@@ -117,12 +118,16 @@ typedef struct s_texture
 
 typedef struct s_input
 {
-	int	forward;
-	int	backward;
-	int	left;
-	int	right;
-	int	turn_l;
-	int	turn_r;
+	int		forward;
+	int		backward;
+	int		left;
+	int		right;
+	int		mouse_captured;
+	int		last_x;
+	int		last_y;
+	double	mouse_angle;
+	double	mouse_dy;
+	double	sens;
 }	t_input;
 
 // Player Status
@@ -136,6 +141,7 @@ typedef struct s_player
 	double	dir_y;
 	double	plane_x;
 	double	plane_y;
+	double	pitch;
 	char	dir_char;
 	bool	is_set;
 }	t_player;
@@ -195,6 +201,7 @@ typedef struct s_game
 	t_render		render;
 	t_rttex			tex_rt[4];
 	t_input			inp;
+	bool			paused;
 }	t_game;
 
 // Parser Helper Struct
@@ -281,7 +288,6 @@ int		player_x(const t_player *player);
 int		player_y(const t_player *player);
 char	player_dir(const t_player *player);
 void	rotate_left(t_game *cube, double old_dir_x, double old_plane_x, double rs);
-void	rotate_right(t_game *cube, double old_dir_x, double old_plane_x, double rs);
 
 // Raycast
 void	ray_setup(t_game *cube, t_ray *r, int x);
@@ -291,16 +297,22 @@ int		ray_pick_tex(const t_ray *r);
 void	ray_texcoords_setup(t_game *cube, t_ray *r);
 void	ray_set_dir(t_game *cube, t_ray *r);
 
+// Input
+void	apply_mouse_yaw(t_game *cube);
+void	apply_mouse_pitch(t_game *cube);
+void	update_mouse_angle(t_game *cube);
+void	mouse_capture_set(t_game *cube, int enable);
+
 // Error Handling
 void	print_error(const char *msg);
 
 // Cleanup Game
 void	clean_game(t_game *game);
+void	clean_map_buffer(t_map_buffer *buf);
+void	clean_str_array(char **arr, int count);
 void	clean_game_setup(t_game *game);
 void	clean_texture(t_texture *t);
 void	clean_map(t_map *m);
-void	clean_map_buffer(t_map_buffer *buf);
-void	clean_str_array(char **arr, int count);
 void	print_parse(const t_game *game);
 
 int		render_init(t_game *g);
@@ -310,11 +322,14 @@ int		textures_load(t_game *cube);
 void	textures_destroy(t_game *cube);
 
 void	draw_frame(t_game *cube);
+void	draw_crosshair(t_game *cube);
 
 int		game_loop(void *param);
 int		key_press(int keycode, t_game *cube);
 int		key_release(int keycode, t_game *cube);
+int		mouse_move(int x, int y, void *param);
 int		win_close(t_game *cube);
 void	update_player(t_game *cube);
 
+void	rotate_player(t_game *cube, double angle);
 #endif
