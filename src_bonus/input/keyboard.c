@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   input.c                                            :+:      :+:    :+:   */
+/*   keyboard.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jopedro- <jopedro-@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 16:13:40 by jopedro-          #+#    #+#             */
-/*   Updated: 2025/09/05 20:55:53 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/06 15:16:17 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,11 @@ int	key_press(int keycode, t_game *cube)
 		return (win_close(cube), 0);
 	if (keycode == KEY_M)
 	{
+		cube->paused = !cube->paused;
 		if (cube->paused)
-			cube->paused = false;
+			mouse_capture_set(cube, 0);
 		else
-			cube->paused = true;
-		mouse_capture_set(cube, !cube->inp.mouse_captured);
+			mouse_capture_set(cube, 1);
 	}
 	return (0);
 }

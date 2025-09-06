@@ -6,7 +6,7 @@
 /*   By: jopedro- <jopedro-@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 16:15:05 by jopedro-          #+#    #+#             */
-/*   Updated: 2025/09/04 17:27:20 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/06 15:19:37 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,6 @@ void	update_player(t_game *cube)
 	rs = 0.05;
 	old_dir_x = cube->player.dir_x;
 	old_plane_x = cube->player.plane_x;
-
 	if (cube->inp.turn_l)
 		rotate_left(cube, old_dir_x, old_plane_x, rs);
 	if (cube->inp.turn_r)

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_player_dir.c                                :+:      :+:    :+:   */
+/*   player_dir.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/cub3d.h"
+#include "../../inc/cub3d_bonus.h"
 
 static void	set_dir_and_plane_no(t_game *game)
 {
@@ -30,7 +30,7 @@ static void	set_dir_and_plane_so(t_game *game)
 
 static void	set_dir_and_plane_ea(t_game *game)
 {
-	game->player.dir_x = 0;
+	game->player.dir_x = 1;
 	game->player.dir_y = 0;
 	game->player.plane_x = 0;
 	game->player.plane_y = 0.66;
@@ -38,10 +38,10 @@ static void	set_dir_and_plane_ea(t_game *game)
 
 static void	set_dir_and_plane_we(t_game *game)
 {
-	game->player.dir_x = 0;
+	game->player.dir_x = -1;
 	game->player.dir_y = 0;
 	game->player.plane_x = 0;
-	game->player.plane_y = 0.66;
+	game->player.plane_y = -0.66;
 }
 
 void	set_dir_and_plane(t_game *game, char c)

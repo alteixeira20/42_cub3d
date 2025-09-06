@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 15:38:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/06 12:00:44 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/06 16:00:23 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <fcntl.h>
 # include <stdbool.h>
 # include <math.h>
+# include <sys/time.h>
 
 // Custom
 # include "../libft/libft/libft.h"
@@ -69,7 +70,7 @@
 # define KEY_M 109
 
 // Player Radius
-#define COLL_R 0.20
+# define COLL_R 0.20
 
 // Error Messages
 # define ERR_USAGE					"usage: ./cub3d <file.cub>"
@@ -201,6 +202,7 @@ typedef struct s_game
 	t_render		render;
 	t_rttex			tex_rt[4];
 	t_input			inp;
+	double			dt;
 	bool			paused;
 }	t_game;
 
@@ -287,7 +289,7 @@ char	map_tile(const t_map *map, int y, int x);
 int		player_x(const t_player *player);
 int		player_y(const t_player *player);
 char	player_dir(const t_player *player);
-void	rotate_left(t_game *cube, double old_dir_x, double old_plane_x, double rs);
+void	rotate_left(t_game *g, double odx, double opx, double rs);
 
 // Raycast
 void	ray_setup(t_game *cube, t_ray *r, int x);

@@ -54,7 +54,7 @@ int	main(int argc, char **argv)
 		return (print_error(ERR_USAGE), 1);
 	if (startup(&cube, argv[1]) != 0)
 		return (clean_game_setup(&cube), 1);
-	mlx_mouse_hide(cube.render.mlx, cube.render.win);
+	mouse_capture_set(&cube, 1);
 	mlx_loop(cube.render.mlx);
 	clean_game(&cube);
 	return (0);

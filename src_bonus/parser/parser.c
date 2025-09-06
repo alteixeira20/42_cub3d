@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/cub3d.h"
+#include "../../inc/cub3d_bonus.h"
 
 static int	process_and_validate_line(char *raw, int *in_map, t_parser_ctx *ctx)
 {

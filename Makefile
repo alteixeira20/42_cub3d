@@ -102,30 +102,30 @@ SRC				+= $(SRC_DIR)/update_util.c
 # Bonus
 SRC_BONUS		= $(SRC_BONUS_DIR)/main.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/init/init.c
-SRC_BONUS		+= $(SRC_BONUS_DIR)/init/init_input.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/init/input.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/parser/parser.c
-SRC_BONUS		+= $(SRC_BONUS_DIR)/parser/parser_lines.c
-SRC_BONUS		+= $(SRC_BONUS_DIR)/parser/parser_color.c
-SRC_BONUS		+= $(SRC_BONUS_DIR)/parser/parser_map.c
-SRC_BONUS		+= $(SRC_BONUS_DIR)/parser/parser_player.c
-SRC_BONUS		+= $(SRC_BONUS_DIR)/parser/parser_player_dir.c
-SRC_BONUS		+= $(SRC_BONUS_DIR)/parser/parser_textures.c
-SRC_BONUS		+= $(SRC_BONUS_DIR)/parser/parser_utils.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/parser/lines.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/parser/color.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/parser/map.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/parser/player.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/parser/player_dir.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/parser/textures.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/parser/utils.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/validation/validation.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/error/error.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/cleanup/cleanup.c
-SRC_BONUS		+= $(SRC_BONUS_DIR)/cleanup/cleanup_util.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/cleanup/util.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/render/draw.c
-SRC_BONUS		+= $(SRC_BONUS_DIR)/render/render_init.c
-SRC_BONUS		+= $(SRC_BONUS_DIR)/render/render_textures.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/render/init.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/render/textures.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/raycast/raycast.c
-SRC_BONUS		+= $(SRC_BONUS_DIR)/raycast/raycast_util.c
-SRC_BONUS		+= $(SRC_BONUS_DIR)/input/input_keyboard.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/raycast/util.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/input/keyboard.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/input/mouse.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/ui/crosshair.c
-SRC_BONUS		+= $(SRC_BONUS_DIR)/game/game_loop.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/game/loop.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/update/update.c
-SRC_BONUS		+= $(SRC_BONUS_DIR)/update/update_util.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/update/util.c
 
 # **************************************************************************** #
 #                                                                              #

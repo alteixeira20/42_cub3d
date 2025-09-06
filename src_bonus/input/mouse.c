@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   input_mouse.c                                      :+:      :+:    :+:   */
+/*   mouse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 17:31:05 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/06 12:01:56 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/06 15:59:09 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	apply_mouse_pitch(t_game *cube)
 	dy = cube->inp.mouse_dy;
 	if (dy != 0.0)
 	{
-		cube->player.pitch += dy * cube->inp.sens;
+		cube->player.pitch += dy * (cube->inp.sens * 0.7);
 		if (cube->player.pitch > 0.5)
 			cube->player.pitch = 0.5;
 		if (cube->player.pitch < -0.5)
@@ -42,18 +42,7 @@ void	apply_mouse_pitch(t_game *cube)
 
 void	update_mouse_angle(t_game *cube)
 {
-	int	cx;
-	int	cy;
-	int	dx;
-
-	if (!cube->inp.mouse_captured)
-		return ;
-	mlx_mouse_get_pos(cube->render.mlx, cube->render.win, &cx, &cy);
-	if (cx == SCR_W / 2)
-		return ;
-	dx = cx - (SCR_W / 2);
-	cube->inp.mouse_angle += dx * cube->inp.sens;
-	mlx_mouse_move(cube->render.mlx, cube->render.win, SCR_W / 2, SCR_H / 2);
+	(void)cube;
 }
 
 void	mouse_capture_set(t_game *cube, int enable)
@@ -62,8 +51,12 @@ void	mouse_capture_set(t_game *cube, int enable)
 	if (cube->inp.mouse_captured)
 	{
 		mlx_mouse_hide(cube->render.mlx, cube->render.win);
+		mlx_mouse_move(cube->render.mlx, cube->render.win,
+			SCR_W / 2, SCR_H / 2);
 		cube->inp.last_x = SCR_W / 2;
 		cube->inp.last_y = SCR_H / 2;
+		cube->inp.mouse_angle = 0.0;
+		cube->inp.mouse_dy = 0.0;
 	}
 	else
 		mlx_mouse_show(cube->render.mlx, cube->render.win);
@@ -82,6 +75,8 @@ int	mouse_move(int x, int y, void *param)
 		return (0);
 	cx = SCR_W / 2;
 	cy = SCR_H / 2;
+	if (x == cx && y == cy)
+		return (0);
 	dx = x - cx;
 	dy = y - cy;
 	if (dx != 0)
@@ -89,5 +84,7 @@ int	mouse_move(int x, int y, void *param)
 	if (dy != 0)
 		cube->inp.mouse_dy += (double)dy;
 	mlx_mouse_move(cube->render.mlx, cube->render.win, cx, cy);
+	cube->inp.last_x = cx;
+	cube->inp.last_y = cy;
 	return (0);
 }

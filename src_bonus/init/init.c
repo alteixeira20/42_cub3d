@@ -38,6 +38,7 @@ static void	player_init(t_player *p)
 	p->dir_y = -1.0;
 	p->plane_x = 0.66;
 	p->plane_y = 0.0;
+	p->pitch = 0.0;
 	p->dir_char = 'N';
 	p->is_set = false;
 }

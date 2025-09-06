@@ -68,7 +68,7 @@
 # define KEY_RIGHT 65363
 
 // Player Radius
-#define COLL_R 0.20
+# define COLL_R 0.20
 
 // Error Messages
 # define ERR_USAGE					"usage: ./cub3d <file.cub>"
@@ -280,8 +280,8 @@ char	map_tile(const t_map *map, int y, int x);
 int		player_x(const t_player *player);
 int		player_y(const t_player *player);
 char	player_dir(const t_player *player);
-void	rotate_left(t_game *cube, double old_dir_x, double old_plane_x, double rs);
-void	rotate_right(t_game *cube, double old_dir_x, double old_plane_x, double rs);
+void	rotate_left(t_game *g, double odx, double opx, double rs);
+void	rotate_right(t_game *g, double odx, double opx, double rs);
 
 // Raycast
 void	ray_setup(t_game *cube, t_ray *r, int x);

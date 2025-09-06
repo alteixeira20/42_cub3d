@@ -6,11 +6,11 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 18:29:58 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/05 16:12:20 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/06 16:02:24 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/cub3d.h"
+#include "../../inc/cub3d_bonus.h"
 
 void	clean_game_setup(t_game *game)
 {

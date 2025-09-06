@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   update_util.c                                      :+:      :+:    :+:   */
+/*   util.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -25,6 +25,7 @@ void	rotate_player(t_game *cube, double angle)
 	sn = sin(angle);
 	cube->player.dir_x = cube->player.dir_x * cs - cube->player.dir_y * sn;
 	cube->player.dir_y = old_dir_x * sn + cube->player.dir_y * cs;
-	cube->player.plane_x = cube->player.plane_x * cs - cube->player.plane_y * sn;
+	cube->player.plane_x = cube->player.plane_x * cs
+		- cube->player.plane_y * sn;
 	cube->player.plane_y = old_plane_x * sn + cube->player.plane_y * cs;
 }

@@ -1,41 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cleanup_util.c                                     :+:      :+:    :+:   */
+/*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/05 15:50:55 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/05 16:03:36 by paalexan         ###   ########.fr       */
+/*   Created: 2025/09/03 16:40:59 by paalexan          #+#    #+#             */
+/*   Updated: 2025/09/05 18:24:11 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/cub3d.h"
+#include "../../inc/cub3d_bonus.h"
 
-void	clean_texture(t_texture *t)
+void	input_init(t_input *inp)
 {
-	if (t->path)
-	{
-		free(t->path);
-		t->path = NULL;
-	}
-	t->is_set = false;
-}
-
-void	clean_map(t_map *m)
-{
-	int	y;
-
-	if (!m->grid)
-		return ;
-	y = 0;
-	while (y < m->height)
-	{
-		free(m->grid[y]);
-		y++;
-	}
-	free(m->grid);
-	m->grid = NULL;
-	m->width = 0;
-	m->height = 0;
+	inp->forward = 0;
+	inp->backward = 0;
+	inp->left = 0;
+	inp->right = 0;
+	inp->mouse_captured = 1;
+	inp->last_x = SCR_W / 2;
+	inp->last_y = SCR_H / 2;
+	inp->mouse_angle = 0.0;
+	inp->mouse_dy = 0.0;
+	inp->sens = 0.0026;
 }

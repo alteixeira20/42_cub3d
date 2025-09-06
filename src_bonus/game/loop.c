@@ -6,7 +6,7 @@
 /*   By: jopedro- <jopedro-@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 16:15:51 by jopedro-          #+#    #+#             */
-/*   Updated: 2025/09/05 21:01:45 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/06 16:00:42 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 static void	dim_screen(t_game *cube)
 {
-	int	x;
-	int	y;
+	int		x;
+	int		y;
 	char	*px;
 
 	y = 0;
@@ -36,22 +36,37 @@ static void	dim_screen(t_game *cube)
 	}
 }
 
-static void	draw_large_text(t_game *g, int x, int y, int color, char *text)
-{
-	mlx_string_put(g->render.mlx, g->render.win, x, y, color, text);
-	mlx_string_put(g->render.mlx, g->render.win, x + 1, y, color, text);
-	mlx_string_put(g->render.mlx, g->render.win, x, y + 1, color, text);
-	mlx_string_put(g->render.mlx, g->render.win, x + 1, y + 1, color, text);
-}
-
 static void	draw_pause_overlay(t_game *cube)
 {
 	dim_screen(cube);
 	mlx_put_image_to_window(cube->render.mlx, cube->render.win,
 		cube->render.frame.img, 0, 0);
-	draw_large_text(cube, SCR_W / 2 - 40, SCR_H / 2 - 20, 0xFFFFFF, "PAUSED");
+	mlx_string_put(cube->render.mlx, cube->render.win,
+		SCR_W / 2 - 40, SCR_H / 2 - 20, 0xFFFFFF, "PAUSED");
 	mlx_string_put(cube->render.mlx, cube->render.win,
 		SCR_W / 2 - 80, SCR_H / 2 + 20, 0xAAAAAA, "Press M to start again");
+}
+
+static double	get_dt(void)
+{
+	static struct timeval	prev = {0, 0};
+	struct timeval			now;
+	double					dt;
+
+	gettimeofday(&now, NULL);
+	if (prev.tv_sec == 0 && prev.tv_usec == 0)
+	{
+		prev = now;
+		return (0.0);
+	}
+	dt = (now.tv_sec - prev.tv_sec)
+		+ (now.tv_usec - prev.tv_usec) / 1000000.0;
+	prev = now;
+	if (dt < 0.0)
+		dt = 0.0;
+	if (dt > 0.1)
+		dt = 0.1;
+	return (dt);
 }
 
 int	game_loop(void *param)
@@ -61,11 +76,15 @@ int	game_loop(void *param)
 	cube = (t_game *)param;
 	if (!cube->paused)
 	{
+		cube->dt = get_dt();
 		update_player(cube);
 		draw_frame(cube);
 	}
 	else
+	{
+		cube->dt = 0.0;
 		draw_pause_overlay(cube);
+	}
 	return (0);
 }
 

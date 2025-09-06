@@ -76,11 +76,12 @@ static void	move_combined(t_game *c, double ms)
 
 void	update_player(t_game *cube)
 {
-	double	ms;
+	const double	move_speed = 4.0;
+	double			ms;
 
 	update_mouse_angle(cube);
-	ms = 0.07;
 	apply_mouse_yaw(cube);
 	apply_mouse_pitch(cube);
+	ms = move_speed * cube->dt;
 	move_combined(cube, ms);
 }
