@@ -68,7 +68,7 @@ static int	load_texture(t_texture *slot, const char *line, int id_len,
 	return (1);
 }
 
-int	parse_texture(const char *line, t_game *game)
+int	parse_texture(const char *line, t_game *cube)
 {
 	int	i;
 
@@ -77,16 +77,16 @@ int	parse_texture(const char *line, t_game *game)
 	i = 0;
 	i = skip_spaces(line, i);
 	if (ft_strncmp(line + i, ID_NO, 2) == 0 && line[i + 2] == ' ')
-		return (load_texture(&game->tex_no, line + i, 2,
+		return (load_texture(&cube->tex_no, line + i, 2,
 				ERR_DUP_ID_NO));
 	if (ft_strncmp(line + i, ID_SO, 2) == 0 && line[i + 2] == ' ')
-		return (load_texture(&game->tex_so, line + i, 2,
+		return (load_texture(&cube->tex_so, line + i, 2,
 				ERR_DUP_ID_SO));
 	if (ft_strncmp(line + i, ID_WE, 2) == 0 && line[i + 2] == ' ')
-		return (load_texture(&game->tex_we, line + i, 2,
+		return (load_texture(&cube->tex_we, line + i, 2,
 				ERR_DUP_ID_WE));
 	if (ft_strncmp(line + i, ID_EA, 2) == 0 && line[i + 2] == ' ')
-		return (load_texture(&game->tex_ea, line + i, 2,
+		return (load_texture(&cube->tex_ea, line + i, 2,
 				ERR_DUP_ID_EA));
 	return (0);
 }

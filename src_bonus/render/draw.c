@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 18:34:36 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/05 20:59:24 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/09 11:58:58 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static inline unsigned int	get_texel(const t_img *img, int x, int y)
 	return (color);
 }
 
-static inline void	put_pixel(t_img *img, int x, int y, unsigned int color)
+static inline void	img_put_pixel(t_img *img, int x, int y, unsigned int color)
 {
 	char	*px;
 
@@ -32,17 +32,15 @@ static inline void	put_pixel(t_img *img, int x, int y, unsigned int color)
 
 static void	draw_helper(t_game *cube, t_ray *r, int x)
 {
-	int				tex_y;
 	t_img			*tex;
 	unsigned int	color;
 	int				y;
+	int				tex_y;
 
 	tex = &cube->tex_rt[r->tex_id].img;
 	y = 0;
 	while (y < r->draw_start)
-	{
-		put_pixel(&cube->render.frame, x, y++, cube->ceil_color.argb);
-	}
+		img_put_pixel(&cube->render.frame, x, y++, cube->ceil_color.argb);
 	while (y <= r->draw_end)
 	{
 		tex_y = (int)r->tex_pos;
@@ -53,7 +51,7 @@ static void	draw_helper(t_game *cube, t_ray *r, int x)
 		color = get_texel(tex, r->tex_x, tex_y);
 		if (r->side == 1)
 			color = ((color & 0xFFFEFEFE) >> 1);
-		put_pixel(&cube->render.frame, x, y, color);
+		img_put_pixel(&cube->render.frame, x, y, color);
 		r->tex_pos += r->step;
 		y++;
 	}
@@ -66,10 +64,12 @@ static void	draw_column(t_game *cube, int x, t_ray *r)
 	draw_helper(cube, r, x);
 	y = r->draw_end + 1;
 	if (y < 0)
+	{
 		y = 0;
+	}
 	while (y < SCR_H)
 	{
-		put_pixel(&cube->render.frame, x, y, cube->floor_color.argb);
+		img_put_pixel(&cube->render.frame, x, y, cube->floor_color.argb);
 		y++;
 	}
 }
@@ -93,4 +93,9 @@ void	draw_frame(t_game *cube)
 	mlx_put_image_to_window(cube->render.mlx, cube->render.win,
 		cube->render.frame.img, 0, 0);
 	draw_crosshair(cube);
+	render_minimap(cube);
+	mlx_put_image_to_window(cube->render.mlx, cube->render.win,
+		cube->minimap.img_ptr,
+		cube->minimap.offset_x,
+		cube->minimap.offset_y);
 }

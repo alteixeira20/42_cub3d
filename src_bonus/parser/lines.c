@@ -60,7 +60,7 @@ int	lines_buf_push(t_map_buffer *buf, const char *line)
 	return (0);
 }
 
-static int	header_try_line(const char *line, t_game *g)
+static int	header_try_line(const char *line, t_game *cube)
 {
 	int	start;
 
@@ -69,20 +69,20 @@ static int	header_try_line(const char *line, t_game *g)
 		start++;
 	if (!ft_strncmp(line + start, ID_NO, 2) && (line[start + 2] == ' '
 			|| line[start + 2] == '\t'))
-		return (parse_texture(line + start, g));
+		return (parse_texture(line + start, cube));
 	if (!ft_strncmp(line + start, ID_SO, 2) && (line[start + 2] == ' '
 			|| line[start + 2] == '\t'))
-		return (parse_texture(line + start, g));
+		return (parse_texture(line + start, cube));
 	if (!ft_strncmp(line + start, ID_WE, 2) && (line[start + 2] == ' '
 			|| line[start + 2] == '\t'))
-		return (parse_texture(line + start, g));
+		return (parse_texture(line + start, cube));
 	if (!ft_strncmp(line + start, ID_EA, 2) && (line[start + 2] == ' '
 			|| line[start + 2] == '\t'))
-		return (parse_texture(line + start, g));
-	return (parse_color(line + start, g));
+		return (parse_texture(line + start, cube));
+	return (parse_color(line + start, cube));
 }
 
-int	process_line(const char *line, int *in_map, t_game *game, t_map_buffer *buf)
+int	process_line(const char *line, int *in_map, t_game *cube, t_map_buffer *buf)
 {
 	int	r;
 
@@ -90,14 +90,14 @@ int	process_line(const char *line, int *in_map, t_game *game, t_map_buffer *buf)
 	{
 		if (line_is_spaces_only(line))
 			return (0);
-		r = header_try_line(line, game);
+		r = header_try_line(line, cube);
 		if (r == 1)
 			return (0);
 		if (r == -1)
 			return (-1);
 		if (!line_is_map_content(line))
 			return (print_error(ERR_INVALID_ID), -1);
-		if (!ids_complete(game))
+		if (!ids_complete(cube))
 			return (print_error(ERR_MISSING_ID), -1);
 		if (lines_buf_push(buf, line) != 0)
 			return (-1);

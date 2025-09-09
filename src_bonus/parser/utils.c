@@ -48,19 +48,19 @@ int	skip_spaces(const char *str, int i)
 	return (i);
 }
 
-int	ids_complete(t_game *game)
+int	ids_complete(t_game *cube)
 {
-	if (!game->tex_no.path || game->tex_no.path[0] == '\0')
+	if (!cube->tex_no.path || cube->tex_no.path[0] == '\0')
 		return (0);
-	if (!game->tex_so.path || game->tex_so.path[0] == '\0')
+	if (!cube->tex_so.path || cube->tex_so.path[0] == '\0')
 		return (0);
-	if (!game->tex_we.path || game->tex_we.path[0] == '\0')
+	if (!cube->tex_we.path || cube->tex_we.path[0] == '\0')
 		return (0);
-	if (!game->tex_ea.path || game->tex_ea.path[0] == '\0')
+	if (!cube->tex_ea.path || cube->tex_ea.path[0] == '\0')
 		return (0);
-	if (!game->floor_color.is_set)
+	if (!cube->floor_color.is_set)
 		return (0);
-	if (!game->ceil_color.is_set)
+	if (!cube->ceil_color.is_set)
 		return (0);
 	return (1);
 }

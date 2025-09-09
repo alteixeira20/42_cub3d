@@ -25,33 +25,33 @@ static int	is_player_char(char c)
 	return (0);
 }
 
-static int	assign_player(t_game *game, int x, int y, int *found)
+static int	assign_player(t_game *cube, int x, int y, int *found)
 {
 	if (*found != 0)
 		return (print_error(ERR_PLAYER_MULTI), -1);
 	*found = 1;
-	game->player.tile_x = x;
-	game->player.tile_y = y;
-	game->player.pos_x = x + 0.5;
-	game->player.pos_y = y + 0.5;
-	set_dir_and_plane(game, game->map.grid[y][x]);
-	game->player.is_set = true;
-	game->map.grid[y][x] = '0';
+	cube->player.tile_x = x;
+	cube->player.tile_y = y;
+	cube->player.pos_x = x + 0.5;
+	cube->player.pos_y = y + 0.5;
+	set_dir_and_plane(cube, cube->map.grid[y][x]);
+	cube->player.is_set = true;
+	cube->map.grid[y][x] = '0';
 	return (0);
 }
 
-static int	scan_row(t_game *game, int y, int *found)
+static int	scan_row(t_game *cube, int y, int *found)
 {
 	int		x;
 	char	c;
 
 	x = 0;
-	while (x < game->map.width)
+	while (x < cube->map.width)
 	{
-		c = game->map.grid[y][x];
+		c = cube->map.grid[y][x];
 		if (is_player_char(c))
 		{
-			if (assign_player(game, x, y, found) != 0)
+			if (assign_player(cube, x, y, found) != 0)
 				return (-1);
 		}
 		x++;
@@ -59,16 +59,16 @@ static int	scan_row(t_game *game, int y, int *found)
 	return (0);
 }
 
-int	parse_player(t_game *game)
+int	parse_player(t_game *cube)
 {
 	int	y;
 	int	found;
 
 	y = 0;
 	found = 0;
-	while (y < game->map.height)
+	while (y < cube->map.height)
 	{
-		if (scan_row(game, y, &found) != 0)
+		if (scan_row(cube, y, &found) != 0)
 			return (-1);
 		y++;
 	}

@@ -37,13 +37,13 @@ static int	process_and_validate_line(char *raw, int *in_map, t_parser_ctx *ctx)
 }
 
 static int	read_and_process_lines(int fd, int *in_map,
-									t_game *game, t_map_buffer *buf)
+									t_game *cube, t_map_buffer *buf)
 {
 	t_parser_ctx	ctx;
 	char			*line;
 
 	ctx.fd = fd;
-	ctx.game = game;
+	ctx.game = cube;
 	ctx.buf = buf;
 	while (1)
 	{
@@ -60,7 +60,7 @@ static int	read_and_process_lines(int fd, int *in_map,
 	return (0);
 }
 
-int	parse_all(const char *path, t_game *game)
+int	parse_all(const char *path, t_game *cube)
 {
 	t_map_buffer	buf;
 	int				fd;
@@ -72,17 +72,17 @@ int	parse_all(const char *path, t_game *game)
 	if (lines_buf_init(&buf, 1024) != 0)
 		return (close(fd), -1);
 	in_map = 0;
-	if (read_and_process_lines(fd, &in_map, game, &buf) != 0)
+	if (read_and_process_lines(fd, &in_map, cube, &buf) != 0)
 		return (clean_map_buffer(&buf), -1);
 	close(fd);
 	if (!in_map)
 		return (clean_map_buffer(&buf), print_error(ERR_MISSING_ID), -1);
-	if (parse_map(buf.items, buf.count, &game->map) != 0)
+	if (parse_map(buf.items, buf.count, &cube->map) != 0)
 		return (clean_map_buffer(&buf), -1);
 	clean_map_buffer(&buf);
-	if (parse_player(game) != 0)
+	if (parse_player(cube) != 0)
 		return (-1);
-	if (validate_map_closed(game) != 0)
+	if (validate_map_closed(cube) != 0)
 		return (-1);
 	return (0);
 }

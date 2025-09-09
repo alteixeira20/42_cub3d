@@ -6,7 +6,7 @@
 #    By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/11 15:11:22 by paalexan          #+#    #+#              #
-#    Updated: 2025/09/05 20:59:47 by paalexan         ###   ########.fr        #
+#    Updated: 2025/09/09 14:58:54 by paalexan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -103,6 +103,7 @@ SRC				+= $(SRC_DIR)/update_util.c
 SRC_BONUS		= $(SRC_BONUS_DIR)/main.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/init/init.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/init/input.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/init/minimap.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/parser/parser.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/parser/lines.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/parser/color.c
@@ -123,6 +124,10 @@ SRC_BONUS		+= $(SRC_BONUS_DIR)/raycast/util.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/input/keyboard.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/input/mouse.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/ui/crosshair.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/ui/minimap/minimap.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/ui/minimap/minimap_utils.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/ui/minimap/minimap_sampling.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/ui/minimap/minimap_colors.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/game/loop.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/update/update.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/update/util.c
@@ -176,7 +181,9 @@ $(NAME): $(OBJ_DIR) $(MLX) $(LIBFT) $(OBJS)
 	@$(CC) $(CFLAGS) $(DFLAGS) $(OBJS) $(LIBFT) $(MLX_LIBS) -o $(NAME)
 	@echo "$(PREFIX) $(B)Executable$(D) compiled $(SUCCESS)."
 
-bonus: $(OBJ_BONUS_DIR) $(LIBFT) $(MLX) $(OBJS_BONUS)
+bonus: $(NAME_BONUS)
+
+$(NAME_BONUS): $(OBJ_BONUS_DIR) $(LIBFT) $(MLX) $(OBJS_BONUS)
 	@$(CC) $(CFLAGS) $(DFLAGS) $(OBJS_BONUS) $(LIBFT) $(MLX_LIBS) -o $(NAME_BONUS)
 	@echo "$(PREFIX) $(B)Bonus Executable$(D) compiled $(SUCCESS)."
 

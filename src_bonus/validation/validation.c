@@ -66,28 +66,28 @@ static int	flood_fill(char **grid, t_map *map, int x, int y)
 	return (1);
 }
 
-int	validate_map_closed(t_game *game)
+int	validate_map_closed(t_game *cube)
 {
 	char	**copy;
 	int		y;
 
-	copy = malloc(sizeof(char *) * game->map.height);
+	copy = malloc(sizeof(char *) * cube->map.height);
 	if (!copy)
 		return (print_error(ERR_ALLOC), -1);
 	y = 0;
-	while (y < game->map.height)
+	while (y < cube->map.height)
 	{
-		copy[y] = ft_strdup(game->map.grid[y]);
+		copy[y] = ft_strdup(cube->map.grid[y]);
 		if (!copy[y])
 			return (print_error(ERR_ALLOC), -1);
 		y++;
 	}
-	if (!flood_fill(copy, &game->map,
-			(int)game->player.pos_x, (int)game->player.pos_y))
+	if (!flood_fill(copy, &cube->map,
+			(int)cube->player.pos_x, (int)cube->player.pos_y))
 	{
-		clean_str_array(copy, game->map.height);
+		clean_str_array(copy, cube->map.height);
 		return (print_error(ERR_MAP_OPEN), -1);
 	}
-	clean_str_array(copy, game->map.height);
+	clean_str_array(copy, cube->map.height);
 	return (0);
 }

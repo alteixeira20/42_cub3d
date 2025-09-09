@@ -12,46 +12,46 @@
 
 #include "../../inc/cub3d_bonus.h"
 
-static void	set_dir_and_plane_no(t_game *game)
+static void	set_dir_and_plane_no(t_game *cube)
 {
-	game->player.dir_x = 0;
-	game->player.dir_y = -1;
-	game->player.plane_x = 0.66;
-	game->player.plane_y = 0;
+	cube->player.dir_x = 0;
+	cube->player.dir_y = -1;
+	cube->player.plane_x = 0.66;
+	cube->player.plane_y = 0;
 }
 
-static void	set_dir_and_plane_so(t_game *game)
+static void	set_dir_and_plane_so(t_game *cube)
 {
-	game->player.dir_x = 0;
-	game->player.dir_y = 1;
-	game->player.plane_x = -0.66;
-	game->player.plane_y = 0;
+	cube->player.dir_x = 0;
+	cube->player.dir_y = 1;
+	cube->player.plane_x = -0.66;
+	cube->player.plane_y = 0;
 }
 
-static void	set_dir_and_plane_ea(t_game *game)
+static void	set_dir_and_plane_ea(t_game *cube)
 {
-	game->player.dir_x = 1;
-	game->player.dir_y = 0;
-	game->player.plane_x = 0;
-	game->player.plane_y = 0.66;
+	cube->player.dir_x = 1;
+	cube->player.dir_y = 0;
+	cube->player.plane_x = 0;
+	cube->player.plane_y = 0.66;
 }
 
-static void	set_dir_and_plane_we(t_game *game)
+static void	set_dir_and_plane_we(t_game *cube)
 {
-	game->player.dir_x = -1;
-	game->player.dir_y = 0;
-	game->player.plane_x = 0;
-	game->player.plane_y = -0.66;
+	cube->player.dir_x = -1;
+	cube->player.dir_y = 0;
+	cube->player.plane_x = 0;
+	cube->player.plane_y = -0.66;
 }
 
-void	set_dir_and_plane(t_game *game, char c)
+void	set_dir_and_plane(t_game *cube, char c)
 {
 	if (c == 'N')
-		set_dir_and_plane_no(game);
+		set_dir_and_plane_no(cube);
 	else if (c == 'S')
-		set_dir_and_plane_so(game);
+		set_dir_and_plane_so(cube);
 	else if (c == 'E')
-		set_dir_and_plane_ea(game);
+		set_dir_and_plane_ea(cube);
 	else if (c == 'W')
-		set_dir_and_plane_we(game);
+		set_dir_and_plane_we(cube);
 }

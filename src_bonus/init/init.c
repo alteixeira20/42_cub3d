@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 18:23:11 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/05 20:51:33 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/08 20:33:18 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,16 +49,16 @@ static void	texture_init(t_texture *t)
 	t->is_set = false;
 }
 
-void	game_init(t_game *game)
+void	game_init(t_game *cube)
 {
-	texture_init(&game->tex_no);
-	texture_init(&game->tex_so);
-	texture_init(&game->tex_we);
-	texture_init(&game->tex_ea);
-	color_init(&game->floor_color);
-	color_init(&game->ceil_color);
-	map_init(&game->map);
-	input_init(&game->inp);
-	player_init(&game->player);
-	game->paused = false;
+	texture_init(&cube->tex_no);
+	texture_init(&cube->tex_so);
+	texture_init(&cube->tex_we);
+	texture_init(&cube->tex_ea);
+	color_init(&cube->floor_color);
+	color_init(&cube->ceil_color);
+	map_init(&cube->map);
+	input_init(&cube->inp);
+	player_init(&cube->player);
+	cube->paused = false;
 }

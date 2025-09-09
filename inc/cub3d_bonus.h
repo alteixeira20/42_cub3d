@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 15:38:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/06 16:00:23 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/09 15:20:06 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,20 @@
 
 // Player Radius
 # define COLL_R 0.20
+
+// Minimap Settings
+# define MM_TILE_SIZE       10
+# define MM_RADIUS_TILES    12
+# define MM_OFFSET_MARGIN   20
+# define MM_SCALE           2.0
+# define MM_SS_OFFSET       0.042
+
+// Minimap Colors
+# define MM_COLOR_WALL   0x00333333
+# define MM_COLOR_FLOOR  0x00777777
+# define MM_COLOR_VOID   0x00000000
+# define MM_COLOR_BORDER 0x00000000
+# define MM_COLOR_PLAYER 0x00FF0000
 
 // Error Messages
 # define ERR_USAGE					"usage: ./cub3d <file.cub>"
@@ -162,6 +176,25 @@ typedef struct s_map_buffer
 	int		capacity;
 }	t_map_buffer;
 
+typedef struct s_minimap
+{
+	void	*img_ptr;
+	char	*addr;
+	int		bpp;
+	int		line_len;
+	int		endian;
+	int		width;
+	int		height;
+
+	int		tile_size;
+	int		radius_tiles;
+	int		offset_x;
+	int		offset_y;
+
+	double	scale;
+	bool	enabled;
+}	t_minimap;
+
 typedef struct s_img
 {
 	void	*img;
@@ -202,6 +235,7 @@ typedef struct s_game
 	t_render		render;
 	t_rttex			tex_rt[4];
 	t_input			inp;
+	t_minimap		minimap;
 	double			dt;
 	bool			paused;
 }	t_game;
@@ -254,84 +288,99 @@ typedef struct s_ray
 /* ************************************************************************** */
 
 // Initialize Game
-void	game_init(t_game *game);
-void	input_init(t_input *inp);
+void			game_init(t_game *cube);
+void			input_init(t_input *inp);
+void			init_minimap(t_game *cube);
 
 // Parsing
-int		parse_all(const char *path, t_game *game);
-int		parse_map(char **lines, int count, t_map *map);
-int		parse_player(t_game *game);
-int		parse_color(const char *line, t_game *game);
-int		parse_color_after_id(const char *row_text, t_color *dst);
-int		parse_texture(const char *line, t_game *game);
-char	*line_dup_trimmed(const char *src);
-int		lines_buf_init(t_map_buffer *buf, int capacity);
-int		lines_buf_push(t_map_buffer *buf, const char *line);
-int		line_is_spaces_only(const char *str);
-int		line_is_map_content(const char *str);
-int		process_line(const char *line, int *in_map, t_game *game,
-			t_map_buffer *buf);
-int		skip_spaces(const char *str, int i);
-int		ids_complete(t_game *game);
-void	set_dir_and_plane(t_game *game, char c);
+int				parse_all(const char *path, t_game *cube);
+int				parse_map(char **lines, int count, t_map *map);
+int				parse_player(t_game *cube);
+int				parse_color(const char *line, t_game *cube);
+int				parse_color_after_id(const char *row_text, t_color *dst);
+int				parse_texture(const char *line, t_game *cube);
+char			*line_dup_trimmed(const char *src);
+int				lines_buf_init(t_map_buffer *buf, int capacity);
+int				lines_buf_push(t_map_buffer *buf, const char *line);
+int				line_is_spaces_only(const char *str);
+int				line_is_map_content(const char *str);
+int				process_line(const char *line, int *in_map, t_game *cube,
+					t_map_buffer *buf);
+int				skip_spaces(const char *str, int i);
+int				ids_complete(t_game *cube);
+void			set_dir_and_plane(t_game *cube, char c);
 
 // Validations
-int		has_cub_extension(const char *str);
-int		has_xpm_extension(const char *str);
-int		validate_map_closed(t_game *game);
+int				has_cub_extension(const char *str);
+int				has_xpm_extension(const char *str);
+int				validate_map_closed(t_game *cube);
 
 // Map Settings
-int		map_width(const t_map *map);
-int		map_height(const t_map *map);
-char	map_tile(const t_map *map, int y, int x);
+int				map_width(const t_map *map);
+int				map_height(const t_map *map);
+char			map_tile(const t_map *map, int y, int x);
 
 // Player Status
-int		player_x(const t_player *player);
-int		player_y(const t_player *player);
-char	player_dir(const t_player *player);
-void	rotate_left(t_game *g, double odx, double opx, double rs);
+int				player_x(const t_player *player);
+int				player_y(const t_player *player);
+char			player_dir(const t_player *player);
+void			rotate_left(t_game *cube, double odx, double opx, double rs);
 
 // Raycast
-void	ray_setup(t_game *cube, t_ray *r, int x);
-void	ray_dda(t_game *cube, t_ray *r);
-void	ray_compute_lines(t_game *cube, t_ray *r);
-int		ray_pick_tex(const t_ray *r);
-void	ray_texcoords_setup(t_game *cube, t_ray *r);
-void	ray_set_dir(t_game *cube, t_ray *r);
+void			ray_setup(t_game *cube, t_ray *r, int x);
+void			ray_dda(t_game *cube, t_ray *r);
+void			ray_compute_lines(t_game *cube, t_ray *r);
+int				ray_pick_tex(const t_ray *r);
+void			ray_texcoords_setup(t_game *cube, t_ray *r);
+void			ray_set_dir(t_game *cube, t_ray *r);
 
 // Input
-void	apply_mouse_yaw(t_game *cube);
-void	apply_mouse_pitch(t_game *cube);
-void	update_mouse_angle(t_game *cube);
-void	mouse_capture_set(t_game *cube, int enable);
+void			apply_mouse_yaw(t_game *cube);
+void			apply_mouse_pitch(t_game *cube);
+void			update_mouse_angle(t_game *cube);
+void			mouse_capture_set(t_game *cube, int enable);
+
+// UI
+void			render_minimap(t_game *cube);
+void			render_player_pos(t_game *cube);
+void			draw_crosshair(t_game *cube);
+void			draw_border(t_minimap *m, int color);
+void			put_pixel(t_minimap *m, int x, int y, int color);
+void			clear_minimap(t_minimap *m, int color);
+void			get_rgb(unsigned int c, unsigned int *r,
+					unsigned int *g, unsigned int *b);
+
+unsigned int	tile_color(char t);
+unsigned int	rgb(unsigned int r, unsigned int g, unsigned int b);
+unsigned int	sample2x2(const t_game *cube, double sx, double sy);
 
 // Error Handling
-void	print_error(const char *msg);
+void			print_error(const char *msg);
 
 // Cleanup Game
-void	clean_game(t_game *game);
-void	clean_map_buffer(t_map_buffer *buf);
-void	clean_str_array(char **arr, int count);
-void	clean_game_setup(t_game *game);
-void	clean_texture(t_texture *t);
-void	clean_map(t_map *m);
-void	print_parse(const t_game *game);
+void			clean_game(t_game *cube);
+void			clean_map_buffer(t_map_buffer *buf);
+void			clean_str_array(char **arr, int count);
+void			clean_game_setup(t_game *cube);
+void			clean_texture(t_texture *t);
+void			clean_map(t_map *m);
+void			print_parse(const t_game *cube);
 
-int		render_init(t_game *g);
-void	render_destroy(t_game *g);
+int				render_init(t_game *cube);
+void			render_destroy(t_game *cube);
 
-int		textures_load(t_game *cube);
-void	textures_destroy(t_game *cube);
+int				textures_load(t_game *cube);
+void			textures_destroy(t_game *cube);
 
-void	draw_frame(t_game *cube);
-void	draw_crosshair(t_game *cube);
+// Render
+void			draw_frame(t_game *cube);
 
-int		game_loop(void *param);
-int		key_press(int keycode, t_game *cube);
-int		key_release(int keycode, t_game *cube);
-int		mouse_move(int x, int y, void *param);
-int		win_close(t_game *cube);
-void	update_player(t_game *cube);
+int				game_loop(void *param);
+int				key_press(int keycode, t_game *cube);
+int				key_release(int keycode, t_game *cube);
+int				mouse_move(int x, int y, void *param);
+int				win_close(t_game *cube);
+void			update_player(t_game *cube);
 
-void	rotate_player(t_game *cube, double angle);
+void			rotate_player(t_game *cube, double angle);
 #endif

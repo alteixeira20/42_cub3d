@@ -6,36 +6,46 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 18:29:58 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/06 16:02:24 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/09 11:37:02 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/cub3d_bonus.h"
 
-void	clean_game_setup(t_game *game)
+static void	clean_minimap(t_game *cube)
 {
-	clean_texture(&game->tex_no);
-	clean_texture(&game->tex_so);
-	clean_texture(&game->tex_we);
-	clean_texture(&game->tex_ea);
-	clean_map(&game->map);
-	game->floor_color.is_set = false;
-	game->ceil_color.is_set = false;
-	game->player.is_set = false;
+	if (cube->minimap.img_ptr)
+	{
+		mlx_destroy_image(cube->render.mlx, cube->minimap.img_ptr);
+		cube->minimap.img_ptr = NULL;
+	}
 }
 
-void	clean_game(t_game *game)
+void	clean_game_setup(t_game *cube)
 {
-	clean_texture(&game->tex_no);
-	clean_texture(&game->tex_so);
-	clean_texture(&game->tex_we);
-	clean_texture(&game->tex_ea);
-	clean_map(&game->map);
-	game->floor_color.is_set = false;
-	game->ceil_color.is_set = false;
-	game->player.is_set = false;
-	textures_destroy(game);
-	render_destroy(game);
+	clean_texture(&cube->tex_no);
+	clean_texture(&cube->tex_so);
+	clean_texture(&cube->tex_we);
+	clean_texture(&cube->tex_ea);
+	clean_map(&cube->map);
+	cube->floor_color.is_set = false;
+	cube->ceil_color.is_set = false;
+	cube->player.is_set = false;
+}
+
+void	clean_game(t_game *cube)
+{
+	clean_texture(&cube->tex_no);
+	clean_texture(&cube->tex_so);
+	clean_texture(&cube->tex_we);
+	clean_texture(&cube->tex_ea);
+	clean_map(&cube->map);
+	cube->floor_color.is_set = false;
+	cube->ceil_color.is_set = false;
+	cube->player.is_set = false;
+	textures_destroy(cube);
+	clean_minimap(cube);
+	render_destroy(cube);
 }
 
 void	clean_map_buffer(t_map_buffer *buf)

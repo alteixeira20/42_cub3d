@@ -44,28 +44,28 @@ void	print_grid(char **map, int height)
 	}
 }
 
-void	print_parse(const t_game *game)
+void	print_parse(const t_game *cube)
 {
-	print_str_field("North texture path: ", game->tex_no.path);
-	print_str_field("South texture path: ", game->tex_so.path);
-	print_str_field("East texture path: ", game->tex_ea.path);
-	print_str_field("West texture path: ", game->tex_we.path);
+	print_str_field("North texture path: ", cube->tex_no.path);
+	print_str_field("South texture path: ", cube->tex_so.path);
+	print_str_field("East texture path: ", cube->tex_ea.path);
+	print_str_field("West texture path: ", cube->tex_we.path);
 	ft_printf("Floor RGB: %d, %d, %d  ARGB: %u\n",
-		game->floor_color.r, game->floor_color.g,
-		game->floor_color.b, game->floor_color.argb);
+		cube->floor_color.r, cube->floor_color.g,
+		cube->floor_color.b, cube->floor_color.argb);
 	ft_printf("Ceiling RGB: %d, %d, %d  ARGB: %u\n",
-		game->ceil_color.r, game->ceil_color.g,
-		game->ceil_color.b, game->ceil_color.argb);
-	print_int_field("Map width: ", game->map.width);
-	print_int_field("Map height: ", game->map.height);
-	print_grid(game->map.grid, game->map.height);
-	print_int_field("Player Tile X: ", game->player.tile_x);
-	print_int_field("Player Tile Y: ", game->player.tile_y);
-	print_double_field("Player Pos X: ", game->player.pos_x);
-	print_double_field("Player Pos Y: ", game->player.pos_y);
-	ft_printf("Player Direction: %c\n", game->player.dir_char);
-	ft_printf("Dir vector: (%.2f, %.2f)\n", game->player.dir_x,
-		game->player.dir_y);
-	ft_printf("Plane vector: (%.2f, %.2f)\n", game->player.plane_x,
-		game->player.plane_y);
+		cube->ceil_color.r, cube->ceil_color.g,
+		cube->ceil_color.b, cube->ceil_color.argb);
+	print_int_field("Map width: ", cube->map.width);
+	print_int_field("Map height: ", cube->map.height);
+	print_grid(cube->map.grid, cube->map.height);
+	print_int_field("Player Tile X: ", cube->player.tile_x);
+	print_int_field("Player Tile Y: ", cube->player.tile_y);
+	print_double_field("Player Pos X: ", cube->player.pos_x);
+	print_double_field("Player Pos Y: ", cube->player.pos_y);
+	ft_printf("Player Direction: %c\n", cube->player.dir_char);
+	ft_printf("Dir vector: (%.2f, %.2f)\n", cube->player.dir_x,
+		cube->player.dir_y);
+	ft_printf("Plane vector: (%.2f, %.2f)\n", cube->player.plane_x,
+		cube->player.plane_y);
 }

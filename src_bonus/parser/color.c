@@ -73,17 +73,17 @@ static int	color_assign(const char *line, t_color *dst, const char *dup_err)
 	return (0);
 }
 
-int	parse_color(const char *line, t_game *game)
+int	parse_color(const char *line, t_game *cube)
 {
 	if (line[0] == 'F' && (line[1] == ' ' || line[1] == '\t'))
 	{
-		if (color_assign(line, &game->floor_color, ERR_DUP_ID_F) != 0)
+		if (color_assign(line, &cube->floor_color, ERR_DUP_ID_F) != 0)
 			return (-1);
 		return (1);
 	}
 	if (line[0] == 'C' && (line[1] == ' ' || line[1] == '\t'))
 	{
-		if (color_assign(line, &game->ceil_color, ERR_DUP_ID_C) != 0)
+		if (color_assign(line, &cube->ceil_color, ERR_DUP_ID_C) != 0)
 			return (-1);
 		return (1);
 	}

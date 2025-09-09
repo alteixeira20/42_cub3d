@@ -6,7 +6,7 @@
 /*   By: jopedro- <jopedro-@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 16:19:18 by jopedro-          #+#    #+#             */
-/*   Updated: 2025/09/05 20:28:59 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/08 20:41:09 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ static int	setup_after_parse(t_game *cube)
 		render_destroy(cube);
 		return (-1);
 	}
+	init_minimap(cube);
 	return (0);
 }
 
