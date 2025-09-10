@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 15:38:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/10 17:11:13 by jopedro-         ###   ########.fr       */
+/*   Updated: 2025/09/10 17:44:28 by jopedro-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@
 //Doors
 # define DOOR_CELL 'D'
 # define DOOR_OPEN_SPEED 0.1f
-# define DOOR_RADIUS 1.5f
+# define DOOR_RADIUS 2.5f
 # define DOOR_THICK 0.9f
 
 /* ************************************************************************** */
