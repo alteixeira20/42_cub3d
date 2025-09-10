@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 01:04:14 by paalexan          #+#    #+#             */
-/*   Updated: 2025/08/12 18:58:37 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/09 17:46:36 by jopedro-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,9 @@ static int	header_try_line(const char *line, t_game *cube)
 			|| line[start + 2] == '\t'))
 		return (parse_texture(line + start, cube));
 	if (!ft_strncmp(line + start, ID_EA, 2) && (line[start + 2] == ' '
+			|| line[start + 2] == '\t'))
+		return (parse_texture(line + start, cube));
+	if (!ft_strncmp(line + start, ID_DO, 2) && (line[start + 2] == ' '
 			|| line[start + 2] == '\t'))
 		return (parse_texture(line + start, cube));
 	return (parse_color(line + start, cube));

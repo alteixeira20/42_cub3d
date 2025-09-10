@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 18:23:11 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/08 20:33:18 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/09 21:39:42 by jopedro-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ void	game_init(t_game *cube)
 	texture_init(&cube->tex_so);
 	texture_init(&cube->tex_we);
 	texture_init(&cube->tex_ea);
+	texture_init(&cube->tex_do);
 	color_init(&cube->floor_color);
 	color_init(&cube->ceil_color);
 	map_init(&cube->map);

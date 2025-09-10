@@ -6,7 +6,7 @@
 #    By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/11 15:11:22 by paalexan          #+#    #+#              #
-#    Updated: 2025/09/09 14:58:54 by paalexan         ###   ########.fr        #
+#    Updated: 2025/09/09 21:31:46 by jopedro-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -112,10 +112,12 @@ SRC_BONUS		+= $(SRC_BONUS_DIR)/parser/player.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/parser/player_dir.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/parser/textures.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/parser/utils.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/parser/parse_doors.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/validation/validation.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/error/error.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/cleanup/cleanup.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/cleanup/util.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/cleanup/doors_clean.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/render/draw.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/render/init.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/render/textures.c
@@ -130,6 +132,8 @@ SRC_BONUS		+= $(SRC_BONUS_DIR)/ui/minimap/minimap_sampling.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/ui/minimap/minimap_colors.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/game/loop.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/update/update.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/update/doors_query.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/update/doors_update.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/update/util.c
 
 # **************************************************************************** #

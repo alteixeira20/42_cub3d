@@ -6,7 +6,7 @@
 /*   By: jopedro- <jopedro-@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 15:57:08 by jopedro-          #+#    #+#             */
-/*   Updated: 2025/09/03 17:56:09 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/09 18:51:08 by jopedro-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,9 @@ static int	load_all_paths(t_game *cube)
 	if (load_one_tex(cube->render.mlx, cube->tex_ea.path,
 			&cube->tex_rt[3].img) != 0)
 		return (-1);
+	if (load_one_tex(cube->render.mlx, cube->tex_do.path,
+			&cube->tex_rt[4].img) != 0)
+		return (-1);
 	return (0);
 }
 
@@ -75,4 +78,5 @@ void	textures_destroy(t_game *cube)
 	destroy_one_tex(cube->render.mlx, &cube->tex_rt[1].img);
 	destroy_one_tex(cube->render.mlx, &cube->tex_rt[2].img);
 	destroy_one_tex(cube->render.mlx, &cube->tex_rt[3].img);
+	destroy_one_tex(cube->render.mlx, &cube->tex_rt[4].img);
 }

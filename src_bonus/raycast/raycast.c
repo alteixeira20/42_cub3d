@@ -6,11 +6,20 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 18:36:06 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/06 16:01:59 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/09 19:26:07 by jopedro-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/cub3d_bonus.h"
+
+static int	cell_is_open_door(t_game *cube, int gx, int gy)
+{
+	if (cube->map.grid[gy][gx] != 'D')
+		return (0);
+	if (door_blocks_cell(&cube->doors, gx, gy))
+		return (0);
+	return (1);
+}
 
 void	ray_setup(t_game *cube, t_ray *r, int x)
 {
@@ -54,6 +63,12 @@ void	ray_dda(t_game *cube, t_ray *r)
 			break ;
 		if (cube->map.grid[r->map_y][r->map_x] == '1')
 			hit = 1;
+		else if (cube->map.grid[r->map_y][r->map_x] == 'D')
+		{
+			if (cell_is_open_door(cube, r->map_x, r->map_y))
+				continue ;
+			hit = 2;
+		}
 	}
 }
 
@@ -81,14 +96,16 @@ void	ray_compute_lines(t_game *cube, t_ray *r)
 
 int	ray_pick_tex(const t_ray *r)
 {
+	if (r->hit_type == 2)
+		return (TEX_DO);
 	if (r->side == 0)
 	{
-		if (r->ray_dir_x > 0.0)
+		if (r->ray_dir_x < 0.0)
 			return (TEX_WE);
 		else
 			return (TEX_EA);
 	}
-	if (r->ray_dir_y > 0.0)
+	if (r->ray_dir_y < 0.0)
 		return (TEX_NO);
 	return (TEX_SO);
 }
@@ -109,8 +126,8 @@ void	ray_texcoords_setup(t_game *cube, t_ray *r)
 		r->wall_x = cube->player.pos_x + r->perp_dist * r->ray_dir_x;
 	r->wall_x -= floor(r->wall_x);
 	r->tex_x = (int)(r->wall_x * (double)tex_w);
-	if ((r->side == 0 && r->ray_dir_x > 0.0)
-		|| (r->side == 1 && r->ray_dir_y < 0.0))
+	if ((r->side == 0 && r->ray_dir_x < 0.0)
+		|| (r->side == 1 && r->ray_dir_y > 0.0))
 		r->tex_x = tex_w - r->tex_x - 1;
 	r->step = (double)tex_h / (double)r->line_h;
 	v_offset = (int)(-cube->player.pitch * SCR_H);

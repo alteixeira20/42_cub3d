@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 12:39:20 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/05 16:28:58 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/09 16:33:48 by jopedro-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,5 +88,8 @@ int	parse_texture(const char *line, t_game *cube)
 	if (ft_strncmp(line + i, ID_EA, 2) == 0 && line[i + 2] == ' ')
 		return (load_texture(&cube->tex_ea, line + i, 2,
 				ERR_DUP_ID_EA));
+	if (ft_strncmp(line + i, ID_DO, 2) == 0 && line[i + 2] == ' ')
+		return (load_texture(&cube->tex_do, line + i, 2,
+				ERR_DUP_ID_DO));
 	return (0);
 }

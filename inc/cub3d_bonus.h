@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 15:38:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/09 15:20:06 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/10 13:42:52 by jopedro-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # include <stdbool.h>
 # include <math.h>
 # include <sys/time.h>
+# include <stddef.h>
 
 // Custom
 # include "../libft/libft/libft.h"
@@ -40,13 +41,14 @@
 /* ************************************************************************** */
 
 // Allowed Map Characters
-# define MAP_CHARS		" 01NSEW"
+# define MAP_CHARS		" 01NSEWD"
 
 // Identifier Tokens
 # define ID_NO			"NO"
 # define ID_SO			"SO"
 # define ID_WE			"WE"
 # define ID_EA			"EA"
+# define ID_DO			"DO"
 # define ID_F			"F"
 # define ID_C			"C"
 
@@ -68,6 +70,9 @@
 # define KEY_LEFT 65361
 # define KEY_RIGHT 65363
 # define KEY_M 109
+
+//Input
+# define MOUSE_SENSE 0.00009
 
 // Player Radius
 # define COLL_R 0.20
@@ -95,6 +100,7 @@
 # define ERR_DUP_ID_SO				"duplicate identifier SO"
 # define ERR_DUP_ID_WE				"duplicate identifier WE"
 # define ERR_DUP_ID_EA				"duplicate identifier EA"
+# define ERR_DUP_ID_DO				"duplicate identifier DO"
 # define ERR_DUP_ID_F				"duplicate identifier F"
 # define ERR_DUP_ID_C				"duplicate identifier C"
 # define ERR_MISSING_ID				"missing identifier"
@@ -107,6 +113,12 @@
 # define ERR_PLAYER_MULTI			"multiple player positions"
 # define ERR_PLAYER_MISSING			"missing player"
 # define ERR_ALLOC					"allocation failed"
+
+//Doors
+# define DOOR_CELL 'D'
+# define DOOR_OPEN_SPEED 0.5f
+# define DOOR_RADIUS 2.5f
+# define DOOR_THICK 0.9f
 
 /* ************************************************************************** */
 /*                                                                            */
@@ -220,6 +232,27 @@ typedef struct s_render
 	t_img	frame;
 }	t_render;
 
+//Doors
+typedef struct s_door
+{
+	int		grid_x;
+	int		grid_y;
+	float	open_t;
+	int		opening;
+}	t_door;
+
+typedef struct s_doors
+{
+	t_door	*arr;
+	size_t	len;
+}	t_doors;
+
+typedef struct s_vec2
+{
+	float	x;
+	float	y;
+}	t_vec2;
+
 // Game Settings
 typedef struct s_game
 {
@@ -227,15 +260,17 @@ typedef struct s_game
 	t_texture		tex_so;
 	t_texture		tex_we;
 	t_texture		tex_ea;
+	t_texture		tex_do;
 	t_color			floor_color;
 	t_color			ceil_color;
 	t_map			map;
 	t_player		player;
 	t_map_buffer	tmp;
 	t_render		render;
-	t_rttex			tex_rt[4];
+	t_rttex			tex_rt[5];
 	t_input			inp;
 	t_minimap		minimap;
+	t_doors			doors;
 	double			dt;
 	bool			paused;
 }	t_game;
@@ -253,7 +288,8 @@ typedef enum e_texid
 	TEX_NO = 0,
 	TEX_SO = 1,
 	TEX_WE = 2,
-	TEX_EA = 3
+	TEX_EA = 3,
+	TEX_DO = 4
 }	t_texid;
 
 typedef struct s_ray
@@ -279,7 +315,9 @@ typedef struct s_ray
 	int		tex_x;
 	double	step;
 	double	tex_pos;
+	int		hit_type;
 }	t_ray;
+
 
 /* ************************************************************************** */
 /*                                                                            */
@@ -365,6 +403,7 @@ void			clean_game_setup(t_game *cube);
 void			clean_texture(t_texture *t);
 void			clean_map(t_map *m);
 void			print_parse(const t_game *cube);
+void			clean_doors(t_doors *doors);
 
 int				render_init(t_game *cube);
 void			render_destroy(t_game *cube);
@@ -383,4 +422,13 @@ int				win_close(t_game *cube);
 void			update_player(t_game *cube);
 
 void			rotate_player(t_game *cube, double angle);
+
+//Doors
+void			parse_doors(t_game *cube);
+void			doors_update(t_doors *doors, char **map, t_vec2 p, float dt);
+int				door_blocks_cell(const t_doors *doors, int gx, int gy);
+float			door_plane_offset(const t_doors *doors, int gx, int gy);
+void			doors_free(t_doors *doors);
+void			doors_update(t_doors *doors, char **map, t_vec2 p, float dt);
+void			update_doors_for_frame(t_game *cube);
 #endif

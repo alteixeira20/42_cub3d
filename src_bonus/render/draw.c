@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 18:34:36 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/09 11:58:58 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/09 21:07:03 by jopedro-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ void	draw_frame(t_game *cube)
 	int		x;
 	t_ray	r;
 
+	update_doors_for_frame(cube);
 	x = 0;
 	while (x < SCR_W)
 	{
