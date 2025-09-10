@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 18:36:06 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/10 16:22:28 by jopedro-         ###   ########.fr       */
+/*   Updated: 2025/09/10 16:32:54 by jopedro-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ void	ray_compute_lines(t_game *cube, t_ray *r)
 	r->draw_end = r->line_h / 2 + SCR_H / 2 + v_offset;
 	if (r->draw_end >= SCR_H)
 		r->draw_end = SCR_H - 1;
+	r->base_bottom = r->draw_end;
 }
 
 int	ray_pick_tex(const t_ray *r)

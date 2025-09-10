@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 15:38:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/10 15:46:01 by jopedro-         ###   ########.fr       */
+/*   Updated: 2025/09/10 16:38:54 by jopedro-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -434,6 +434,4 @@ void			doors_update(t_doors *doors, char **map, t_vec2 p);
 void			update_doors_for_frame(t_game *cube);
 int				get_door_screen_offset(t_game *c, const t_ray *r);
 void			apply_door_sink(t_game *c, t_ray *r);
-void			draw_bg_slice(t_game *c, t_ray *r_bg, int x, int y_min);
-int				ray_find_next_wall(t_game *c, const t_ray *src, t_ray *out);
 #endif

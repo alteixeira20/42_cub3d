@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 18:34:36 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/10 16:22:23 by jopedro-         ###   ########.fr       */
+/*   Updated: 2025/09/10 16:38:08 by jopedro-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,14 +72,9 @@ static void	draw_column(t_game *cube, int x, t_ray *r)
 	}
 	if (r->tex_id == TEX_DO)
 	{
-
-		if (ray_find_next_wall(cube, r, &rb))
-		{
-			rb.tex_id = ray_pick_tex(&rb);
-			ray_compute_lines(cube, &rb);
-			ray_texcoords_setup(cube, &rb);
-			draw_bg_slice(cube, &rb, x, r->draw_end + 1);
-		}
+		rb.tex_id = ray_pick_tex(&rb);
+		ray_compute_lines(cube, &rb);
+		ray_texcoords_setup(cube, &rb);
 	}
 	while (y < SCR_H)
 	{
