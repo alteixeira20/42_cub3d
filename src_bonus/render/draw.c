@@ -6,13 +6,13 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 18:34:36 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/10 16:38:08 by jopedro-         ###   ########.fr       */
+/*   Updated: 2025/09/10 17:09:29 by jopedro-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/cub3d_bonus.h"
 
-static inline unsigned int	get_texel(const t_img *img, int x, int y)
+unsigned int	get_texel(const t_img *img, int x, int y)
 {
 	char			*px;
 	unsigned int	color;
@@ -30,55 +30,61 @@ void	img_put_pixel(t_img *img, int x, int y, unsigned int color)
 	*(unsigned int *)px = color;
 }
 
-static void	draw_helper(t_game *cube, t_ray *r, int x)
-{
-	t_img			*tex;
-	unsigned int	color;
-	int				y;
-	int				tex_y;
+//static void	draw_helper(t_game *cube, t_ray *r, int x)
+//{
+//	t_img			*tex;
+//	unsigned int	color;
+//	int				y;
+//	int				tex_y;
+//
+//	tex = &cube->tex_rt[r->tex_id].img;
+//	y = 0;
+//	while (y < r->draw_start)
+//		img_put_pixel(&cube->render.frame, x, y++, cube->ceil_color.argb);
+//	while (y <= r->draw_end)
+//	{
+//		tex_y = (int)r->tex_pos;
+//		if (r->tex_id == TEX_DO)
+//			tex_y += r->tex_y_off;
+//		if (tex_y < 0)
+//			tex_y = 0;
+//		if (tex_y >= tex->h)
+//			tex_y = tex->h - 1;
+//		color = get_texel(tex, r->tex_x, tex_y);
+//		if (r->side == 1)
+//			color = ((color & 0xFFFEFEFE) >> 1);
+//		img_put_pixel(&cube->render.frame, x, y, color);
+//		r->tex_pos += r->step;
+//		y++;
+//	}
+//}
 
-	tex = &cube->tex_rt[r->tex_id].img;
-	y = 0;
-	while (y < r->draw_start)
-		img_put_pixel(&cube->render.frame, x, y++, cube->ceil_color.argb);
-	while (y <= r->draw_end)
-	{
-		tex_y = (int)r->tex_pos;
-		if (r->tex_id == TEX_DO)
-			tex_y += r->tex_y_off;
-		if (tex_y < 0)
-			tex_y = 0;
-		if (tex_y >= tex->h)
-			tex_y = tex->h - 1;
-		color = get_texel(tex, r->tex_x, tex_y);
-		if (r->side == 1)
-			color = ((color & 0xFFFEFEFE) >> 1);
-		img_put_pixel(&cube->render.frame, x, y, color);
-		r->tex_pos += r->step;
-		y++;
-	}
-}
-
-static void	draw_column(t_game *cube, int x, t_ray *r)
+void		draw_column(t_game *c, int x, t_ray *r)
 {
-	int				y;
+	int		y;
 	t_ray	rb;
 
-	draw_helper(cube, r, x);
-	y = r->draw_end + 1;
-	if (y < 0)
-	{
-		y = 0;
-	}
+	y = 0;
+	while (y < r->draw_start)
+		img_put_pixel(&c->render.frame, x, y++, c->ceil_color.argb);
 	if (r->tex_id == TEX_DO)
 	{
-		rb.tex_id = ray_pick_tex(&rb);
-		ray_compute_lines(cube, &rb);
-		ray_texcoords_setup(cube, &rb);
+		rb = *r;
+		if (ray_find_wall_behind_door(c, &rb))
+		{
+			rb.tex_id = ray_pick_tex(&rb);
+			ray_compute_lines(c, &rb);
+			ray_texcoords_setup(c, &rb);
+			draw_slice(c, &rb, x);
+		}
 	}
+	draw_slice(c, r, x);
+	y = r->draw_end + 1;
+	if (y < 0)
+		y = 0;
 	while (y < SCR_H)
 	{
-		img_put_pixel(&cube->render.frame, x, y, cube->floor_color.argb);
+		img_put_pixel(&c->render.frame, x, y, c->floor_color.argb);
 		y++;
 	}
 }
