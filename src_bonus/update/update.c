@@ -6,7 +6,7 @@
 /*   By: jopedro- <jopedro-@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 16:15:05 by jopedro-          #+#    #+#             */
-/*   Updated: 2025/09/10 13:46:58 by jopedro-         ###   ########.fr       */
+/*   Updated: 2025/09/10 13:58:21 by jopedro-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,12 +76,11 @@ static void	move_combined(t_game *c, double ms)
 
 void	update_player(t_game *cube)
 {
-	const double	move_speed = 3.0;
 	double			ms;
 
 	update_mouse_angle(cube);
 	apply_mouse_yaw(cube);
 	apply_mouse_pitch(cube);
-	ms = move_speed * cube->dt;
+	ms = 0.1;
 	move_combined(cube, ms);
 }

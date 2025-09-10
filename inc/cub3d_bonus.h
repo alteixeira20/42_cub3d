@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 15:38:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/10 13:42:52 by jopedro-         ###   ########.fr       */
+/*   Updated: 2025/09/10 15:46:01 by jopedro-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@
 
 //Doors
 # define DOOR_CELL 'D'
-# define DOOR_OPEN_SPEED 0.5f
+# define DOOR_OPEN_SPEED 0.1f
 # define DOOR_RADIUS 2.5f
 # define DOOR_THICK 0.9f
 
@@ -271,7 +271,6 @@ typedef struct s_game
 	t_input			inp;
 	t_minimap		minimap;
 	t_doors			doors;
-	double			dt;
 	bool			paused;
 }	t_game;
 
@@ -316,6 +315,8 @@ typedef struct s_ray
 	double	step;
 	double	tex_pos;
 	int		hit_type;
+	int		tex_y_off;
+	int		base_bottom;
 }	t_ray;
 
 
@@ -413,6 +414,7 @@ void			textures_destroy(t_game *cube);
 
 // Render
 void			draw_frame(t_game *cube);
+void			img_put_pixel(t_img *img, int x, int y, unsigned int color);
 
 int				game_loop(void *param);
 int				key_press(int keycode, t_game *cube);
@@ -425,10 +427,13 @@ void			rotate_player(t_game *cube, double angle);
 
 //Doors
 void			parse_doors(t_game *cube);
-void			doors_update(t_doors *doors, char **map, t_vec2 p, float dt);
 int				door_blocks_cell(const t_doors *doors, int gx, int gy);
 float			door_plane_offset(const t_doors *doors, int gx, int gy);
 void			doors_free(t_doors *doors);
-void			doors_update(t_doors *doors, char **map, t_vec2 p, float dt);
+void			doors_update(t_doors *doors, char **map, t_vec2 p);
 void			update_doors_for_frame(t_game *cube);
+int				get_door_screen_offset(t_game *c, const t_ray *r);
+void			apply_door_sink(t_game *c, t_ray *r);
+void			draw_bg_slice(t_game *c, t_ray *r_bg, int x, int y_min);
+int				ray_find_next_wall(t_game *c, const t_ray *src, t_ray *out);
 #endif

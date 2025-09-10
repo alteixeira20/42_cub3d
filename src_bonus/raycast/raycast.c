@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 18:36:06 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/09 19:26:07 by jopedro-         ###   ########.fr       */
+/*   Updated: 2025/09/10 16:22:28 by jopedro-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,12 +62,16 @@ void	ray_dda(t_game *cube, t_ray *r)
 			|| r->map_x >= cube->map.width || r->map_y >= cube->map.height)
 			break ;
 		if (cube->map.grid[r->map_y][r->map_x] == '1')
+		{
 			hit = 1;
+			r->hit_type = 1;
+		}
 		else if (cube->map.grid[r->map_y][r->map_x] == 'D')
 		{
 			if (cell_is_open_door(cube, r->map_x, r->map_y))
 				continue ;
 			hit = 2;
+			r->hit_type = 2;
 		}
 	}
 }

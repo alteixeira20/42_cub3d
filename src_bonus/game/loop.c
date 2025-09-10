@@ -6,7 +6,7 @@
 /*   By: jopedro- <jopedro-@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 16:15:51 by jopedro-          #+#    #+#             */
-/*   Updated: 2025/09/06 16:00:42 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/10 13:53:34 by jopedro-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,28 +47,6 @@ static void	draw_pause_overlay(t_game *cube)
 		SCR_W / 2 - 80, SCR_H / 2 + 20, 0xAAAAAA, "Press M to start again");
 }
 
-static double	get_dt(void)
-{
-	static struct timeval	prev = {0, 0};
-	struct timeval			now;
-	double					dt;
-
-	gettimeofday(&now, NULL);
-	if (prev.tv_sec == 0 && prev.tv_usec == 0)
-	{
-		prev = now;
-		return (0.0);
-	}
-	dt = (now.tv_sec - prev.tv_sec)
-		+ (now.tv_usec - prev.tv_usec) / 1000000.0;
-	prev = now;
-	if (dt < 0.0)
-		dt = 0.0;
-	if (dt > 0.1)
-		dt = 0.1;
-	return (dt);
-}
-
 int	game_loop(void *param)
 {
 	t_game	*cube;
@@ -76,13 +54,11 @@ int	game_loop(void *param)
 	cube = (t_game *)param;
 	if (!cube->paused)
 	{
-		cube->dt = get_dt();
 		update_player(cube);
 		draw_frame(cube);
 	}
 	else
 	{
-		cube->dt = 0.0;
 		draw_pause_overlay(cube);
 	}
 	return (0);

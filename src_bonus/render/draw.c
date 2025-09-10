@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 18:34:36 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/09 21:07:03 by jopedro-         ###   ########.fr       */
+/*   Updated: 2025/09/10 16:22:23 by jopedro-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static inline unsigned int	get_texel(const t_img *img, int x, int y)
 	return (color);
 }
 
-static inline void	img_put_pixel(t_img *img, int x, int y, unsigned int color)
+void	img_put_pixel(t_img *img, int x, int y, unsigned int color)
 {
 	char	*px;
 
@@ -44,6 +44,8 @@ static void	draw_helper(t_game *cube, t_ray *r, int x)
 	while (y <= r->draw_end)
 	{
 		tex_y = (int)r->tex_pos;
+		if (r->tex_id == TEX_DO)
+			tex_y += r->tex_y_off;
 		if (tex_y < 0)
 			tex_y = 0;
 		if (tex_y >= tex->h)
@@ -60,12 +62,24 @@ static void	draw_helper(t_game *cube, t_ray *r, int x)
 static void	draw_column(t_game *cube, int x, t_ray *r)
 {
 	int				y;
+	t_ray	rb;
 
 	draw_helper(cube, r, x);
 	y = r->draw_end + 1;
 	if (y < 0)
 	{
 		y = 0;
+	}
+	if (r->tex_id == TEX_DO)
+	{
+
+		if (ray_find_next_wall(cube, r, &rb))
+		{
+			rb.tex_id = ray_pick_tex(&rb);
+			ray_compute_lines(cube, &rb);
+			ray_texcoords_setup(cube, &rb);
+			draw_bg_slice(cube, &rb, x, r->draw_end + 1);
+		}
 	}
 	while (y < SCR_H)
 	{
@@ -87,6 +101,7 @@ void	draw_frame(t_game *cube)
 		ray_dda(cube, &r);
 		r.tex_id = ray_pick_tex(&r);
 		ray_compute_lines(cube, &r);
+		apply_door_sink(cube, &r);
 		ray_texcoords_setup(cube, &r);
 		draw_column(cube, x, &r);
 		x++;

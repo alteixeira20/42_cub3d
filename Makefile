@@ -6,7 +6,7 @@
 #    By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/11 15:11:22 by paalexan          #+#    #+#              #
-#    Updated: 2025/09/09 21:31:46 by jopedro-         ###   ########.fr        #
+#    Updated: 2025/09/10 15:39:12 by jopedro-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -122,6 +122,7 @@ SRC_BONUS		+= $(SRC_BONUS_DIR)/render/draw.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/render/init.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/render/textures.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/raycast/raycast.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/raycast/raycast_behind.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/raycast/util.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/input/keyboard.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/input/mouse.c
@@ -134,6 +135,7 @@ SRC_BONUS		+= $(SRC_BONUS_DIR)/game/loop.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/update/update.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/update/doors_query.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/update/doors_update.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/update/doors_update_util.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/update/util.c
 
 # **************************************************************************** #
