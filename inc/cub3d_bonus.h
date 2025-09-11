@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 15:38:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/11 17:18:05 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/11 18:02:23 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,67 +41,66 @@
 /* ************************************************************************** */
 
 // Allowed Map Characters
-# define MAP_CHARS		" 01NSEWDC"
+# define MAP_CHARS					" 01NSEWDC"
 
 // Identifier Tokens
-# define ID_NO			"NO"
-# define ID_SO			"SO"
-# define ID_WE			"WE"
-# define ID_EA			"EA"
-# define ID_DO			"DO"
-# define ID_F			"F"
-# define ID_C			"C"
+# define ID_NO						"NO"
+# define ID_SO						"SO"
+# define ID_WE						"WE"
+# define ID_EA						"EA"
+# define ID_DO						"DO"
+# define ID_F						"F"
+# define ID_C						"C"
 
 // Max Allowed Width
-# define MAX_MAP_WIDTH	8192
-# define MAX_MAP_HEIGHT	8192
-# define MAX_LINE_LEN	16384
+# define MAX_MAP_WIDTH				8192
+# define MAX_MAP_HEIGHT				8192
+# define MAX_LINE_LEN				16384
 
 // Window Resolution
-# define SCR_W 1920
-# define SCR_H 1080
+# define SCR_W						1920
+# define SCR_H						1080
 
 // KeyMap
-# define KEY_ESC 65307
-# define KEY_W 119
-# define KEY_A 97
-# define KEY_S 115
-# define KEY_D 100
-# define KEY_LEFT 65361
-# define KEY_RIGHT 65363
-# define KEY_M 109
+# define KEY_ESC					65307
+# define KEY_W						119
+# define KEY_A						97
+# define KEY_S						115
+# define KEY_D						100
+# define KEY_LEFT					65361
+# define KEY_RIGHT					65363
+# define KEY_M						109
 
 // Input
-# define MOUSE_SENS		0.00042
-# define MOUSE_SENSE		MOUSE_SENS
+# define MOUSE_SENS					0.00042
 
 // Player Radius
-# define COLL_R 0.20
+# define COLL_R						0.20
 
 // Movement
-# define PLAYER_MOVE_SPEED	0.50
+# define PLAYER_MOVE_SPEED			0.10
 
 // Collectibles
-# define KEY_FRAME_COUNT 24
-# define KEY_ANIM_FPS    12.0
-# define KEY_BOB_AMP_PX  6
-# define KEY_PICKUP_DIST 0.5
-# define KEY_SCALE       0.5
-# define KEY_TEXT_SCALE  10
+# define KEY_FRAME_COUNT			24
+# define KEY_ANIM_FPS				12.0
+# define KEY_BOB_AMP_PX				6
+# define KEY_PICKUP_DIST			0.5
+# define KEY_SCALE					0.5
+# define KEY_TEXT_SCALE				10
 
 // Minimap Settings
-# define MM_TILE_SIZE       10
-# define MM_RADIUS_TILES    12
-# define MM_OFFSET_MARGIN   20
-# define MM_SCALE           2.0
-# define MM_SS_OFFSET       0.042
+# define MM_TILE_SIZE				10
+# define MM_RADIUS_TILES			12
+# define MM_OFFSET_MARGIN			20
+# define MM_SCALE					2.0
+# define MM_SS_OFFSET				0.042
 
 // Minimap Colors
-# define MM_COLOR_WALL   0x00333333
-# define MM_COLOR_FLOOR  0x00777777
-# define MM_COLOR_VOID   0x00000000
-# define MM_COLOR_BORDER 0x00000000
-# define MM_COLOR_PLAYER 0x00FF0000
+# define MM_COLOR_WALL				0x00333333
+# define MM_COLOR_FLOOR				0x00777777
+# define MM_COLOR_VOID				0x00000000
+# define MM_COLOR_BORDER			0x00000000
+# define MM_COLOR_PLAYER			0x00FF0000
 
 // Error Messages
 # define ERR_USAGE					"usage: ./cub3d <file.cub>"
@@ -127,10 +126,10 @@
 # define ERR_ALLOC					"allocation failed"
 
 //Doors
-# define DOOR_CELL 'D'
-# define DOOR_OPEN_SPEED 0.1f
-# define DOOR_RADIUS 1.5f
-# define DOOR_THICK 0.9f
+# define DOOR_CELL					'D'
+# define DOOR_OPEN_SPEED			0.2f
+# define DOOR_RADIUS				1.5f
+# define DOOR_THICK					0.9f
 
 /* ************************************************************************** */
 /*                                                                            */
@@ -445,6 +444,7 @@ void			render_minimap(t_game *cube);
 void			render_player_pos(t_game *cube);
 void			draw_crosshair(t_game *cube);
 void			draw_border(t_minimap *m, int color);
+void			draw_column(t_game *c, int x, t_ray *r);
 void			put_pixel(t_minimap *m, int x, int y, int color);
 void			clear_minimap(t_minimap *m, int color);
 void			get_rgb(unsigned int c, unsigned int *r,

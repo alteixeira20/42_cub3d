@@ -6,7 +6,7 @@
 #    By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/11 15:11:22 by paalexan          #+#    #+#              #
-#    Updated: 2025/09/11 17:18:55 by paalexan         ###   ########.fr        #
+#    Updated: 2025/09/11 17:55:04 by paalexan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -121,6 +121,7 @@ SRC_BONUS		+= $(SRC_BONUS_DIR)/cleanup/cleanup.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/cleanup/util.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/cleanup/doors_clean.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/render/draw.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/render/draw_utils.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/render/draw_bg.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/render/init.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/render/textures.c
