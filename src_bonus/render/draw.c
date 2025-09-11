@@ -12,16 +12,6 @@
 
 #include "../../inc/cub3d_bonus.h"
 
-unsigned int	get_texel(const t_img *img, int x, int y)
-{
-	char			*px;
-	unsigned int	color;
-
-	px = img->addr + y * img->line_len + x * (img->bpp / 8);
-	color = *(unsigned int *)px;
-	return (color);
-}
-
 void	img_put_pixel(t_img *img, int x, int y, unsigned int color)
 {
 	char	*px;
@@ -29,35 +19,6 @@ void	img_put_pixel(t_img *img, int x, int y, unsigned int color)
 	px = img->addr + y * img->line_len + x * (img->bpp / 8);
 	*(unsigned int *)px = color;
 }
-
-//static void	draw_helper(t_game *cube, t_ray *r, int x)
-//{
-//	t_img			*tex;
-//	unsigned int	color;
-//	int				y;
-//	int				tex_y;
-//
-//	tex = &cube->tex_rt[r->tex_id].img;
-//	y = 0;
-//	while (y < r->draw_start)
-//		img_put_pixel(&cube->render.frame, x, y++, cube->ceil_color.argb);
-//	while (y <= r->draw_end)
-//	{
-//		tex_y = (int)r->tex_pos;
-//		if (r->tex_id == TEX_DO)
-//			tex_y += r->tex_y_off;
-//		if (tex_y < 0)
-//			tex_y = 0;
-//		if (tex_y >= tex->h)
-//			tex_y = tex->h - 1;
-//		color = get_texel(tex, r->tex_x, tex_y);
-//		if (r->side == 1)
-//			color = ((color & 0xFFFEFEFE) >> 1);
-//		img_put_pixel(&cube->render.frame, x, y, color);
-//		r->tex_pos += r->step;
-//		y++;
-//	}
-//}
 
 void		draw_column(t_game *c, int x, t_ray *r)
 {
@@ -103,10 +64,13 @@ void	draw_frame(t_game *cube)
 		r.tex_id = ray_pick_tex(&r);
 		ray_compute_lines(cube, &r);
 		apply_door_sink(cube, &r);
+		cube->zbuf[x] = r.perp_dist;
 		ray_texcoords_setup(cube, &r);
 		draw_column(cube, x, &r);
 		x++;
 	}
+	collectibles_draw(cube);
+	hud_draw_collected(cube);
 	mlx_put_image_to_window(cube->render.mlx, cube->render.win,
 		cube->render.frame.img, 0, 0);
 	draw_crosshair(cube);

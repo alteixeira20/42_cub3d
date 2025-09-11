@@ -1,27 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   input.c                                            :+:      :+:    :+:   */
+/*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/03 16:40:59 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/09 18:31:52 by jopedro-         ###   ########.fr       */
+/*   Created: 2025/09/10 19:26:41 by paalexan          #+#    #+#             */
+/*   Updated: 2025/09/10 19:28:58 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/cub3d_bonus.h"
 
-void	input_init(t_input *inp)
+void	render_init(t_game *cube)
 {
-	inp->forward = 0;
-	inp->backward = 0;
-	inp->left = 0;
-	inp->right = 0;
-	inp->mouse_captured = 1;
-	inp->last_x = SCR_W / 2;
-	inp->last_y = SCR_H / 2;
-	inp->mouse_angle = 0.0;
-	inp->mouse_dy = 0.0;
-	inp->sens = MOUSE_SENS;
+	t_render	*render;
+
+	render = &cube->render;
+	render->mlx = NULL;
+	render->win = NULL;
+	render->frame.img = NULL;
+	render->frame.addr = NULL;
+	render->frame.bpp = 0;
+	render->frame.line_len = 0;
+	render->frame.endian = 0;
+	render->frame.w = 0;
+	render->frame.h = 0;
 }
