@@ -6,7 +6,7 @@
 #    By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/11 15:11:22 by paalexan          #+#    #+#              #
-#    Updated: 2025/09/10 17:07:05 by jopedro-         ###   ########.fr        #
+#    Updated: 2025/09/11 17:18:55 by paalexan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -102,6 +102,7 @@ SRC				+= $(SRC_DIR)/update_util.c
 # Bonus
 SRC_BONUS		= $(SRC_BONUS_DIR)/main.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/init/init.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/init/init_utils.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/init/input.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/init/minimap.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/init/render.c

@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 18:23:11 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/09 21:39:42 by jopedro-         ###   ########.fr       */
+/*   Updated: 2025/09/11 17:18:33 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,24 +62,7 @@ void	game_init(t_game *cube)
 	input_init(&cube->inp);
 	player_init(&cube->player);
 	render_init(cube);
-	/* init runtime textures to a known state */
-	{
-		int	i;
-
-		i = 0;
-		while (i < 5)
-		{
-			cube->tex_rt[i].img.img = NULL;
-			cube->tex_rt[i].img.addr = NULL;
-			cube->tex_rt[i].img.bpp = 0;
-			cube->tex_rt[i].img.line_len = 0;
-			cube->tex_rt[i].img.endian = 0;
-			cube->tex_rt[i].img.w = 0;
-			cube->tex_rt[i].img.h = 0;
-			i++;
-		}
-	}
-	/* init doors */
+	tex_rt_init(cube);
 	cube->doors.arr = NULL;
 	cube->doors.len = 0;
 	cube->paused = false;

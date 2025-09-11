@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 18:11:30 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/11 13:27:10 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/11 17:10:54 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 static void	update_anim(t_game *cube)
 {
 	static struct timeval	prev = {0, 0};
-	struct timeval	now;
-	double		dt;
-	double		t;
+	struct timeval			now;
+	double					dt;
+	double					t;
 
 	gettimeofday(&now, NULL);
 	if (prev.tv_sec == 0 && prev.tv_usec == 0)

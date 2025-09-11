@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 15:50:55 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/10 19:19:52 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/11 17:12:52 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,16 @@ static void	free_collectibles_array(t_game *cube)
 		cube->collect.count = 0;
 		cube->collect.collected = 0;
 	}
+}
+
+void	free3(char **a, char **b, char **c)
+{
+	if (a && *a)
+		free(*a);
+	if (b && *b)
+		free(*b);
+	if (c && *c)
+		free(*c);
 }
 
 void	clean_keys(t_game *cube)

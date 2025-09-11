@@ -6,13 +6,11 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 17:18:29 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/10 18:10:55 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/11 17:22:18 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/cub3d_bonus.h"
-
-static int	make_key_path(int idx, char **out, const char *base);
 
 static int	check_key_frame_path(const char *path)
 {
@@ -22,6 +20,49 @@ static int	check_key_frame_path(const char *path)
 	if (fd < 0)
 		return (-1);
 	close(fd);
+	return (0);
+}
+
+static int	load_one_frame(void *mlx, const char *path, t_img *out)
+{
+	out->img = NULL;
+	out->addr = NULL;
+	out->img = mlx_xpm_file_to_image(mlx, (char *)path, &out->w, &out->h);
+	if (!out->img)
+		return (-1);
+	out->addr = mlx_get_data_addr(out->img, &out->bpp,
+			&out->line_len, &out->endian);
+	if (!out->addr)
+		return (-1);
+	return (0);
+}
+
+static int	make_key_path(int idx, char **out, const char *base)
+{
+	char	*tmp;
+	char	*num;
+	char	*pre;
+	char	*path;
+
+	tmp = NULL;
+	num = NULL;
+	pre = NULL;
+	path = NULL;
+	tmp = ft_strjoin(base, "key_frame-");
+	if (!tmp)
+		return (-1);
+	num = ft_itoa(idx);
+	if (!num)
+		return (free3(NULL, &tmp, NULL), -1);
+	pre = ft_strjoin(tmp, num);
+	if (!pre)
+		return (free3(NULL, &tmp, &num), -1);
+	path = ft_strjoin(pre, ".xpm");
+	if (!path)
+		return (free3(NULL, &tmp, &num), free(pre), -1);
+	free3(NULL, &tmp, &num);
+	free(pre);
+	*out = path;
 	return (0);
 }
 
@@ -51,59 +92,6 @@ int	keys_precheck(t_game *cube)
 		i++;
 	}
 	free(base);
-	return (0);
-}
-
-static int	load_one_frame(void *mlx, const char *path, t_img *out)
-{
-	out->img = NULL;
-	out->addr = NULL;
-	out->img = mlx_xpm_file_to_image(mlx, (char *)path, &out->w, &out->h);
-	if (!out->img)
-		return (-1);
-	out->addr = mlx_get_data_addr(out->img, &out->bpp,
-			&out->line_len, &out->endian);
-	if (!out->addr)
-		return (-1);
-	return (0);
-}
-
-static void	free3(char **a, char **b, char **c)
-{
-	if (a && *a)
-		free(*a);
-	if (b && *b)
-		free(*b);
-	if (c && *c)
-		free(*c);
-}
-
-static int	make_key_path(int idx, char **out, const char *base)
-{
-	char	*tmp;
-	char	*num;
-	char	*pre;
-	char	*path;
-
-	tmp = NULL;
-	num = NULL;
-	pre = NULL;
-	path = NULL;
-	tmp = ft_strjoin(base, "key_frame-");
-	if (!tmp)
-		return (-1);
-	num = ft_itoa(idx);
-	if (!num)
-		return (free3(NULL, &tmp, NULL), -1);
-	pre = ft_strjoin(tmp, num);
-	if (!pre)
-		return (free3(NULL, &tmp, &num), -1);
-	path = ft_strjoin(pre, ".xpm");
-	if (!path)
-		return (free3(NULL, &tmp, &num), free(pre), -1);
-	free3(NULL, &tmp, &num);
-	free(pre);
-	*out = path;
 	return (0);
 }
 
