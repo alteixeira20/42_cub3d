@@ -12,20 +12,20 @@
 
 #include "../../inc/cub3d_bonus.h"
 
-static size_t	count_doors(char **map)
+static size_t	count_doors(const t_map *m)
 {
-	size_t	i;
-	size_t	j;
-	size_t	n;
+	size_t			i;
+	size_t			j;
+	size_t			n;
 
 	i = 0;
 	n = 0;
-	while (map[i])
+	while (i < (size_t)m->height)
 	{
 		j = 0;
-		while (map[i][j])
+		while (m->grid[i][j])
 		{
-			if (map[i][j] == DOOR_CELL)
+			if (m->grid[i][j] == DOOR_CELL)
 				n++;
 			j++;
 		}
@@ -34,13 +34,13 @@ static size_t	count_doors(char **map)
 	return (n);
 }
 
-int	doors_build(char **map, t_doors *doors)
+static int	doors_build(const t_map *m, t_doors *doors)
 {
-	size_t	i;
-	size_t	j;
-	size_t	k;
+	size_t			i;
+	size_t			j;
+	size_t			k;
 
-	doors->len = count_doors(map);
+	doors->len = count_doors(m);
 	if (doors->len == 0)
 	{
 		doors->arr = NULL;
@@ -51,12 +51,12 @@ int	doors_build(char **map, t_doors *doors)
 		return (-1);
 	i = 0;
 	k = 0;
-	while (map[i])
+	while (i < (size_t)m->height)
 	{
 		j = 0;
-		while (map[i][j])
+		while (m->grid[i][j])
 		{
-			if (map[i][j] == DOOR_CELL && k < doors->len)
+			if (m->grid[i][j] == DOOR_CELL && k < doors->len)
 			{
 				doors->arr[k].grid_x = (int)j;
 				doors->arr[k].grid_y = (int)i;
@@ -73,5 +73,5 @@ int	doors_build(char **map, t_doors *doors)
 
 void	parse_doors(t_game *cube)
 {
-	doors_build(cube->map.grid, &cube->doors);
+	doors_build(&cube->map, &cube->doors);
 }

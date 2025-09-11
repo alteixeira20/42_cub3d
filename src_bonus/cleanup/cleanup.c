@@ -27,6 +27,14 @@ void	clean_game_setup(t_game *cube)
 	clean_texture(&cube->tex_so);
 	clean_texture(&cube->tex_we);
 	clean_texture(&cube->tex_ea);
+	clean_doors(&cube->doors);
+	if (cube->collect.items)
+	{
+		free(cube->collect.items);
+		cube->collect.items = NULL;
+		cube->collect.count = 0;
+		cube->collect.collected = 0;
+	}
 	clean_map(&cube->map);
 	cube->floor_color.is_set = false;
 	cube->ceil_color.is_set = false;

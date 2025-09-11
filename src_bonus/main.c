@@ -14,6 +14,12 @@
 
 static int	setup_after_parse(t_game *cube)
 {
+	/* Preflight: ensure all required asset files exist
+	** This prevents opening a window and then failing. */
+	if (textures_precheck(cube) != 0)
+		return (-1);
+	if (keys_precheck(cube) != 0)
+		return (-1);
 	if (render_init_win(cube) != 0)
 		return (-1);
 	if (textures_load(cube) != 0)

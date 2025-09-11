@@ -62,6 +62,26 @@ void	game_init(t_game *cube)
 	input_init(&cube->inp);
 	player_init(&cube->player);
 	render_init(cube);
+	/* init runtime textures to a known state */
+	{
+		int	i;
+
+		i = 0;
+		while (i < 5)
+		{
+			cube->tex_rt[i].img.img = NULL;
+			cube->tex_rt[i].img.addr = NULL;
+			cube->tex_rt[i].img.bpp = 0;
+			cube->tex_rt[i].img.line_len = 0;
+			cube->tex_rt[i].img.endian = 0;
+			cube->tex_rt[i].img.w = 0;
+			cube->tex_rt[i].img.h = 0;
+			i++;
+		}
+	}
+	/* init doors */
+	cube->doors.arr = NULL;
+	cube->doors.len = 0;
 	cube->paused = false;
 	cube->collect.items = NULL;
 	cube->collect.count = 0;

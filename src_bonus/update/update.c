@@ -12,7 +12,7 @@
 
 #include "../../inc/cub3d_bonus.h"
 
-static int	is_blocked(t_map *m, double y, double x)
+static int	is_blocked(t_game *c, double y, double x)
 {
 	int	x0;
 	int	x1;
@@ -23,10 +23,19 @@ static int	is_blocked(t_map *m, double y, double x)
 	x1 = (int)floor(x + COLL_R);
 	y0 = (int)floor(y - COLL_R);
 	y1 = (int)floor(y + COLL_R);
-	if (x0 < 0 || y0 < 0 || x1 >= m->width || y1 >= m->height)
+	if (x0 < 0 || y0 < 0 || x1 >= c->map.width || y1 >= c->map.height)
 		return (1);
-	return (m->grid[y0][x0] == '1' || m->grid[y0][x1] == '1'
-		|| m->grid[y1][x0] == '1' || m->grid[y1][x1] == '1');
+	/* wall collision */
+	if (c->map.grid[y0][x0] == '1' || c->map.grid[y0][x1] == '1'
+		|| c->map.grid[y1][x0] == '1' || c->map.grid[y1][x1] == '1')
+		return (1);
+	/* door collision (block until fully open) */
+	if ((c->map.grid[y0][x0] == 'D' && door_blocks_cell(&c->doors, x0, y0))
+		|| (c->map.grid[y0][x1] == 'D' && door_blocks_cell(&c->doors, x1, y0))
+		|| (c->map.grid[y1][x0] == 'D' && door_blocks_cell(&c->doors, x0, y1))
+		|| (c->map.grid[y1][x1] == 'D' && door_blocks_cell(&c->doors, x1, y1)))
+		return (1);
+	return (0);
 }
 
 static void	get_movement_vector(t_game *c, double *dx, double *dy)
@@ -67,9 +76,9 @@ static void	move_combined(t_game *c, double ms)
 	{
 		dx = (dx / len) * ms;
 		dy = (dy / len) * ms;
-		if (!is_blocked(&c->map, c->player.pos_y, c->player.pos_x + dx))
+		if (!is_blocked(c, c->player.pos_y, c->player.pos_x + dx))
 			c->player.pos_x += dx;
-		if (!is_blocked(&c->map, c->player.pos_y + dy, c->player.pos_x))
+		if (!is_blocked(c, c->player.pos_y + dy, c->player.pos_x))
 			c->player.pos_y += dy;
 	}
 }
@@ -81,7 +90,7 @@ void	update_player(t_game *cube)
 	update_mouse_angle(cube);
 	apply_mouse_yaw(cube);
 	apply_mouse_pitch(cube);
-	ms = 0.1;
+	ms = PLAYER_MOVE_SPEED;
 	move_combined(cube, ms);
 	collectibles_update(cube);
 }

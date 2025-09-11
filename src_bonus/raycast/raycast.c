@@ -6,20 +6,11 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 18:36:06 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/10 16:32:54 by jopedro-         ###   ########.fr       */
+/*   Updated: 2025/09/11 14:37:40 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/cub3d_bonus.h"
-
-static int	cell_is_open_door(t_game *cube, int gx, int gy)
-{
-	if (cube->map.grid[gy][gx] != 'D')
-		return (0);
-	if (door_blocks_cell(&cube->doors, gx, gy))
-		return (0);
-	return (1);
-}
 
 void	ray_setup(t_game *cube, t_ray *r, int x)
 {
@@ -28,6 +19,9 @@ void	ray_setup(t_game *cube, t_ray *r, int x)
 	r->ray_dir_y = cube->player.dir_y + cube->player.plane_y * r->camera_x;
 	r->map_x = (int)cube->player.pos_x;
 	r->map_y = (int)cube->player.pos_y;
+	r->hit_type = 0;
+	r->tex_y_off = 0;
+	r->base_bottom = 0;
 	if (r->ray_dir_x == 0.0)
 		r->delta_x = 1e30;
 	else
@@ -68,7 +62,7 @@ void	ray_dda(t_game *cube, t_ray *r)
 		}
 		else if (cube->map.grid[r->map_y][r->map_x] == 'D')
 		{
-			if (cell_is_open_door(cube, r->map_x, r->map_y))
+			if (!door_blocks_cell(&cube->doors, r->map_x, r->map_y))
 				continue ;
 			hit = 2;
 			r->hit_type = 2;

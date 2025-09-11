@@ -12,6 +12,39 @@
 
 #include "../../inc/cub3d_bonus.h"
 
+static int	check_path_readable(const char *path)
+{
+	int	fd;
+
+	if (!path)
+		return (-1);
+	fd = open(path, O_RDONLY);
+	if (fd < 0)
+		return (-1);
+	close(fd);
+	return (0);
+}
+
+int	textures_precheck(t_game *cube)
+{
+	/* mandatory four textures must be present */
+	if (check_path_readable(cube->tex_no.path) != 0)
+		return (print_error(ERR_BAD_TEXT_PATH), -1);
+	if (check_path_readable(cube->tex_so.path) != 0)
+		return (print_error(ERR_BAD_TEXT_PATH), -1);
+	if (check_path_readable(cube->tex_we.path) != 0)
+		return (print_error(ERR_BAD_TEXT_PATH), -1);
+	if (check_path_readable(cube->tex_ea.path) != 0)
+		return (print_error(ERR_BAD_TEXT_PATH), -1);
+	/* doors texture required iff map has doors */
+	if (cube->doors.len > 0)
+	{
+		if (check_path_readable(cube->tex_do.path) != 0)
+			return (print_error(ERR_BAD_TEXT_PATH), -1);
+	}
+	return (0);
+}
+
 static int	load_one_tex(void *mlx, const char *path, t_img *out)
 {
 	out->img = mlx_xpm_file_to_image(mlx, (char *)path, &out->w, &out->h);
@@ -51,9 +84,15 @@ static int	load_all_paths(t_game *cube)
 	if (load_one_tex(cube->render.mlx, cube->tex_ea.path,
 			&cube->tex_rt[3].img) != 0)
 		return (-1);
-	if (load_one_tex(cube->render.mlx, cube->tex_do.path,
-			&cube->tex_rt[4].img) != 0)
-		return (-1);
+	/* Doors texture is required only if there are doors in the map */
+	if (cube->doors.len > 0)
+	{
+		if (!cube->tex_do.path)
+			return (-1);
+		if (load_one_tex(cube->render.mlx, cube->tex_do.path,
+				&cube->tex_rt[4].img) != 0)
+			return (-1);
+	}
 	return (0);
 }
 

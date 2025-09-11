@@ -68,7 +68,7 @@ void	draw_slice(t_game *c, t_ray *r, int x)
 	{
 		tex_y = (int)r->tex_pos;
 		if (r->tex_id == TEX_DO)
-			tex_y += r->tex_y_off;
+			tex_y -= r->tex_y_off;
 		if (tex_y < 0)
 			tex_y = 0;
 		if (tex_y >= tex->h)

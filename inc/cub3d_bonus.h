@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 15:38:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/10 17:44:28 by jopedro-         ###   ########.fr       */
+/*   Updated: 2025/09/11 17:04:37 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,9 @@
 // Player Radius
 # define COLL_R 0.20
 
+// Movement
+# define PLAYER_MOVE_SPEED	0.50
+
 // Collectibles
 # define KEY_FRAME_COUNT 24
 # define KEY_ANIM_FPS    12.0
@@ -126,7 +129,7 @@
 //Doors
 # define DOOR_CELL 'D'
 # define DOOR_OPEN_SPEED 0.1f
-# define DOOR_RADIUS 2.5f
+# define DOOR_RADIUS 1.5f
 # define DOOR_THICK 0.9f
 
 /* ************************************************************************** */
@@ -227,13 +230,11 @@ typedef struct s_img
 	int		h;
 }	t_img;
 
-/* Runtime texture image (for NO, SO, WE, EA) */
 typedef struct s_rttex
 {
 	t_img	img;
 }	t_rttex;
 
-/* Rendering context */
 typedef struct s_render
 {
 	void	*mlx;
@@ -241,7 +242,6 @@ typedef struct s_render
 	t_img	frame;
 }	t_render;
 
-//Doors
 typedef struct s_door
 {
 	int		grid_x;
@@ -262,7 +262,6 @@ typedef struct s_vec2
 	float	y;
 }	t_vec2;
 
-// HUD
 typedef struct s_hud_ctx
 {
 	t_img			*img;
@@ -306,55 +305,6 @@ typedef struct s_collectibles
 	double				anim_t;
 }	t_collectibles;
 
-// Game Settings
-typedef struct s_game
-{
-	t_texture		tex_no;
-	t_texture		tex_so;
-	t_texture		tex_we;
-	t_texture		tex_ea;
-	t_texture		tex_do;
-	t_color			floor_color;
-	t_color			ceil_color;
-	t_map			map;
-	t_player		player;
-	t_map_buffer	tmp;
-	t_render		render;
-	t_rttex			tex_rt[5];
-	t_input			inp;
-	t_minimap		minimap;
-	t_doors			doors;
-	bool			paused;
-	t_collectibles	collect;
-	double			zbuf[SCR_W];
-}	t_game;
-
-/* Collectible sprite draw context */
-typedef struct s_drawctx
-{
-	t_game			*cube;
-	t_img			*tex;
-	unsigned int	trans;
-	double			ty;
-}	t_drawctx;
-
-// Parser Helper Struct
-typedef struct s_parser_ctx
-{
-	int				fd;
-	t_game			*game;
-	t_map_buffer	*buf;
-}	t_parser_ctx;
-
-typedef enum e_texid
-{
-	TEX_NO = 0,
-	TEX_SO = 1,
-	TEX_WE = 2,
-	TEX_EA = 3,
-	TEX_DO = 4
-}	t_texid;
-
 typedef struct s_ray
 {
 	int		map_x;
@@ -383,14 +333,54 @@ typedef struct s_ray
 	int		base_bottom;
 }	t_ray;
 
+typedef struct s_game
+{
+	t_texture		tex_no;
+	t_texture		tex_so;
+	t_texture		tex_we;
+	t_texture		tex_ea;
+	t_texture		tex_do;
+	t_color			floor_color;
+	t_color			ceil_color;
+	t_map			map;
+	t_player		player;
+	t_map_buffer	tmp;
+	t_render		render;
+	t_rttex			tex_rt[5];
+	t_input			inp;
+	t_minimap		minimap;
+	t_doors			doors;
+	bool			paused;
+	t_collectibles	collect;
+	double			zbuf[SCR_W];
+	int				door_hit[SCR_W];
+	t_ray			door_ray[SCR_W];
+}	t_game;
 
-/* ************************************************************************** */
-/*                                                                            */
-/*                            General Declarations                            */
-/*                                                                            */
-/* ************************************************************************** */
+typedef struct s_drawctx
+{
+	t_game			*cube;
+	t_img			*tex;
+	unsigned int	trans;
+	double			ty;
+}	t_drawctx;
 
-// Initialize Game
+typedef struct s_parser_ctx
+{
+	int				fd;
+	t_game			*game;
+	t_map_buffer	*buf;
+}	t_parser_ctx;
+
+typedef enum e_texid
+{
+	TEX_NO = 0,
+	TEX_SO = 1,
+	TEX_WE = 2,
+	TEX_EA = 3,
+	TEX_DO = 4
+}	t_texid;
+
 void			game_init(t_game *cube);
 void			input_init(t_input *inp);
 void			minimap_init(t_game *cube);
@@ -491,6 +481,7 @@ void			render_destroy(t_game *cube);
 
 int				textures_load(t_game *cube);
 void			textures_destroy(t_game *cube);
+int				textures_precheck(t_game *cube);
 
 // Render
 void			draw_frame(t_game *cube);
@@ -524,6 +515,7 @@ int				keys_load(t_game *cube);
 void			clean_keys(t_game *cube);
 void			collectibles_update(t_game *cube);
 void			collectibles_draw(t_game *cube);
+int				keys_precheck(t_game *cube);
 
 // HUD
 void			hud_init(t_hud_ctx *ctx, t_img *frame);

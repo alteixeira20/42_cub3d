@@ -12,6 +12,48 @@
 
 #include "../../inc/cub3d_bonus.h"
 
+static int	make_key_path(int idx, char **out, const char *base);
+
+static int	check_key_frame_path(const char *path)
+{
+	int	fd;
+
+	fd = open(path, O_RDONLY);
+	if (fd < 0)
+		return (-1);
+	close(fd);
+	return (0);
+}
+
+int	keys_precheck(t_game *cube)
+{
+	int		i;
+	int		r;
+	char	*base;
+	char	*path;
+
+	if (cube->collect.count <= 0)
+		return (0);
+	base = ft_strdup("assets/key/");
+	if (!base)
+		return (print_error(ERR_ALLOC), -1);
+	i = 0;
+	while (i < KEY_FRAME_COUNT)
+	{
+		path = NULL;
+		r = make_key_path(i, &path, base);
+		if (r != 0)
+			return (free(base), print_error(ERR_ALLOC), -1);
+		r = check_key_frame_path(path);
+		free(path);
+		if (r != 0)
+			return (free(base), print_error(ERR_BAD_TEXT_PATH), -1);
+		i++;
+	}
+	free(base);
+	return (0);
+}
+
 static int	load_one_frame(void *mlx, const char *path, t_img *out)
 {
 	out->img = NULL;
