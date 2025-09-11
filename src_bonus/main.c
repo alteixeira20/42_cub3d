@@ -6,7 +6,7 @@
 /*   By: jopedro- <jopedro-@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 16:19:18 by jopedro-          #+#    #+#             */
-/*   Updated: 2025/09/11 17:25:15 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/11 18:11:21 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,13 @@ static void	register_hooks(t_game *cube)
 
 static int	startup(t_game *cube, const char *path)
 {
+	int	in_map;
+
+	in_map = 0;
 	game_init(cube);
 	if (!has_cub_extension(path))
 		return (print_error(ERR_INVALID_EXT), -1);
-	if (parse_all(path, cube) != 0)
+	if (parse_all(path, cube, in_map) != 0)
 		return (-1);
 	if (setup_after_parse(cube) != 0)
 		return (-1);

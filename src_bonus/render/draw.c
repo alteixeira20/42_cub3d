@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 18:34:36 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/11 18:05:14 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/11 18:15:32 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static void	render_columns(t_game *c)
 	x = 0;
 	while (x < SCR_W)
 	{
-		ray_setup(c, &r, x);
+		raycast_init(c, &r, x);
 		ray_dda(c, &r);
 		r.tex_id = ray_pick_tex(&r);
 		ray_compute_lines(c, &r);

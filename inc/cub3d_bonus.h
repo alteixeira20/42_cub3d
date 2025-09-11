@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 15:38:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/11 18:02:23 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/11 18:16:03 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -386,9 +386,10 @@ void			minimap_init(t_game *cube);
 void			render_init(t_game *cube);
 int				render_init_win(t_game *cube);
 void			tex_rt_init(t_game *cube);
+void			raycast_init(t_game *cube, t_ray *r, int x);
 
 // Parsing
-int				parse_all(const char *path, t_game *cube);
+int				parse_all(const char *path, t_game *cube, int in_map);
 int				parse_map(char **lines, int count, t_map *map);
 int				parse_player(t_game *cube);
 int				parse_color(const char *line, t_game *cube);
@@ -426,7 +427,6 @@ char			player_dir(const t_player *player);
 void			rotate_left(t_game *cube, double odx, double opx, double rs);
 
 // Raycast
-void			ray_setup(t_game *cube, t_ray *r, int x);
 void			ray_dda(t_game *cube, t_ray *r);
 void			ray_compute_lines(t_game *cube, t_ray *r);
 int				ray_pick_tex(const t_ray *r);

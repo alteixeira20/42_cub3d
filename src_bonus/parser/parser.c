@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 00:30:07 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/09 21:29:37 by jopedro-         ###   ########.fr       */
+/*   Updated: 2025/09/11 18:11:34 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,18 +60,16 @@ static int	read_and_process_lines(int fd, int *in_map,
 	return (0);
 }
 
-int	parse_all(const char *path, t_game *cube)
+int	parse_all(const char *path, t_game *cube, int in_map)
 {
 	t_map_buffer	buf;
 	int				fd;
-	int				in_map;
 
 	fd = open(path, O_RDONLY);
 	if (fd < 0)
 		return (print_error(ERR_CANNOT_OPEN), -1);
 	if (lines_buf_init(&buf, 1024) != 0)
 		return (close(fd), -1);
-	in_map = 0;
 	if (read_and_process_lines(fd, &in_map, cube, &buf) != 0)
 		return (clean_map_buffer(&buf), -1);
 	close(fd);
