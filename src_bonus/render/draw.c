@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 18:34:36 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/11 17:54:22 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/11 18:05:14 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,45 +20,64 @@ void	img_put_pixel(t_img *img, int x, int y, unsigned int color)
 	*(unsigned int *)px = color;
 }
 
-void	draw_frame(t_game *cube)
+static void	clear_door_hits(t_game *c)
+{
+	int	x;
+
+	x = 0;
+	while (x < SCR_W)
+	{
+		c->door_hit[x] = 0;
+		x++;
+	}
+}
+
+static void	render_columns(t_game *c)
 {
 	int		x;
 	t_ray	r;
 
-	update_doors_for_frame(cube);
 	x = 0;
 	while (x < SCR_W)
 	{
-		cube->door_hit[x] = 0;
-		x++;
-	}
-	x = 0;
-	while (x < SCR_W)
-	{
-		ray_setup(cube, &r, x);
-		ray_dda(cube, &r);
+		ray_setup(c, &r, x);
+		ray_dda(c, &r);
 		r.tex_id = ray_pick_tex(&r);
-		ray_compute_lines(cube, &r);
-		apply_door_sink(cube, &r);
-		ray_texcoords_setup(cube, &r);
-		draw_column(cube, x, &r);
+		ray_compute_lines(c, &r);
+		apply_door_sink(c, &r);
+		ray_texcoords_setup(c, &r);
+		draw_column(c, x, &r);
 		x++;
 	}
-	collectibles_draw(cube);
+}
+
+static void	render_doors(t_game *c)
+{
+	int	x;
+
 	x = 0;
 	while (x < SCR_W)
 	{
-		if (cube->door_hit[x])
-			draw_slice(cube, &cube->door_ray[x], x);
+		if (c->door_hit[x])
+			draw_slice(c, &c->door_ray[x], x);
 		x++;
 	}
-	hud_draw_collected(cube);
-	mlx_put_image_to_window(cube->render.mlx, cube->render.win,
-		cube->render.frame.img, 0, 0);
-	draw_crosshair(cube);
-	render_minimap(cube);
-	mlx_put_image_to_window(cube->render.mlx, cube->render.win,
-		cube->minimap.img_ptr,
-		cube->minimap.offset_x,
-		cube->minimap.offset_y);
+}
+
+void	draw_frame(t_game *c)
+{
+	update_doors_for_frame(c);
+	clear_door_hits(c);
+	render_columns(c);
+	collectibles_draw(c);
+	render_doors(c);
+	hud_draw_collected(c);
+	mlx_put_image_to_window(c->render.mlx, c->render.win,
+		c->render.frame.img, 0, 0);
+	draw_crosshair(c);
+	render_minimap(c);
+	mlx_put_image_to_window(c->render.mlx, c->render.win,
+		c->minimap.img_ptr,
+		c->minimap.offset_x,
+		c->minimap.offset_y);
 }
