@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 18:29:58 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/09 16:37:54 by jopedro-         ###   ########.fr       */
+/*   Updated: 2025/09/11 19:19:44 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	clean_game_setup(t_game *cube)
 	clean_texture(&cube->tex_so);
 	clean_texture(&cube->tex_we);
 	clean_texture(&cube->tex_ea);
+	clean_texture(&cube->tex_do);
 	clean_doors(&cube->doors);
 	if (cube->collect.items)
 	{
@@ -47,6 +48,7 @@ void	clean_game(t_game *cube)
 	clean_texture(&cube->tex_so);
 	clean_texture(&cube->tex_we);
 	clean_texture(&cube->tex_ea);
+	clean_texture(&cube->tex_do);
 	clean_doors(&cube->doors);
 	clean_map(&cube->map);
 	cube->floor_color.is_set = false;

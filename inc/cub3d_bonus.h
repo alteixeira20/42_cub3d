@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 15:38:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/11 18:16:03 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/11 19:22:53 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -387,6 +387,7 @@ void			render_init(t_game *cube);
 int				render_init_win(t_game *cube);
 void			tex_rt_init(t_game *cube);
 void			raycast_init(t_game *cube, t_ray *r, int x);
+void			keys_init(t_game *cube);
 
 // Parsing
 int				parse_all(const char *path, t_game *cube, int in_map);
@@ -478,7 +479,6 @@ void			clean_map(t_map *m);
 void			print_parse(const t_game *cube);
 void			clean_doors(t_doors *doors);
 
-
 void			free3(char **a, char **b, char **c);
 void			render_destroy(t_game *cube);
 
@@ -523,5 +523,5 @@ int				keys_precheck(t_game *cube);
 // HUD
 void			hud_init(t_hud_ctx *ctx, t_img *frame);
 void			hud_draw_collected(t_game *cube);
- 
+
 #endif

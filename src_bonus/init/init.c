@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 18:23:11 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/11 17:18:33 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/11 19:05:11 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,4 +70,5 @@ void	game_init(t_game *cube)
 	cube->collect.count = 0;
 	cube->collect.collected = 0;
 	cube->collect.anim_t = 0.0;
+	keys_init(cube);
 }

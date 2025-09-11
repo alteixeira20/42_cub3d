@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 17:15:18 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/11 18:15:10 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/11 19:05:56 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,22 @@ void	raycast_init(t_game *cube, t_ray *r, int x)
 	else
 		r->delta_y = fabs(1.0 / r->ray_dir_y);
 	ray_set_dir(cube, r);
+}
+
+void	keys_init(t_game *cube)
+{
+	int	i;
+
+	i = 0;
+	while (i < KEY_FRAME_COUNT)
+	{
+		cube->collect.key_frames[i].img = NULL;
+		cube->collect.key_frames[i].addr = NULL;
+		cube->collect.key_frames[i].bpp = 0;
+		cube->collect.key_frames[i].line_len = 0;
+		cube->collect.key_frames[i].endian = 0;
+		cube->collect.key_frames[i].w = 0;
+		cube->collect.key_frames[i].h = 0;
+		i++;
+	}
 }

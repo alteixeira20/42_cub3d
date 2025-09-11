@@ -1,4 +1,8 @@
-# Suppress uninitialized values passed to writev() (X11/XCB)
+# ===========================
+# Suppressions for Cub3D Valgrind
+# ===========================
+
+# Suppress uninitialized values passed to writev (X11/XCB noise)
 {
    x11_writev_param0
    Memcheck:Param
@@ -12,7 +16,7 @@
    fun:writev
 }
 
-# Suppress allocations from X11 (libX11)
+# Suppress allocations from X11 (libX11 internals)
 {
    x11_still_reachable
    Memcheck:Leak
@@ -28,18 +32,53 @@
    obj:/usr/lib/x86_64-linux-gnu/libXcursor.so.*
 }
 
-# Suppress allocations from glibc dynamic loader
+# Suppress allocations from Xext and Xau/Xdmcp helpers
+{
+   xext_still_reachable
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   obj:/usr/lib/x86_64-linux-gnu/libXext.so.*
+}
+{
+   xau_still_reachable
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   obj:/usr/lib/x86_64-linux-gnu/libXau.so.*
+}
+{
+   xdmcp_still_reachable
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   obj:/usr/lib/x86_64-linux-gnu/libXdmcp.so.*
+}
+
+# Suppress allocations from glibc dynamic loader (dlopen, etc.)
 {
    ldso_still_reachable
    Memcheck:Leak
    match-leak-kinds: reachable
    obj:/usr/lib/x86_64-linux-gnu/ld-*.so
 }
-
-# Suppress allocations from valgrind preload (vgpreload_memcheck)
 {
-   valgrind_preload
+   libdl_still_reachable
    Memcheck:Leak
    match-leak-kinds: reachable
+   obj:/usr/lib/x86_64-linux-gnu/libdl.so.*
+}
+
+# Suppress Valgrind’s own preload library (safe form)
+# ⚠️ Only suppress allocations **inside vgpreload itself**, not your code.
+{
+   vgpreload_internal_malloc
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   obj:/usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so
+}
+{
+   vgpreload_internal_calloc
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:calloc
    obj:/usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so
 }
