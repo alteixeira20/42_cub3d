@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 15:38:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/09 15:20:06 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/11 13:00:32 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@
 /* ************************************************************************** */
 
 // Allowed Map Characters
-# define MAP_CHARS		" 01NSEW"
+# define MAP_CHARS		" 01NSEWC"
 
 // Identifier Tokens
 # define ID_NO			"NO"
@@ -69,8 +69,19 @@
 # define KEY_RIGHT 65363
 # define KEY_M 109
 
+// Input
+# define MOUSE_SENS 0.00042
+
 // Player Radius
 # define COLL_R 0.20
+
+// Collectibles
+# define KEY_FRAME_COUNT 24
+# define KEY_ANIM_FPS    12.0
+# define KEY_BOB_AMP_PX  6
+# define KEY_PICKUP_DIST 0.5
+# define KEY_SCALE       0.5
+# define KEY_TEXT_SCALE  10
 
 // Minimap Settings
 # define MM_TILE_SIZE       10
@@ -220,6 +231,50 @@ typedef struct s_render
 	t_img	frame;
 }	t_render;
 
+// HUD
+typedef struct s_hud_ctx
+{
+	t_img			*img;
+	int				x;
+	int				y;
+	int				scale;
+	unsigned int	color;
+	const char		*text;
+}	t_hud_ctx;
+
+typedef struct s_hud_glyph
+{
+	char			c;
+	unsigned char	rows[7];
+}	t_hud_glyph;
+
+typedef struct s_collectible
+{
+	int		tile_x;
+	int		tile_y;
+	double	pos_x;
+	double	pos_y;
+	int		collected;
+	double	phase;
+}	t_collectible;
+
+typedef struct s_bounds
+{
+	int	start_x;
+	int	end_x;
+	int	start_y;
+	int	end_y;
+}	t_bounds;
+
+typedef struct s_collectibles
+{
+	t_img				key_frames[KEY_FRAME_COUNT];
+	t_collectible		*items;
+	int					count;
+	int					collected;
+	double				anim_t;
+}	t_collectibles;
+
 // Game Settings
 typedef struct s_game
 {
@@ -238,7 +293,18 @@ typedef struct s_game
 	t_minimap		minimap;
 	double			dt;
 	bool			paused;
+	t_collectibles	collect;
+	double			zbuf[SCR_W];
 }	t_game;
+
+/* Collectible sprite draw context */
+typedef struct s_drawctx
+{
+	t_game			*cube;
+	t_img			*tex;
+	unsigned int	trans;
+	double			ty;
+}	t_drawctx;
 
 // Parser Helper Struct
 typedef struct s_parser_ctx
@@ -290,7 +356,9 @@ typedef struct s_ray
 // Initialize Game
 void			game_init(t_game *cube);
 void			input_init(t_input *inp);
-void			init_minimap(t_game *cube);
+void			minimap_init(t_game *cube);
+void			render_init(t_game *cube);
+int				render_init_win(t_game *cube);
 
 // Parsing
 int				parse_all(const char *path, t_game *cube);
@@ -319,6 +387,10 @@ int				validate_map_closed(t_game *cube);
 int				map_width(const t_map *map);
 int				map_height(const t_map *map);
 char			map_tile(const t_map *map, int y, int x);
+
+// HUD
+void			hud_put_text(t_game *cube, t_hud_ctx *ctx);
+char			*hud_make_counter_text(const t_game *cube);
 
 // Player Status
 int				player_x(const t_player *player);
@@ -354,6 +426,17 @@ unsigned int	tile_color(char t);
 unsigned int	rgb(unsigned int r, unsigned int g, unsigned int b);
 unsigned int	sample2x2(const t_game *cube, double sx, double sy);
 
+// Textures Utils
+unsigned int	get_texel(const t_img *img, int x, int y);
+void			put_pixel_img(t_img *img, int x, int y, unsigned int color);
+
+// Collectible Util
+void			sprite_transform(t_game *cube, t_collectible *c,
+					double *tx, double *ty);
+t_bounds		sprite_bounds(int screen_x,
+					int sprite_w, int sprite_h, int v_off);
+int				clampi(int v, int lo, int hi);
+
 // Error Handling
 void			print_error(const char *msg);
 
@@ -366,7 +449,6 @@ void			clean_texture(t_texture *t);
 void			clean_map(t_map *m);
 void			print_parse(const t_game *cube);
 
-int				render_init(t_game *cube);
 void			render_destroy(t_game *cube);
 
 int				textures_load(t_game *cube);
@@ -383,4 +465,15 @@ int				win_close(t_game *cube);
 void			update_player(t_game *cube);
 
 void			rotate_player(t_game *cube, double angle);
+// Collectibles
+int				parse_collectibles(t_game *cube);
+int				keys_load(t_game *cube);
+void			clean_keys(t_game *cube);
+void			collectibles_update(t_game *cube);
+void			collectibles_draw(t_game *cube);
+
+// HUD
+void			hud_init(t_hud_ctx *ctx, t_img *frame);
+void			hud_draw_collected(t_game *cube);
+
 #endif

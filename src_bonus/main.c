@@ -6,7 +6,7 @@
 /*   By: jopedro- <jopedro-@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 16:19:18 by jopedro-          #+#    #+#             */
-/*   Updated: 2025/09/08 20:41:09 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/10 19:34:36 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,21 @@
 
 static int	setup_after_parse(t_game *cube)
 {
-	if (render_init(cube) != 0)
+	if (render_init_win(cube) != 0)
 		return (-1);
 	if (textures_load(cube) != 0)
 	{
 		render_destroy(cube);
 		return (-1);
 	}
-	init_minimap(cube);
+	if (keys_load(cube) != 0)
+	{
+		clean_keys(cube);
+		textures_destroy(cube);
+		render_destroy(cube);
+		return (-1);
+	}
+	minimap_init(cube);
 	return (0);
 }
 

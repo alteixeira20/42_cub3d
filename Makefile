@@ -6,7 +6,7 @@
 #    By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/11 15:11:22 by paalexan          #+#    #+#              #
-#    Updated: 2025/09/09 14:58:54 by paalexan         ###   ########.fr        #
+#    Updated: 2025/09/10 19:35:31 by paalexan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -104,6 +104,7 @@ SRC_BONUS		= $(SRC_BONUS_DIR)/main.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/init/init.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/init/input.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/init/minimap.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/init/render.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/parser/parser.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/parser/lines.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/parser/color.c
@@ -119,6 +120,7 @@ SRC_BONUS		+= $(SRC_BONUS_DIR)/cleanup/util.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/render/draw.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/render/init.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/render/textures.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/render/textures_utils.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/raycast/raycast.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/raycast/util.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/input/keyboard.c
@@ -131,6 +133,14 @@ SRC_BONUS		+= $(SRC_BONUS_DIR)/ui/minimap/minimap_colors.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/game/loop.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/update/update.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/update/util.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/collectibles/keys_load.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/collectibles/draw_utils.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/collectibles/update.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/collectibles/draw.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/ui/hud/hud.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/ui/hud/hud_text.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/ui/hud/hud_utils.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/parser/collectibles.c
 
 # **************************************************************************** #
 #                                                                              #
@@ -228,6 +238,9 @@ maps:
 
 valgrind: $(NAME)
 	$(VALGRIND) ./$(NAME) $(ARGS)
+
+valgrind_bonus: $(NAME_BONUS)
+	$(VALGRIND) ./$(NAME_BONUS) $(ARGS)
 
 valgrind_invalid:
 	@echo "$(PREFIX) $(YEL)Running strict Valgrind checks on invalid maps...$(D)"

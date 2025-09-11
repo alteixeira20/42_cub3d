@@ -1,14 +1,78 @@
+## ============================================================
+## Suppress MiniLibX / X11 / XCB allocator "reachable" noise
+## (Only affects leaks/still-reachable from external libs.)
+## ============================================================
+
+# libxcb writev param (uninitialized bytes) — harmless X11 chatter
 {
-   ignore_x11_writev
+   xcb_writev_uninit_any
    Memcheck:Param
-   writev(vector[...])
-   fun:writev
-   obj:/usr/lib/x86_64-linux-gnu/libxcb.so.*
+   writev(vector[0])
+   obj:*/libxcb.so.*
 }
 {
-   ignore_x11_send
+   xcb_writev_uninit_all
    Memcheck:Param
    writev(vector[...])
-   fun:xcb_writev
-   obj:/usr/lib/x86_64-linux-gnu/libxcb.so.*
+   obj:*/libxcb.so.*
+}
+
+# Generic X11 allocations (locale, resource manager, pixmaps, etc.)
+{
+   x11_leaks_generic
+   Memcheck:Leak
+   match-leak-kinds: reachable,possible
+   obj:*/libX11.so.*
+}
+
+# Xcursor allocations (ARGB cursor support, display info)
+{
+   xcursor_leaks
+   Memcheck:Leak
+   match-leak-kinds: reachable,possible
+   obj:*/libXcursor.so.*
+}
+
+# Xext and friends (MLX depends on Xext)
+{
+   xext_leaks
+   Memcheck:Leak
+   match-leak-kinds: reachable,possible
+   obj:*/libXext.so.*
+}
+
+# XCB allocations
+{
+   xcb_leaks
+   Memcheck:Leak
+   match-leak-kinds: reachable,possible
+   obj:*/libxcb.so.*
+}
+
+# X11 transport helpers occasionally show as reachable
+{
+   xau_leaks
+   Memcheck:Leak
+   match-leak-kinds: reachable,possible
+   obj:*/libXau.so.*
+}
+{
+   xdmcp_leaks
+   Memcheck:Leak
+   match-leak-kinds: reachable,possible
+   obj:*/libXdmcp.so.*
+}
+
+# Dynamic loader artifacts due to X11 modules being dlopened
+{
+   ldso_reachable
+   Memcheck:Leak
+   match-leak-kinds: reachable,possible
+   obj:*/ld-*.so
+}
+{
+   libdl_reachable
+   Memcheck:Leak
+   match-leak-kinds: reachable,possible
+   obj:*/libdl.so.*
 }

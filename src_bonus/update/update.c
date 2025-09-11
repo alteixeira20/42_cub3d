@@ -84,4 +84,5 @@ void	update_player(t_game *cube)
 	apply_mouse_pitch(cube);
 	ms = move_speed * cube->dt;
 	move_combined(cube, ms);
+	collectibles_update(cube);
 }

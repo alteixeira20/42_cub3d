@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 19:19:56 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/08 21:17:14 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/10 19:29:28 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static void	create_minimap_image(t_game *cube, t_minimap *m)
 	}
 }
 
-void	init_minimap(t_game *cube)
+void	minimap_init(t_game *cube)
 {
 	t_minimap	*minimap;
 
@@ -41,5 +41,10 @@ void	init_minimap(t_game *cube)
 	minimap->offset_y = MM_OFFSET_MARGIN;
 	minimap->scale = MM_SCALE;
 	minimap->enabled = true;
+	minimap->img_ptr = NULL;
+	minimap->addr = NULL;
+	minimap->bpp = 0;
+	minimap->line_len = 0;
+	minimap->endian = 0;
 	create_minimap_image(cube, minimap);
 }

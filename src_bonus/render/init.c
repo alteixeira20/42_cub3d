@@ -6,7 +6,7 @@
 /*   By: jopedro- <jopedro-@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 15:50:59 by jopedro-          #+#    #+#             */
-/*   Updated: 2025/09/05 18:30:08 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/10 19:34:24 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static void	render_destroy_frame(t_render *r)
 	r->frame.h = 0;
 }
 
-int	render_init(t_game *cube)
+int	render_init_win(t_game *cube)
 {
 	cube->render.mlx = mlx_init();
 	if (!cube->render.mlx)

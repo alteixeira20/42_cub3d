@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 18:29:58 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/09 11:37:02 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/10 19:19:22 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,14 @@ void	clean_game(t_game *cube)
 	cube->ceil_color.is_set = false;
 	cube->player.is_set = false;
 	textures_destroy(cube);
+	clean_keys(cube);
+	if (cube->collect.items)
+	{
+		free(cube->collect.items);
+		cube->collect.items = NULL;
+		cube->collect.count = 0;
+		cube->collect.collected = 0;
+	}
 	clean_minimap(cube);
 	render_destroy(cube);
 }

@@ -82,6 +82,8 @@ int	parse_all(const char *path, t_game *cube)
 	clean_map_buffer(&buf);
 	if (parse_player(cube) != 0)
 		return (-1);
+	if (parse_collectibles(cube) != 0)
+		return (-1);
 	if (validate_map_closed(cube) != 0)
 		return (-1);
 	return (0);

@@ -71,7 +71,7 @@ unsigned int	tile_color(char t)
 {
 	if (t == '1')
 		return (MM_COLOR_WALL);
-	if (t == '0')
+	if (t == '0' || t == 'C')
 		return (MM_COLOR_FLOOR);
 	return (MM_COLOR_VOID);
 }
