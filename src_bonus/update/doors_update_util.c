@@ -6,7 +6,7 @@
 /*   By: jopedro- <jopedro-@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 14:03:37 by jopedro-          #+#    #+#             */
-/*   Updated: 2025/09/11 17:34:50 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/11 17:36:18 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	apply_door_sink(t_game *c, t_ray *r)
 	if (vis_h <= 0)
 		return ;
 	r->tex_y_off = (int)((float)off
-					* ((float)c->tex_rt[TEX_DO].img.h / (float)r->line_h));
+			* ((float)c->tex_rt[TEX_DO].img.h / (float)r->line_h));
 	if (r->tex_y_off < 0)
 		r->tex_y_off = 0;
 }
