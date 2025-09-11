@@ -6,7 +6,7 @@
 /*   By: jopedro- <jopedro-@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 16:15:05 by jopedro-          #+#    #+#             */
-/*   Updated: 2025/09/10 13:58:21 by jopedro-         ###   ########.fr       */
+/*   Updated: 2025/09/11 17:33:06 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,9 @@ static int	is_blocked(t_game *c, double y, double x)
 	y1 = (int)floor(y + COLL_R);
 	if (x0 < 0 || y0 < 0 || x1 >= c->map.width || y1 >= c->map.height)
 		return (1);
-	/* wall collision */
 	if (c->map.grid[y0][x0] == '1' || c->map.grid[y0][x1] == '1'
 		|| c->map.grid[y1][x0] == '1' || c->map.grid[y1][x1] == '1')
 		return (1);
-	/* door collision (block until fully open) */
 	if ((c->map.grid[y0][x0] == 'D' && door_blocks_cell(&c->doors, x0, y0))
 		|| (c->map.grid[y0][x1] == 'D' && door_blocks_cell(&c->doors, x1, y0))
 		|| (c->map.grid[y1][x0] == 'D' && door_blocks_cell(&c->doors, x0, y1))

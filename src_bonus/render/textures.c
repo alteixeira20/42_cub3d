@@ -6,44 +6,11 @@
 /*   By: jopedro- <jopedro-@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 15:57:08 by jopedro-          #+#    #+#             */
-/*   Updated: 2025/09/09 18:51:08 by jopedro-         ###   ########.fr       */
+/*   Updated: 2025/09/11 17:30:02 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/cub3d_bonus.h"
-
-static int	check_path_readable(const char *path)
-{
-	int	fd;
-
-	if (!path)
-		return (-1);
-	fd = open(path, O_RDONLY);
-	if (fd < 0)
-		return (-1);
-	close(fd);
-	return (0);
-}
-
-int	textures_precheck(t_game *cube)
-{
-	/* mandatory four textures must be present */
-	if (check_path_readable(cube->tex_no.path) != 0)
-		return (print_error(ERR_BAD_TEXT_PATH), -1);
-	if (check_path_readable(cube->tex_so.path) != 0)
-		return (print_error(ERR_BAD_TEXT_PATH), -1);
-	if (check_path_readable(cube->tex_we.path) != 0)
-		return (print_error(ERR_BAD_TEXT_PATH), -1);
-	if (check_path_readable(cube->tex_ea.path) != 0)
-		return (print_error(ERR_BAD_TEXT_PATH), -1);
-	/* doors texture required iff map has doors */
-	if (cube->doors.len > 0)
-	{
-		if (check_path_readable(cube->tex_do.path) != 0)
-			return (print_error(ERR_BAD_TEXT_PATH), -1);
-	}
-	return (0);
-}
 
 static int	load_one_tex(void *mlx, const char *path, t_img *out)
 {
@@ -84,7 +51,6 @@ static int	load_all_paths(t_game *cube)
 	if (load_one_tex(cube->render.mlx, cube->tex_ea.path,
 			&cube->tex_rt[3].img) != 0)
 		return (-1);
-	/* Doors texture is required only if there are doors in the map */
 	if (cube->doors.len > 0)
 	{
 		if (!cube->tex_do.path)

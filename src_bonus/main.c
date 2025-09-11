@@ -6,7 +6,7 @@
 /*   By: jopedro- <jopedro-@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 16:19:18 by jopedro-          #+#    #+#             */
-/*   Updated: 2025/09/10 19:34:36 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/11 17:25:15 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 static int	setup_after_parse(t_game *cube)
 {
-	/* Preflight: ensure all required asset files exist
-	** This prevents opening a window and then failing. */
 	if (textures_precheck(cube) != 0)
 		return (-1);
 	if (keys_precheck(cube) != 0)
