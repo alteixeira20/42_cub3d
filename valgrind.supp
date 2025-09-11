@@ -1,78 +1,45 @@
-## ============================================================
-## Suppress MiniLibX / X11 / XCB allocator "reachable" noise
-## (Only affects leaks/still-reachable from external libs.)
-## ============================================================
-
-# libxcb writev param (uninitialized bytes) — harmless X11 chatter
+# Suppress uninitialized values passed to writev() (X11/XCB)
 {
-   xcb_writev_uninit_any
+   x11_writev_param0
    Memcheck:Param
    writev(vector[0])
-   obj:*/libxcb.so.*
+   fun:writev
 }
 {
-   xcb_writev_uninit_all
+   x11_writev_param_any
    Memcheck:Param
    writev(vector[...])
-   obj:*/libxcb.so.*
+   fun:writev
 }
 
-# Generic X11 allocations (locale, resource manager, pixmaps, etc.)
+# Suppress allocations from X11 (libX11)
 {
-   x11_leaks_generic
+   x11_still_reachable
    Memcheck:Leak
-   match-leak-kinds: reachable,possible
-   obj:*/libX11.so.*
+   match-leak-kinds: reachable
+   obj:/usr/lib/x86_64-linux-gnu/libX11.so.*
 }
 
-# Xcursor allocations (ARGB cursor support, display info)
+# Suppress allocations from Xcursor
 {
-   xcursor_leaks
+   xcursor_still_reachable
    Memcheck:Leak
-   match-leak-kinds: reachable,possible
-   obj:*/libXcursor.so.*
+   match-leak-kinds: reachable
+   obj:/usr/lib/x86_64-linux-gnu/libXcursor.so.*
 }
 
-# Xext and friends (MLX depends on Xext)
+# Suppress allocations from glibc dynamic loader
 {
-   xext_leaks
+   ldso_still_reachable
    Memcheck:Leak
-   match-leak-kinds: reachable,possible
-   obj:*/libXext.so.*
+   match-leak-kinds: reachable
+   obj:/usr/lib/x86_64-linux-gnu/ld-*.so
 }
 
-# XCB allocations
+# Suppress allocations from valgrind preload (vgpreload_memcheck)
 {
-   xcb_leaks
+   valgrind_preload
    Memcheck:Leak
-   match-leak-kinds: reachable,possible
-   obj:*/libxcb.so.*
-}
-
-# X11 transport helpers occasionally show as reachable
-{
-   xau_leaks
-   Memcheck:Leak
-   match-leak-kinds: reachable,possible
-   obj:*/libXau.so.*
-}
-{
-   xdmcp_leaks
-   Memcheck:Leak
-   match-leak-kinds: reachable,possible
-   obj:*/libXdmcp.so.*
-}
-
-# Dynamic loader artifacts due to X11 modules being dlopened
-{
-   ldso_reachable
-   Memcheck:Leak
-   match-leak-kinds: reachable,possible
-   obj:*/ld-*.so
-}
-{
-   libdl_reachable
-   Memcheck:Leak
-   match-leak-kinds: reachable,possible
-   obj:*/libdl.so.*
+   match-leak-kinds: reachable
+   obj:/usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so
 }
