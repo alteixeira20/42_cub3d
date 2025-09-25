@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 00:30:07 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/11 18:11:34 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/11 19:44:12 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,13 +77,13 @@ int	parse_all(const char *path, t_game *cube, int in_map)
 		return (clean_map_buffer(&buf), print_error(ERR_MISSING_ID), -1);
 	if (parse_map(buf.items, buf.count, &cube->map) != 0)
 		return (clean_map_buffer(&buf), -1);
+	if (validate_no_adjacent_doors(cube) != 0)
+		return (clean_map_buffer(&buf), -1);
 	parse_doors(cube);
 	clean_map_buffer(&buf);
 	if (parse_player(cube) != 0)
 		return (-1);
-	if (parse_collectibles(cube) != 0)
-		return (-1);
-	if (validate_map_closed(cube) != 0)
+	if (parse_collectibles(cube) != 0 || validate_map_closed(cube) != 0)
 		return (-1);
 	return (0);
 }

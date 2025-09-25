@@ -91,3 +91,28 @@ int	validate_map_closed(t_game *cube)
 	clean_str_array(copy, cube->map.height);
 	return (0);
 }
+
+int	validate_no_adjacent_doors(const t_game *cube)
+{
+	int	x;
+	int	y;
+
+	y = 0;
+	while (y < cube->map.height)
+	{
+		x = 0;
+		while (x < cube->map.width)
+		{
+			if (cube->map.grid[y][x] == 'D')
+			{
+				if (x + 1 < cube->map.width && cube->map.grid[y][x + 1] == 'D')
+					return (print_error(ERR_DOORS_ADJACENT), -1);
+				if (y + 1 < cube->map.height && cube->map.grid[y + 1][x] == 'D')
+					return (print_error(ERR_DOORS_ADJACENT), -1);
+			}
+			x++;
+		}
+		y++;
+	}
+	return (0);
+}

@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 15:38:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/11 19:22:53 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/09/11 21:19:35 by paalexan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@
 # define KEY_M						109
 
 // Input
-# define MOUSE_SENS					0.00042
+# define MOUSE_SENS					0.0001
 
 // Player Radius
 # define COLL_R						0.20
@@ -124,10 +124,11 @@
 # define ERR_PLAYER_MULTI			"multiple player positions"
 # define ERR_PLAYER_MISSING			"missing player"
 # define ERR_ALLOC					"allocation failed"
+# define ERR_DOORS_ADJACENT         "adjacent doors are not allowed"
 
 //Doors
 # define DOOR_CELL					'D'
-# define DOOR_OPEN_SPEED			0.2f
+# define DOOR_OPEN_SPEED			0.02f
 # define DOOR_RADIUS				1.5f
 # define DOOR_THICK					0.9f
 
@@ -411,6 +412,7 @@ void			set_dir_and_plane(t_game *cube, char c);
 int				has_cub_extension(const char *str);
 int				has_xpm_extension(const char *str);
 int				validate_map_closed(t_game *cube);
+int				validate_no_adjacent_doors(const t_game *cube);
 
 // Map Settings
 int				map_width(const t_map *map);

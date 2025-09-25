@@ -17,7 +17,16 @@ unsigned int	get_texel(const t_img *img, int x, int y)
 	char			*px;
 	unsigned int	color;
 
-	px = NULL;
+	if (!img || !img->addr)
+		return (0);
+	if (x < 0)
+		x = 0;
+	if (y < 0)
+		y = 0;
+	if (x >= img->w)
+		x = img->w - 1;
+	if (y >= img->h)
+		y = img->h - 1;
 	px = img->addr + y * img->line_len + x * (img->bpp / 8);
 	color = *(unsigned int *)px;
 	return (color);
@@ -27,7 +36,10 @@ void	put_pixel_img(t_img *img, int x, int y, unsigned int color)
 {
 	char	*px;
 
-	px = NULL;
+	if (!img || !img->addr)
+		return ;
+	if (x < 0 || y < 0 || x >= img->w || y >= img->h)
+		return ;
 	px = img->addr + y * img->line_len + x * (img->bpp / 8);
 	*(unsigned int *)px = color;
 }

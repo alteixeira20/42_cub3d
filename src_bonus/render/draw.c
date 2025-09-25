@@ -16,6 +16,10 @@ void	img_put_pixel(t_img *img, int x, int y, unsigned int color)
 {
 	char	*px;
 
+	if (!img || !img->addr)
+		return ;
+	if (x < 0 || y < 0 || x >= img->w || y >= img->h)
+		return ;
 	px = img->addr + y * img->line_len + x * (img->bpp / 8);
 	*(unsigned int *)px = color;
 }
