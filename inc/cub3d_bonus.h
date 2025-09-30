@@ -41,16 +41,16 @@
 /* ************************************************************************** */
 
 // Allowed Map Characters
-# define MAP_CHARS					" 01NSEWDC"
+# define MAP_CHARS				" 01NSEWDC"
 
 // Identifier Tokens
-# define ID_NO						"NO"
-# define ID_SO						"SO"
-# define ID_WE						"WE"
-# define ID_EA						"EA"
-# define ID_DO						"DO"
-# define ID_F						"F"
-# define ID_C						"C"
+# define ID_NO					"NO"
+# define ID_SO					"SO"
+# define ID_WE					"WE"
+# define ID_EA					"EA"
+# define ID_DO					"DO"
+# define ID_F					"F"
+# define ID_C					"C"
 
 // Max Allowed Width
 # define MAX_MAP_WIDTH				8192
@@ -58,24 +58,24 @@
 # define MAX_LINE_LEN				16384
 
 // Window Resolution
-# define SCR_W						1920
-# define SCR_H						1080
+# define SCR_W					1920
+# define SCR_H					1080
 
 // KeyMap
-# define KEY_ESC					65307
-# define KEY_W						119
-# define KEY_A						97
-# define KEY_S						115
-# define KEY_D						100
-# define KEY_LEFT					65361
-# define KEY_RIGHT					65363
-# define KEY_M						109
+# define KEY_ESC				65307
+# define KEY_W					119
+# define KEY_A					97
+# define KEY_S					115
+# define KEY_D					100
+# define KEY_LEFT				65361
+# define KEY_RIGHT				65363
+# define KEY_M					109
 
 // Input
-# define MOUSE_SENS					0.0001
+# define MOUSE_SENS				0.0001
 
 // Player Radius
-# define COLL_R						0.20
+# define COLL_R					0.20
 
 // Movement
 # define PLAYER_MOVE_SPEED			0.10
@@ -85,14 +85,14 @@
 # define KEY_ANIM_FPS				12.0
 # define KEY_BOB_AMP_PX				6
 # define KEY_PICKUP_DIST			0.5
-# define KEY_SCALE					0.5
+# define KEY_SCALE				0.5
 # define KEY_TEXT_SCALE				10
 
 // Minimap Settings
 # define MM_TILE_SIZE				10
 # define MM_RADIUS_TILES			12
 # define MM_OFFSET_MARGIN			20
-# define MM_SCALE					2.0
+# define MM_SCALE				2.0
 # define MM_SS_OFFSET				0.042
 
 // Minimap Colors
@@ -103,11 +103,11 @@
 # define MM_COLOR_PLAYER			0x00FF0000
 
 // Error Messages
-# define ERR_USAGE					"usage: ./cub3d <file.cub>"
+# define ERR_USAGE				"usage: ./cub3d <file.cub>"
 # define ERR_CANNOT_OPEN			"cannot open file"
 # define ERR_INVALID_ID				"invalid identifier"
 # define ERR_INVALID_EXT			"invalid file extension (expected .cub)"
-# define ERR_DUP_ID_NO			    "duplicate identifier NO"
+# define ERR_DUP_ID_NO			   	"duplicate identifier NO"
 # define ERR_DUP_ID_SO				"duplicate identifier SO"
 # define ERR_DUP_ID_WE				"duplicate identifier WE"
 # define ERR_DUP_ID_EA				"duplicate identifier EA"
@@ -119,18 +119,18 @@
 # define ERR_BAD_TEXT_PATH			"texture path not readable"
 # define ERR_MAP_CHAR				"map contains forbidden character"
 # define ERR_MAP_EMPTY_LINE			"empty line inside map"
-# define ERR_MAP_AFTER_CONTENT		"content after map block"
+# define ERR_MAP_AFTER_CONTENT			"content after map block"
 # define ERR_MAP_OPEN				"map not closed"
 # define ERR_PLAYER_MULTI			"multiple player positions"
 # define ERR_PLAYER_MISSING			"missing player"
-# define ERR_ALLOC					"allocation failed"
-# define ERR_DOORS_ADJACENT         "adjacent doors are not allowed"
+# define ERR_ALLOC				"allocation failed"
+# define ERR_DOORS_ADJACENT  	      		"adjacent doors are not allowed"
 
 //Doors
-# define DOOR_CELL					'D'
+# define DOOR_CELL				'D'
 # define DOOR_OPEN_SPEED			0.02f
 # define DOOR_RADIUS				1.5f
-# define DOOR_THICK					0.9f
+# define DOOR_THICK				0.9f
 
 /* ************************************************************************** */
 /*                                                                            */
