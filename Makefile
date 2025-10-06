@@ -40,9 +40,10 @@ DFLAGS			= -g
 MAKE			= make -C
 
 # Minilibx
-MLX_DIR   	= ./minilibx-linux
+MLX_DIR   	= ./mlx
+
 MLX       	= $(MLX_DIR)/libmlx.a
-MLX_LIBS  	= -L$(MLX_DIR) -lmlx -lXext -lX11 -lm -lz -lbsd
+MLX_LIBS  	= -L$(MLX_DIR) -lmlx -lXext -lX11 -lm -lbsd
 
 # Valgrind
 VALGRIND = valgrind --leak-check=full --show-leak-kinds=all \
@@ -65,6 +66,13 @@ VALIDATION_DIR	= $(SRC_DIR)/validation
 MAP_DIR			= maps
 OBJ_DIR			= obj
 OBJ_BONUS_DIR	= obj_bonus
+
+# Test helpers
+GAME			?= $(NAME_BONUS)
+INVALID_MAPS	:= $(shell find $(MAP_DIR)/invalid -type f -name '*.cub' 2>/dev/null)
+TEXTURE_TEST_MAP := $(firstword $(wildcard $(MAP_DIR)/valid/*.cub))
+HAS_TEXTURE_MAP := $(if $(TEXTURE_TEST_MAP),1,0)
+TEXTURES		:= $(shell find assets -type f -name '*.xpm' 2>/dev/null)
 
 # **************************************************************************** #
 #                                                                              #
@@ -275,6 +283,135 @@ valgrind_invalid:
 		fi; \
 	done
 
+test_invalid:
+	@bash -c ' \
+		if [ ! -f "$(GAME)" ]; then \
+			echo "$(YELLOW)$(PREFIX)$(RESET) No executable found. Please compile the project first (make bonus)."; \
+			exit 0; \
+		fi; \
+		if [ -z "$(INVALID_MAPS)" ]; then \
+			echo "$(YELLOW)$(PREFIX)$(RESET) No invalid maps found in maps/invalid."; \
+			exit 0; \
+		fi; \
+		status=0; passed=0; failed=0; \
+		echo "$(ORANGE)$(PREFIX)$(RESET) Running Tests on Invalid Maps..."; \
+		for map in $(INVALID_MAPS); do \
+			echo ; \
+			printf "Testing map %s:\\n" "$(YELLOW)$$(basename "$$map")$(RESET)"; \
+			msg_output=$$(./$(GAME) "$$map" 2>&1 || true); \
+			first=$$(printf "%s" "$$msg_output" | sed -n '1p'); \
+			error_line=$$(printf "%s" "$$msg_output" | sed -n "2p"); \
+			err_ok=1; \
+			if [ "$$first" = "Error" ] && [ -n "$$error_line" ]; then \
+				printf "  Error Msg: %s%s%s %s\\n" "$(GREY)" "$$error_line" "$(RESET)" "$(GREEN)OK$(RESET)"; \
+			else \
+				printf "  Error Msg: %s%s%s %s\\n" "$(GREY)" "$$error_line" "$(RESET)" "$(RED)KO$(RESET)"; \
+				printf "%s\\n" "$$msg_output"; \
+				err_ok=0; \
+			fi; \
+			tmp=$$(mktemp); \
+			valgrind --leak-check=full --error-exitcode=42 --log-file=$$tmp ./$(GAME) "$$map" > /dev/null 2>&1 || true; \
+			vg_output=$$(cat $$tmp); rm -f $$tmp; \
+			vg_ok=1; \
+			if printf "%s\\n" "$$vg_output" | grep -q "ERROR SUMMARY: 0"; then \
+				printf "  Valgrind: %sOK%s\\n" "$(GREEN)" "$(RESET)"; \
+			else \
+				printf "  Valgrind: %sKO%s\\n" "$(RED)" "$(RESET)"; \
+				printf "%s\\n" "$$vg_output"; \
+				vg_ok=0; \
+			fi; \
+			if [ "$$err_ok" -eq 1 ] && [ "$$vg_ok" -eq 1 ]; then \
+				passed=$$((passed + 1)); \
+			else \
+				failed=$$((failed + 1)); \
+				status=1; \
+			fi; \
+		done; \
+		if [ "$$failed" -eq 0 ]; then \
+			echo "$(ORANGE)$(PREFIX)$(RESET) Congratulations you passed all $(GREEN)$$passed$(RESET) tests."; \
+		else \
+			echo "$(ORANGE)$(PREFIX)$(RESET) Passed $(GREEN)$$passed$(RESET) tests and $(RED)$$failed$(RESET) tests."; \
+		fi; \
+		exit $$status'
+
+test_textures:
+	@bash -c ' \
+		if [ ! -f "$(GAME)" ]; then \
+			echo "$(YELLOW)$(PREFIX)$(RESET) No executable found. Please compile the project first (make bonus)."; \
+			exit 0; \
+		fi; \
+		if [ $(HAS_TEXTURE_MAP) -eq 0 ]; then \
+			echo "$(YELLOW)$(PREFIX)$(RESET) No valid map found in maps/valid for texture tests."; \
+			exit 1; \
+		fi; \
+		map_textures=$$(sed -n "s/^\(NO\|SO\|WE\|EA\|DO\)[[:space:]]\+\(.*\)/\2/p" $(TEXTURE_TEST_MAP)); \
+		key_textures=$$(find assets/key -type f -name "*.xpm" 2>/dev/null); \
+		key_map=$$(find $(MAP_DIR)/valid -maxdepth 1 -type f -name '*keys*.cub' | head -n 1); \
+		if [ -z "$$map_textures" ] && [ -z "$$key_textures" ]; then \
+			echo "$(YELLOW)$(PREFIX)$(RESET) No textures detected for testing."; \
+			exit 0; \
+		fi; \
+		status=0; passed=0; failed=0; \
+		for texture in $$map_textures; do \
+			if [ ! -f "$$texture" ]; then \
+				continue; \
+			fi; \
+			bname=$$(basename "$$texture"); \
+			dirname=$$(dirname "$$texture"); \
+			echo ; \
+			printf "Testing texture %s (dir %s):\\n" "$(YELLOW)$$bname$(RESET)" "$$dirname"; \
+			save_perms=$$(stat -c %a "$$texture"); \
+			chmod 000 "$$texture"; \
+			msg_output=$$(./$(GAME) $(TEXTURE_TEST_MAP) 2>&1 || true); \
+			chmod $$save_perms "$$texture"; \
+			first=$$(printf "%s" "$$msg_output" | sed -n "1p"); \
+			error_line=$$(printf "%s" "$$msg_output" | sed -n "2p"); \
+			if [ "$$first" = "Error" ] && printf "%s\\n" "$$error_line" | grep -qi "texture path not readable"; then \
+				printf "  Error Msg: %s%s%s %s\\n" "$(GREY)" "$$error_line" "$(RESET)" "$(GREEN)OK$(RESET)"; \
+				passed=$$((passed + 1)); \
+			else \
+				printf "  Error Msg: %s%s%s %s\\n" "$(GREY)" "$$error_line" "$(RESET)" "$(RED)KO$(RESET)"; \
+				printf "%s\\n" "$$msg_output"; \
+				failed=$$((failed + 1)); \
+				status=1; \
+			fi; \
+			done; \
+		if [ -n "$$key_textures" ] && [ ! -f "$$key_map" ]; then \
+			echo "$(YELLOW)$(PREFIX)$(RESET) No map containing collectibles found for key texture tests."; \
+			key_textures=""; \
+		fi; \
+		for texture in $$key_textures; do \
+			if [ ! -f "$$texture" ]; then \
+				continue; \
+			fi; \
+			bname=$$(basename "$$texture"); \
+			dirname=$$(dirname "$$texture"); \
+			echo ; \
+			printf "Testing texture %s (dir %s):\\n" "$(YELLOW)$$bname$(RESET)" "$$dirname"; \
+			save_perms=$$(stat -c %a "$$texture"); \
+			chmod 000 "$$texture"; \
+			msg_output=$$(./$(GAME) "$$key_map" 2>&1 || true); \
+			chmod $$save_perms "$$texture"; \
+			first=$$(printf "%s" "$$msg_output" | sed -n "1p"); \
+			error_line=$$(printf "%s" "$$msg_output" | sed -n "2p"); \
+			if [ "$$first" = "Error" ] && printf "%s\\n" "$$error_line" | grep -qi "texture path not readable"; then \
+				printf "  Error Msg: %s%s%s %s\\n" "$(GREY)" "$$error_line" "$(RESET)" "$(GREEN)OK$(RESET)"; \
+				passed=$$((passed + 1)); \
+			else \
+				printf "  Error Msg: %s%s%s %s\\n" "$(GREY)" "$$error_line" "$(RESET)" "$(RED)KO$(RESET)"; \
+				printf "%s\\n" "$$msg_output"; \
+				failed=$$((failed + 1)); \
+				status=1; \
+			fi; \
+			done; \
+		if [ "$$failed" -eq 0 ]; then \
+			echo "$(ORANGE)$(PREFIX)$(RESET) Congratulations you passed all $(GREEN)$$passed$(RESET) texture tests."; \
+		else \
+			echo "$(ORANGE)$(PREFIX)$(RESET) Texture tests: $(GREEN)$$passed$(RESET) passed, $(RED)$$failed$(RESET) failed."; \
+		fi; \
+		exit $$status'
+
+tester: test_invalid test_textures
 
 clean:
 	@echo "$(PREFIX) $(YEL)clean$(D): removing $(CYA)object files$(D)"
@@ -303,7 +440,7 @@ fclean: clean
 	fi
 re: fclean all
 
-.PHONY: all clean fclean re bonus maps valgrind valgrind_invalid
+.PHONY: all clean fclean re bonus maps valgrind valgrind_invalid test_invalid test_textures tester
 
 # **************************************************************************** #
 #                                                                              #
@@ -334,3 +471,10 @@ BWHI	= $(shell tput setaf 15)
 D 		= $(shell tput sgr0)
 BEL 	= $(shell tput bel)
 CLR 	= $(shell tput el 1)
+
+# Aliases used by external test helpers
+YELLOW	= $(YEL)
+GREEN	= $(GRN)
+ORANGE	= $(BYEL)
+RESET	= $(D)
+GREY	= $(GRE)

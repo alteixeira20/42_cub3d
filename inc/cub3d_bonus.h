@@ -32,7 +32,7 @@
 # include "../libft/libft/libft.h"
 # include "../libft/gnl/get_next_line_bonus.h"
 # include "../libft/printf/ft_printf_bonus.h"
-# include "../minilibx-linux/mlx.h"
+# include "../mlx/mlx.h"
 
 /* ************************************************************************** */
 /*                                                                            */
@@ -72,13 +72,13 @@
 # define KEY_M					109
 
 // Input
-# define MOUSE_SENS				0.0001
+# define MOUSE_SENS				0.00005
 
 // Player Radius
 # define COLL_R					0.20
 
 // Movement
-# define PLAYER_MOVE_SPEED			0.10
+# define PLAYER_MOVE_SPEED			0.05
 
 // Collectibles
 # define KEY_FRAME_COUNT			24
@@ -121,6 +121,8 @@
 # define ERR_MAP_EMPTY_LINE			"empty line inside map"
 # define ERR_MAP_AFTER_CONTENT			"content after map block"
 # define ERR_MAP_OPEN				"map not closed"
+# define ERR_MAP_WIDTH				"map width exceeds limit"
+# define ERR_MAP_HEIGHT				"map height exceeds limit"
 # define ERR_PLAYER_MULTI			"multiple player positions"
 # define ERR_PLAYER_MISSING			"missing player"
 # define ERR_ALLOC				"allocation failed"
@@ -128,8 +130,8 @@
 
 //Doors
 # define DOOR_CELL				'D'
-# define DOOR_OPEN_SPEED			0.02f
-# define DOOR_RADIUS				1.5f
+# define DOOR_OPEN_SPEED			0.070f
+# define DOOR_RADIUS				2.5f
 # define DOOR_THICK				0.9f
 
 /* ************************************************************************** */

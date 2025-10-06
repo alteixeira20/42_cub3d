@@ -82,7 +82,12 @@ static void	map_copy_row_padded(char *dst, const char *src, int width)
 	while (i < width)
 	{
 		if (i < len)
-			dst[i] = src[i];
+		{
+			if (src[i] == ' ')
+				dst[i] = '0';
+			else
+				dst[i] = src[i];
+		}
 		else
 			dst[i] = ' ';
 		i++;
@@ -96,6 +101,10 @@ int	parse_map(char **lines, int count, t_map *map)
 	map_calc_dims(lines, count, &map->width, &map->height);
 	if (map->width == 0 || map->height == 0)
 		return (print_error(ERR_MAP_CHAR), -1);
+	if (map->width > MAX_MAP_WIDTH)
+		return (print_error(ERR_MAP_WIDTH), -1);
+	if (map->height > MAX_MAP_HEIGHT)
+		return (print_error(ERR_MAP_HEIGHT), -1);
 	if (map_alloc_grid(map, map->width, map->height) != 0)
 		return (-1);
 	y = 0;

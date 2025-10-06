@@ -30,7 +30,7 @@
 # include "../libft/libft/libft.h"
 # include "../libft/gnl/get_next_line_bonus.h"
 # include "../libft/printf/ft_printf_bonus.h"
-# include "../minilibx-linux/mlx.h"
+# include "../mlx/mlx.h"
 
 /* ************************************************************************** */
 /*                                                                            */
@@ -88,6 +88,8 @@
 # define ERR_MAP_EMPTY_LINE			"empty line inside map"
 # define ERR_MAP_AFTER_CONTENT		"content after map block"
 # define ERR_MAP_OPEN				"map not closed"
+# define ERR_MAP_WIDTH				"map width exceeds limit"
+# define ERR_MAP_HEIGHT				"map height exceeds limit"
 # define ERR_PLAYER_MULTI			"multiple player positions"
 # define ERR_PLAYER_MISSING			"missing player"
 # define ERR_ALLOC					"allocation failed"

@@ -60,9 +60,19 @@ static int	load_texture(t_texture *slot, const char *line, int id_len,
 		return (print_error(ERR_BAD_TEXT_PATH), -1);
 	if (copy_texture(line, start, end, &slot->path) != 0)
 		return (-1);
+	if (!has_xpm_extension(slot->path))
+	{
+		free(slot->path);
+		slot->path = NULL;
+		return (print_error(ERR_BAD_TEXT_PATH), -1);
+	}
 	fd = open(slot->path, O_RDONLY);
 	if (fd < 0)
+	{
+		free(slot->path);
+		slot->path = NULL;
 		return (print_error(ERR_BAD_TEXT_PATH), -1);
+	}
 	close(fd);
 	slot->is_set = true;
 	return (1);
@@ -72,8 +82,6 @@ int	parse_texture(const char *line, t_game *game)
 {
 	int	i;
 
-	if (!has_xpm_extension(line))
-		return (-1);
 	i = 0;
 	i = skip_spaces(line, i);
 	if (ft_strncmp(line + i, ID_NO, 2) == 0 && line[i + 2] == ' ')

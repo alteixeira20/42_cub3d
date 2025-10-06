@@ -14,18 +14,22 @@
 
 static int	color_get_value(const char *line, int i, int *out)
 {
-	long		val;
-	int			start;
+	long	val;
 
 	i = skip_spaces(line, i);
 	if (!ft_isdigit(line[i]))
 		return (-1);
-	start = i;
-	val = ft_atoi(line + start);
-	if (val < 0 || val > 255)
-		return (-1);
+	val = 0;
 	while (ft_isdigit(line[i]))
+	{
+		int	digit;
+
+		digit = line[i] - '0';
+		if (val > 25 || (val == 25 && digit > 5))
+			return (-1);
+		val = val * 10 + digit;
 		i++;
+	}
 	*out = (int)val;
 	i = skip_spaces(line, i);
 	return (i);
@@ -64,6 +68,9 @@ static int	color_assign(const char *line, t_color *dst, const char *dup_err)
 		return (print_error(ERR_BAD_COLOR), -1);
 	i = parse_component(line, i, &b, false);
 	if (i < 0)
+		return (print_error(ERR_BAD_COLOR), -1);
+	i = skip_spaces(line, i);
+	if (line[i] != '\0')
 		return (print_error(ERR_BAD_COLOR), -1);
 	dst->r = r;
 	dst->g = g;
