@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 15:38:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/11 21:19:35 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/10/13 13:58:50 by jopedro-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@
 # define KEY_BOB_AMP_PX				6
 # define KEY_PICKUP_DIST			0.5
 # define KEY_SCALE				0.5
-# define KEY_TEXT_SCALE				10
+# define KEY_TEXT_SCALE				3
 
 // Minimap Settings
 # define MM_TILE_SIZE				10
@@ -133,6 +133,10 @@
 # define DOOR_OPEN_SPEED			0.070f
 # define DOOR_RADIUS				2.5f
 # define DOOR_THICK				0.9f
+
+//animation images
+# define END_IMAGE				"../assets/textures/game_over.xpm"
+# define GAME_START				"../assets/textures/start.xpm"
 
 /* ************************************************************************** */
 /*                                                                            */
@@ -523,6 +527,7 @@ void			clean_keys(t_game *cube);
 void			collectibles_update(t_game *cube);
 void			collectibles_draw(t_game *cube);
 int				keys_precheck(t_game *cube);
+void			game_over(t_game *cube);
 
 // HUD
 void			hud_init(t_hud_ctx *ctx, t_img *frame);

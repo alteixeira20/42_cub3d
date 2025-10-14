@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 18:11:30 by paalexan          #+#    #+#             */
-/*   Updated: 2025/09/11 17:10:54 by paalexan         ###   ########.fr       */
+/*   Updated: 2025/10/13 13:58:28 by jopedro-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ static void	try_collect(t_game *cube, t_collectible *c)
 	{
 		c->collected = 1;
 		cube->collect.collected = cube->collect.collected + 1;
+		if (cube->collect.collected == cube->collect.count)
+			game_over(cube);
 	}
 }
 
