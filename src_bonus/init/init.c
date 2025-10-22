@@ -66,6 +66,13 @@ void	game_init(t_game *cube)
 	cube->doors.arr = NULL;
 	cube->doors.len = 0;
 	cube->paused = false;
+	cube->ended = false;
+	cube->end_dimmed = false;
+	cube->end_overlay = false;
+	cube->pause_dimmed = false;
+	cube->pause_overlay = false;
+	cube->started = false;
+	cube->start_overlay = false;
 	cube->collect.items = NULL;
 	cube->collect.count = 0;
 	cube->collect.collected = 0;

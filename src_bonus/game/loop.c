@@ -12,39 +12,31 @@
 
 #include "../../inc/cub3d_bonus.h"
 
-static void	dim_screen(t_game *cube)
+static int	load_pause_screen(t_game *cube)
 {
-	int		x;
-	int		y;
-	char	*px;
-
-	y = 0;
-	while (y < SCR_H)
-	{
-		x = 0;
-		while (x < SCR_W)
-		{
-			px = cube->render.frame.addr;
-			px += y * cube->render.frame.line_len;
-			px += x * (cube->render.frame.bpp / 8);
-			px[0] = px[0] / 2;
-			px[1] = px[1] / 2;
-			px[2] = px[2] / 2;
-			x++;
-		}
-		y++;
-	}
+	return (overlay_load_image(cube, &cube->render.pause_screen,
+		PAUSE_SCREEN_PATH));
 }
 
 static void	draw_pause_overlay(t_game *cube)
 {
-	dim_screen(cube);
+	if (!cube->pause_dimmed)
+	{
+		overlay_dim_frame(cube);
+		if (load_pause_screen(cube) == 0)
+		{
+			overlay_blit_centered(cube, &cube->render.pause_screen);
+			cube->pause_overlay = true;
+		}
+		cube->pause_dimmed = true;
+	}
+	else if (!cube->pause_overlay && load_pause_screen(cube) == 0)
+	{
+		overlay_blit_centered(cube, &cube->render.pause_screen);
+		cube->pause_overlay = true;
+	}
 	mlx_put_image_to_window(cube->render.mlx, cube->render.win,
 		cube->render.frame.img, 0, 0);
-	mlx_string_put(cube->render.mlx, cube->render.win,
-		SCR_W / 2 - 40, SCR_H / 2 - 20, 0xFFFFFF, "PAUSED");
-	mlx_string_put(cube->render.mlx, cube->render.win,
-		SCR_W / 2 - 80, SCR_H / 2 + 20, 0xAAAAAA, "Press M to start again");
 }
 
 int	game_loop(void *param)
@@ -52,10 +44,25 @@ int	game_loop(void *param)
 	t_game	*cube;
 
 	cube = (t_game *)param;
+	if (cube->ended)
+	{
+		draw_game_over(cube);
+		return (0);
+	}
+	if (!cube->started)
+	{
+		draw_start_screen(cube);
+		return (0);
+	}
 	if (!cube->paused)
 	{
+		cube->pause_dimmed = false;
+		cube->pause_overlay = false;
 		update_player(cube);
-		draw_frame(cube);
+		if (cube->ended)
+			draw_game_over(cube);
+		else
+			draw_frame(cube);
 	}
 	else
 	{

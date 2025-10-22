@@ -24,9 +24,20 @@ int	key_press(int keycode, t_game *cube)
 		cube->inp.right = 1;
 	if (keycode == KEY_ESC)
 		return (win_close(cube), 0);
-	if (keycode == KEY_M)
+	if (keycode == KEY_ENTER && !cube->started)
+	{
+		cube->started = true;
+		cube->start_overlay = false;
+		cube->pause_dimmed = false;
+		cube->pause_overlay = false;
+		mouse_capture_set(cube, 1);
+		return (0);
+	}
+	if (keycode == KEY_P && cube->started && !cube->ended)
 	{
 		cube->paused = !cube->paused;
+		cube->pause_dimmed = false;
+		cube->pause_overlay = false;
 		if (cube->paused)
 			mouse_capture_set(cube, 0);
 		else

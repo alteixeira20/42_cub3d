@@ -1,0 +1,12 @@
+NO ./assets/textures/wall.xpm
+SO ./assets/textures/wall.xpm
+WE ./assets/textures/wall.xpm
+EA ./assets/textures/wall.xpm
+DO ./assets/textures/fake_wall.xpm
+
+F 142,142,142
+C 0,242,255
+
+1111111111
+100EC00001
+1111111111

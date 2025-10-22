@@ -69,7 +69,8 @@
 # define KEY_D					100
 # define KEY_LEFT				65361
 # define KEY_RIGHT				65363
-# define KEY_M					109
+# define KEY_P					112
+# define KEY_ENTER				65293
 
 // Input
 # define MOUSE_SENS				0.00005
@@ -135,8 +136,9 @@
 # define DOOR_THICK				0.9f
 
 //animation images
-# define END_IMAGE				"../assets/textures/game_over.xpm"
-# define GAME_START				"../assets/textures/start.xpm"
+# define END_SCREEN_PATH			"assets/textures/game_over.xpm"
+# define PAUSE_SCREEN_PATH		"assets/textures/game_paused.xpm"
+# define START_SCREEN_PATH		"assets/textures/game_start.xpm"
 
 /* ************************************************************************** */
 /*                                                                            */
@@ -246,6 +248,9 @@ typedef struct s_render
 	void	*mlx;
 	void	*win;
 	t_img	frame;
+	t_img	end_screen;
+	t_img	pause_screen;
+	t_img	start_screen;
 }	t_render;
 
 typedef struct s_door
@@ -357,6 +362,13 @@ typedef struct s_game
 	t_minimap		minimap;
 	t_doors			doors;
 	bool			paused;
+	bool			ended;
+	bool			end_dimmed;
+	bool			end_overlay;
+	bool			pause_dimmed;
+	bool			pause_overlay;
+	bool			started;
+	bool			start_overlay;
 	t_collectibles	collect;
 	double			zbuf[SCR_W];
 	int				door_hit[SCR_W];
@@ -528,6 +540,12 @@ void			collectibles_update(t_game *cube);
 void			collectibles_draw(t_game *cube);
 int				keys_precheck(t_game *cube);
 void			game_over(t_game *cube);
+void			draw_game_over(t_game *cube);
+void			overlay_dim_frame(t_game *cube);
+void			overlay_fill_color(t_img *img, unsigned int color);
+int				overlay_load_image(t_game *cube, t_img *slot, const char *path);
+void			overlay_blit_centered(t_game *cube, t_img *img);
+void			draw_start_screen(t_game *cube);
 
 // HUD
 void			hud_init(t_hud_ctx *ctx, t_img *frame);

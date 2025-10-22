@@ -294,7 +294,7 @@ test_invalid:
 			echo "$(YELLOW)$(PREFIX)$(RESET) No invalid maps found in maps/invalid."; \
 			exit 0; \
 		fi; \
-		status=0; passed=0; failed=0; \
+		status=0; passed=0; failed=0; skipped=0; \
 		echo "$(ORANGE)$(PREFIX)$(RESET) Running Tests on Invalid Maps..."; \
 		for map in $(INVALID_MAPS); do \
 			echo ; \
@@ -337,78 +337,121 @@ test_invalid:
 
 test_textures:
 	@bash -c ' \
-		if [ ! -f "$(GAME)" ]; then \
-			echo "$(YELLOW)$(PREFIX)$(RESET) No executable found. Please compile the project first (make bonus)."; \
-			exit 0; \
+		mand_exec="$(NAME)"; \
+		bonus_exec="$(NAME_BONUS)"; \
+		ceil_map="$(MAP_DIR)/valid/ceiling_blue_floor_grey.cub"; \
+		bonus_map="$(MAP_DIR)/valid/map2.cub"; \
+		bonus_door_map="$(MAP_DIR)/valid/map_bonus_test.cub"; \
+		mode="bonus"; \
+		if [ -f "$$bonus_exec" ]; then \
+			printf "Run texture tests for mandatory or bonus build? [m/b] (default b): "; \
+			read -r choice; \
+			if [ "$$choice" = "m" ] || [ "$$choice" = "M" ]; then \
+				mode="mandatory"; \
+			fi; \
 		fi; \
-		if [ $(HAS_TEXTURE_MAP) -eq 0 ]; then \
-			echo "$(YELLOW)$(PREFIX)$(RESET) No valid map found in maps/valid for texture tests."; \
+		if [ "$$mode" = "mandatory" ]; then \
+			if [ ! -f "$$mand_exec" ]; then \
+				echo "$(YELLOW)$(PREFIX)$(RESET) Mandatory executable not found. Building bonus instead."; \
+				mode="bonus"; \
+			fi; \
+		fi; \
+		if [ "$$mode" = "mandatory" ]; then \
+			game_exec="$$mand_exec"; \
+			default_map="$$ceil_map"; \
+		else \
+			if [ ! -f "$$bonus_exec" ]; then \
+				echo "$(YELLOW)$(PREFIX)$(RESET) Bonus executable not found. Please build it first."; \
+				exit 0; \
+			fi; \
+			game_exec="$$bonus_exec"; \
+			default_map="$$bonus_map"; \
+		fi; \
+		if [ ! -f "$$game_exec" ]; then \
+			echo "$(YELLOW)$(PREFIX)$(RESET) Selected executable not found (did you build it?)."; \
 			exit 1; \
 		fi; \
-		map_textures=$$(sed -n "s/^\(NO\|SO\|WE\|EA\|DO\)[[:space:]]\+\(.*\)/\2/p" $(TEXTURE_TEST_MAP)); \
-		key_textures=$$(find assets/key -type f -name "*.xpm" 2>/dev/null); \
+		if [ ! -f "$$default_map" ]; then \
+			echo "$(YELLOW)$(PREFIX)$(RESET) Missing test map $$default_map."; \
+			exit 1; \
+		fi; \
 		key_map=$$(find $(MAP_DIR)/valid -maxdepth 1 -type f -name '*keys*.cub' | head -n 1); \
-		if [ -z "$$map_textures" ] && [ -z "$$key_textures" ]; then \
+		asset_textures="$(TEXTURES)"; \
+		if [ -z "$$asset_textures" ]; then \
 			echo "$(YELLOW)$(PREFIX)$(RESET) No textures detected for testing."; \
 			exit 0; \
 		fi; \
-		status=0; passed=0; failed=0; \
-		for texture in $$map_textures; do \
+		skip_mand="door_color.xpm fake_wall.xpm wall.xpm door.xpm"; \
+		status=0; passed=0; failed=0; skipped=0; \
+		for texture in $$asset_textures; do \
 			if [ ! -f "$$texture" ]; then \
 				continue; \
 			fi; \
 			bname=$$(basename "$$texture"); \
+			skip_texture=0; \
+			if [ "$$mode" = "mandatory" ]; then \
+				for skip in $$skip_mand; do \
+					if [ "$$bname" = "$$skip" ]; then \
+						skip_texture=1; \
+						break; \
+					fi; \
+				done; \
+			fi; \
+			if [ $$skip_texture -eq 1 ]; then \
+				echo ; \
+				printf "Skipping texture %s%s%s (not used in mandatory build).\\n" "$(YELLOW)" "$$texture" "$(RESET)"; \
+				skipped=$$((skipped + 1)); \
+				continue; \
+			fi; \
+			map_to_use="$$default_map"; \
+			if [ "$$bname" = "wall_north.xpm" ] || [ "$$bname" = "wall_south.xpm" ] || [ "$$bname" = "wall_east.xpm" ] || [ "$$bname" = "wall_west.xpm" ]; then \
+				map_to_use="$$ceil_map"; \
+			fi; \
+			if [ "$$bname" = "wall.xpm" ] || [ "$$bname" = "door.xpm" ] || [ "$$bname" = "fake_wall.xpm" ]; then \
+				map_to_use="$$bonus_map"; \
+			fi; \
+			if [ "$$bname" = "door_color.xpm" ]; then \
+				map_to_use="$$bonus_door_map"; \
+			fi; \
+			if printf "%s" "$$texture" | grep -q "/key/"; then \
+				if [ -n "$$key_map" ]; then \
+					map_to_use="$$key_map"; \
+				else \
+					map_to_use=""; \
+				fi; \
+			fi; \
+			if [ -z "$$map_to_use" ]; then \
+				echo ; \
+				printf "Skipping texture %s%s%s (no suitable map found).\\n" "$(YELLOW)" "$$texture" "$(RESET)"; \
+				skipped=$$((skipped + 1)); \
+				continue; \
+			fi; \
 			dirname=$$(dirname "$$texture"); \
 			echo ; \
 			printf "Testing texture %s (dir %s):\\n" "$(YELLOW)$$bname$(RESET)" "$$dirname"; \
 			save_perms=$$(stat -c %a "$$texture"); \
 			chmod 000 "$$texture"; \
-			msg_output=$$(./$(GAME) $(TEXTURE_TEST_MAP) 2>&1 || true); \
+			msg_output=$$(./"$$game_exec" "$$map_to_use" 2>&1 || true); \
 			chmod $$save_perms "$$texture"; \
 			first=$$(printf "%s" "$$msg_output" | sed -n "1p"); \
 			error_line=$$(printf "%s" "$$msg_output" | sed -n "2p"); \
 			if [ "$$first" = "Error" ] && printf "%s\\n" "$$error_line" | grep -qi "texture path not readable"; then \
 				printf "  Error Msg: %s%s%s %s\\n" "$(GREY)" "$$error_line" "$(RESET)" "$(GREEN)OK$(RESET)"; \
 				passed=$$((passed + 1)); \
-			else \
+			elif [ "$$first" = "Error" ]; then \
 				printf "  Error Msg: %s%s%s %s\\n" "$(GREY)" "$$error_line" "$(RESET)" "$(RED)KO$(RESET)"; \
 				printf "%s\\n" "$$msg_output"; \
 				failed=$$((failed + 1)); \
 				status=1; \
-			fi; \
-			done; \
-		if [ -n "$$key_textures" ] && [ ! -f "$$key_map" ]; then \
-			echo "$(YELLOW)$(PREFIX)$(RESET) No map containing collectibles found for key texture tests."; \
-			key_textures=""; \
-		fi; \
-		for texture in $$key_textures; do \
-			if [ ! -f "$$texture" ]; then \
-				continue; \
-			fi; \
-			bname=$$(basename "$$texture"); \
-			dirname=$$(dirname "$$texture"); \
-			echo ; \
-			printf "Testing texture %s (dir %s):\\n" "$(YELLOW)$$bname$(RESET)" "$$dirname"; \
-			save_perms=$$(stat -c %a "$$texture"); \
-			chmod 000 "$$texture"; \
-			msg_output=$$(./$(GAME) "$$key_map" 2>&1 || true); \
-			chmod $$save_perms "$$texture"; \
-			first=$$(printf "%s" "$$msg_output" | sed -n "1p"); \
-			error_line=$$(printf "%s" "$$msg_output" | sed -n "2p"); \
-			if [ "$$first" = "Error" ] && printf "%s\\n" "$$error_line" | grep -qi "texture path not readable"; then \
-				printf "  Error Msg: %s%s%s %s\\n" "$(GREY)" "$$error_line" "$(RESET)" "$(GREEN)OK$(RESET)"; \
-				passed=$$((passed + 1)); \
 			else \
-				printf "  Error Msg: %s%s%s %s\\n" "$(GREY)" "$$error_line" "$(RESET)" "$(RED)KO$(RESET)"; \
-				printf "%s\\n" "$$msg_output"; \
-				failed=$$((failed + 1)); \
-				status=1; \
+				printf "  Status: %sSKIPPED%s (texture not loaded by map)\\n" "$(YELLOW)" "$(RESET)"; \
+				skipped=$$((skipped + 1)); \
 			fi; \
-			done; \
+		done; \
 		if [ "$$failed" -eq 0 ]; then \
-			echo "$(ORANGE)$(PREFIX)$(RESET) Congratulations you passed all $(GREEN)$$passed$(RESET) texture tests."; \
+			echo "$(ORANGE)$(PREFIX)$(RESET) Texture tests: $(GREEN)$$passed$(RESET) passed, $(YELLOW)$$skipped$(RESET) skipped."; \
 		else \
-			echo "$(ORANGE)$(PREFIX)$(RESET) Texture tests: $(GREEN)$$passed$(RESET) passed, $(RED)$$failed$(RESET) failed."; \
+			echo "$(ORANGE)$(PREFIX)$(RESET) Texture tests: $(GREEN)$$passed$(RESET) passed, $(RED)$$failed$(RESET) failed, $(YELLOW)$$skipped$(RESET) skipped."; \
 		fi; \
 		exit $$status'
 

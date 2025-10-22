@@ -39,6 +39,45 @@ static void	render_destroy_frame(t_render *r)
 	r->frame.h = 0;
 }
 
+static void	render_destroy_end_screen(t_render *r)
+{
+	if (r->end_screen.img)
+		mlx_destroy_image(r->mlx, r->end_screen.img);
+	r->end_screen.img = NULL;
+	r->end_screen.addr = NULL;
+	r->end_screen.bpp = 0;
+	r->end_screen.line_len = 0;
+	r->end_screen.endian = 0;
+	r->end_screen.w = 0;
+	r->end_screen.h = 0;
+}
+
+static void	render_destroy_pause_screen(t_render *r)
+{
+	if (r->pause_screen.img)
+		mlx_destroy_image(r->mlx, r->pause_screen.img);
+	r->pause_screen.img = NULL;
+	r->pause_screen.addr = NULL;
+	r->pause_screen.bpp = 0;
+	r->pause_screen.line_len = 0;
+	r->pause_screen.endian = 0;
+	r->pause_screen.w = 0;
+	r->pause_screen.h = 0;
+}
+
+static void	render_destroy_start_screen(t_render *r)
+{
+	if (r->start_screen.img)
+		mlx_destroy_image(r->mlx, r->start_screen.img);
+	r->start_screen.img = NULL;
+	r->start_screen.addr = NULL;
+	r->start_screen.bpp = 0;
+	r->start_screen.line_len = 0;
+	r->start_screen.endian = 0;
+	r->start_screen.w = 0;
+	r->start_screen.h = 0;
+}
+
 int	render_init_win(t_game *cube)
 {
 	cube->render.mlx = mlx_init();
@@ -66,6 +105,9 @@ void	render_destroy(t_game *cube)
 	if (cube->render.mlx)
 	{
 		render_destroy_frame(&cube->render);
+		render_destroy_end_screen(&cube->render);
+		render_destroy_pause_screen(&cube->render);
+		render_destroy_start_screen(&cube->render);
 		if (cube->render.win)
 			mlx_destroy_window(cube->render.mlx, cube->render.win);
 		mlx_destroy_display(cube->render.mlx);

@@ -72,5 +72,11 @@ int	textures_precheck(t_game *cube)
 		if (check_path_readable(cube->tex_do.path) != 0)
 			return (print_error(ERR_BAD_TEXT_PATH), -1);
 	}
+	if (check_path_readable(END_SCREEN_PATH) != 0)
+		return (print_error(ERR_BAD_TEXT_PATH), -1);
+	if (check_path_readable(PAUSE_SCREEN_PATH) != 0)
+		return (print_error(ERR_BAD_TEXT_PATH), -1);
+	if (check_path_readable(START_SCREEN_PATH) != 0)
+		return (print_error(ERR_BAD_TEXT_PATH), -1);
 	return (0);
 }

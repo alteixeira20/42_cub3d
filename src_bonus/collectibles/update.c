@@ -56,6 +56,8 @@ void	collectibles_update(t_game *cube)
 {
 	int	i;
 
+	if (cube->ended)
+		return ;
 	update_anim(cube);
 	if (cube->collect.count <= 0 || !cube->collect.items)
 		return ;
