@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 15:38:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/12/18 16:32:23 by alteixeira20     ###   ########.fr       */
+/*   Updated: 2025/12/18 16:36:49 by alteixeira20     ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -479,7 +479,7 @@ void			put_pixel(t_minimap *m, int x, int y, int color);
 void			clear_minimap(t_minimap *m, int color);
 void			get_rgb(unsigned int c, unsigned int *r,
 					unsigned int *g, unsigned int *b);
-void			overlay_frame_helper(t_img *frame, unsigned char *px, int step);
+void			overlay_frame_helper(t_img *frame, int step);
 
 unsigned int	tile_color(char t);
 unsigned int	rgb(unsigned int r, unsigned int g, unsigned int b);

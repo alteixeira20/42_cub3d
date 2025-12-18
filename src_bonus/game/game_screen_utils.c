@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 12:40:00 by paalexan          #+#    #+#             */
-/*   Updated: 2025/12/18 16:30:45 by alteixeira20     ###   ########.fr       */
+/*   Updated: 2025/12/18 16:37:06 by alteixeira20     ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,8 @@
 
 void	overlay_dim_frame(t_game *cube)
 {
-	int				x;
-	int				y;
 	int				step;
 	t_img			*frame;
-	unsigned char	*px;
 
 	frame = &cube->render.frame;
 	if (!frame->addr || frame->w <= 0 || frame->h <= 0)
@@ -26,7 +23,7 @@ void	overlay_dim_frame(t_game *cube)
 	step = frame->bpp / 8;
 	if (step < 3)
 		return ;
-	overlay_frame_helper(frame, px, step);
+	overlay_frame_helper(frame, step);
 }
 
 void	overlay_fill_color(t_img *img, unsigned int color)
