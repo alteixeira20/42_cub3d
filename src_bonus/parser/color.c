@@ -15,6 +15,7 @@
 static int	color_get_value(const char *line, int i, int *out)
 {
 	long	val;
+	int		digit;
 
 	i = skip_spaces(line, i);
 	if (!ft_isdigit(line[i]))
@@ -22,8 +23,6 @@ static int	color_get_value(const char *line, int i, int *out)
 	val = 0;
 	while (ft_isdigit(line[i]))
 	{
-		int	digit;
-
 		digit = line[i] - '0';
 		if (val > 25 || (val == 25 && digit > 5))
 			return (-1);
@@ -50,27 +49,35 @@ static int	parse_component(const char *line, int i,
 	return (i);
 }
 
+static int	color_parse_values(const char *line, int *r, int *g, int *b)
+{
+	int	i;
+
+	i = 1;
+	i = parse_component(line, i, r, true);
+	if (i < 0)
+		return (-1);
+	i = parse_component(line, i, g, true);
+	if (i < 0)
+		return (-1);
+	i = parse_component(line, i, b, false);
+	if (i < 0)
+		return (-1);
+	i = skip_spaces(line, i);
+	if (line[i] != '\0')
+		return (-1);
+	return (0);
+}
+
 static int	color_assign(const char *line, t_color *dst, const char *dup_err)
 {
-	int			i;
-	int			r;
-	int			g;
-	int			b;
+	int	r;
+	int	g;
+	int	b;
 
 	if (dst->is_set)
 		return (print_error(dup_err), -1);
-	i = 1;
-	i = parse_component(line, i, &r, true);
-	if (i < 0)
-		return (print_error(ERR_BAD_COLOR), -1);
-	i = parse_component(line, i, &g, true);
-	if (i < 0)
-		return (print_error(ERR_BAD_COLOR), -1);
-	i = parse_component(line, i, &b, false);
-	if (i < 0)
-		return (print_error(ERR_BAD_COLOR), -1);
-	i = skip_spaces(line, i);
-	if (line[i] != '\0')
+	if (color_parse_values(line, &r, &g, &b) != 0)
 		return (print_error(ERR_BAD_COLOR), -1);
 	dst->r = r;
 	dst->g = g;

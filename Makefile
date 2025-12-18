@@ -6,7 +6,7 @@
 #    By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/11 15:11:22 by paalexan          #+#    #+#              #
-#    Updated: 2025/10/13 13:59:35 by jopedro-         ###   ########.fr        #
+#    Updated: 2025/12/18 16:12:21 by alteixeira20     ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -131,6 +131,7 @@ SRC_BONUS		+= $(SRC_BONUS_DIR)/parser/parse_doors.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/validation/validation.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/error/error.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/cleanup/cleanup.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/cleanup/cleanup_render.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/cleanup/util.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/cleanup/doors_clean.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/render/draw.c
@@ -150,6 +151,7 @@ SRC_BONUS		+= $(SRC_BONUS_DIR)/ui/minimap/minimap_sampling.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/ui/minimap/minimap_colors.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/game/loop.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/game/game_screen.c
+SRC_BONUS		+= $(SRC_BONUS_DIR)/game/game_screen_utils.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/update/update.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/update/doors_query.c
 SRC_BONUS		+= $(SRC_BONUS_DIR)/update/doors_update.c

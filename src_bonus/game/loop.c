@@ -15,7 +15,7 @@
 static int	load_pause_screen(t_game *cube)
 {
 	return (overlay_load_image(cube, &cube->render.pause_screen,
-		PAUSE_SCREEN_PATH));
+			PAUSE_SCREEN_PATH));
 }
 
 static void	draw_pause_overlay(t_game *cube)
@@ -39,6 +39,17 @@ static void	draw_pause_overlay(t_game *cube)
 		cube->render.frame.img, 0, 0);
 }
 
+static void	handle_running(t_game *cube)
+{
+	cube->pause_dimmed = false;
+	cube->pause_overlay = false;
+	update_player(cube);
+	if (cube->ended)
+		draw_game_over(cube);
+	else
+		draw_frame(cube);
+}
+
 int	game_loop(void *param)
 {
 	t_game	*cube;
@@ -56,13 +67,7 @@ int	game_loop(void *param)
 	}
 	if (!cube->paused)
 	{
-		cube->pause_dimmed = false;
-		cube->pause_overlay = false;
-		update_player(cube);
-		if (cube->ended)
-			draw_game_over(cube);
-		else
-			draw_frame(cube);
+		handle_running(cube);
 	}
 	else
 	{

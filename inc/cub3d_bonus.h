@@ -6,7 +6,7 @@
 /*   By: paalexan <paalexan@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 15:38:43 by paalexan          #+#    #+#             */
-/*   Updated: 2025/10/13 13:58:50 by jopedro-         ###   ########.fr       */
+/*   Updated: 2025/12/18 16:32:23 by alteixeira20     ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -399,6 +399,15 @@ typedef enum e_texid
 	TEX_DO = 4
 }	t_texid;
 
+typedef struct s_blit_ctx
+{
+	t_game		*cube;
+	t_img		*img;
+	int			start_x;
+	int			start_y;
+	unsigned int	trans;
+}	t_blit_ctx;
+
 void			game_init(t_game *cube);
 void			input_init(t_input *inp);
 void			minimap_init(t_game *cube);
@@ -470,6 +479,7 @@ void			put_pixel(t_minimap *m, int x, int y, int color);
 void			clear_minimap(t_minimap *m, int color);
 void			get_rgb(unsigned int c, unsigned int *r,
 					unsigned int *g, unsigned int *b);
+void			overlay_frame_helper(t_img *frame, unsigned char *px, int step);
 
 unsigned int	tile_color(char t);
 unsigned int	rgb(unsigned int r, unsigned int g, unsigned int b);
@@ -488,6 +498,7 @@ int				clampi(int v, int lo, int hi);
 
 // Error Handling
 void			print_error(const char *msg);
+int			texture_path_error(t_texture *slot);
 
 // Cleanup Game
 void			clean_game(t_game *cube);
@@ -502,9 +513,14 @@ void			clean_doors(t_doors *doors);
 void			free3(char **a, char **b, char **c);
 void			render_destroy(t_game *cube);
 
-int				textures_load(t_game *cube);
+int			textures_load(t_game *cube);
 void			textures_destroy(t_game *cube);
-int				textures_precheck(t_game *cube);
+int			textures_precheck(t_game *cube);
+void			render_destroy_frame(t_render *r);
+void			render_destroy_end_screen(t_render *r);
+void			render_destroy_pause_screen(t_render *r);
+void			render_destroy_start_screen(t_render *r);
+void			render_destroy(t_game *cube);
 
 // Render
 void			draw_frame(t_game *cube);
@@ -550,5 +566,9 @@ void			draw_start_screen(t_game *cube);
 // HUD
 void			hud_init(t_hud_ctx *ctx, t_img *frame);
 void			hud_draw_collected(t_game *cube);
+
+// Init Utils
+void	color_init(t_color *c);
+void	map_init(t_map *m);
 
 #endif

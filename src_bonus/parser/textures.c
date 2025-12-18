@@ -43,12 +43,24 @@ static int	copy_texture(const char	*str, int start, int end, char **out)
 	return (0);
 }
 
+static int	texture_path_ok(t_texture *slot)
+{
+	int	fd;
+
+	if (!has_xpm_extension(slot->path))
+		return (texture_path_error(slot));
+	fd = open(slot->path, O_RDONLY);
+	if (fd < 0)
+		return (texture_path_error(slot));
+	close(fd);
+	return (0);
+}
+
 static int	load_texture(t_texture *slot, const char *line, int id_len,
 						const char *dup_err)
 {
 	int	start;
 	int	end;
-	int	fd;
 
 	if (slot->is_set)
 		return (print_error(dup_err), -1);
@@ -60,20 +72,8 @@ static int	load_texture(t_texture *slot, const char *line, int id_len,
 		return (print_error(ERR_BAD_TEXT_PATH), -1);
 	if (copy_texture(line, start, end, &slot->path) != 0)
 		return (-1);
-	if (!has_xpm_extension(slot->path))
-	{
-		free(slot->path);
-		slot->path = NULL;
-		return (print_error(ERR_BAD_TEXT_PATH), -1);
-	}
-	fd = open(slot->path, O_RDONLY);
-	if (fd < 0)
-	{
-		free(slot->path);
-		slot->path = NULL;
-		return (print_error(ERR_BAD_TEXT_PATH), -1);
-	}
-	close(fd);
+	if (texture_path_ok(slot) != 0)
+		return (-1);
 	slot->is_set = true;
 	return (1);
 }

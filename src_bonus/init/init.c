@@ -12,22 +12,6 @@
 
 #include "../../inc/cub3d_bonus.h"
 
-static void	color_init(t_color *c)
-{
-	c->r = 0;
-	c->g = 0;
-	c->b = 0;
-	c->argb = 0;
-	c->is_set = false;
-}
-
-static void	map_init(t_map *m)
-{
-	m->grid = NULL;
-	m->width = 0;
-	m->height = 0;
-}
-
 static void	player_init(t_player *p)
 {
 	p->tile_x = 0;
@@ -49,6 +33,28 @@ static void	texture_init(t_texture *t)
 	t->is_set = false;
 }
 
+static void	collect_init(t_collectibles *collect)
+{
+	collect->items = NULL;
+	collect->count = 0;
+	collect->collected = 0;
+	collect->anim_t = 0.0;
+}
+
+static void	flags_init(t_game *cube)
+{
+	cube->doors.arr = NULL;
+	cube->doors.len = 0;
+	cube->paused = false;
+	cube->ended = false;
+	cube->end_dimmed = false;
+	cube->end_overlay = false;
+	cube->pause_dimmed = false;
+	cube->pause_overlay = false;
+	cube->started = false;
+	cube->start_overlay = false;
+}
+
 void	game_init(t_game *cube)
 {
 	texture_init(&cube->tex_no);
@@ -63,19 +69,7 @@ void	game_init(t_game *cube)
 	player_init(&cube->player);
 	render_init(cube);
 	tex_rt_init(cube);
-	cube->doors.arr = NULL;
-	cube->doors.len = 0;
-	cube->paused = false;
-	cube->ended = false;
-	cube->end_dimmed = false;
-	cube->end_overlay = false;
-	cube->pause_dimmed = false;
-	cube->pause_overlay = false;
-	cube->started = false;
-	cube->start_overlay = false;
-	cube->collect.items = NULL;
-	cube->collect.count = 0;
-	cube->collect.collected = 0;
-	cube->collect.anim_t = 0.0;
+	flags_init(cube);
+	collect_init(&cube->collect);
 	keys_init(cube);
 }

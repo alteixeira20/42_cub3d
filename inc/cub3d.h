@@ -295,6 +295,7 @@ void	ray_set_dir(t_game *cube, t_ray *r);
 
 // Error Handling
 void	print_error(const char *msg);
+int	texture_path_error(t_texture *slot);
 
 // Cleanup Game
 void	clean_game(t_game *game);

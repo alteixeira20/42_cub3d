@@ -12,6 +12,26 @@
 
 #include "../../inc/cub3d_bonus.h"
 
+static void	start_game(t_game *cube)
+{
+	cube->started = true;
+	cube->start_overlay = false;
+	cube->pause_dimmed = false;
+	cube->pause_overlay = false;
+	mouse_capture_set(cube, 1);
+}
+
+static void	toggle_pause(t_game *cube)
+{
+	cube->paused = !cube->paused;
+	cube->pause_dimmed = false;
+	cube->pause_overlay = false;
+	if (cube->paused)
+		mouse_capture_set(cube, 0);
+	else
+		mouse_capture_set(cube, 1);
+}
+
 int	key_press(int keycode, t_game *cube)
 {
 	if (keycode == KEY_W)
@@ -26,23 +46,11 @@ int	key_press(int keycode, t_game *cube)
 		return (win_close(cube), 0);
 	if (keycode == KEY_ENTER && !cube->started)
 	{
-		cube->started = true;
-		cube->start_overlay = false;
-		cube->pause_dimmed = false;
-		cube->pause_overlay = false;
-		mouse_capture_set(cube, 1);
+		start_game(cube);
 		return (0);
 	}
 	if (keycode == KEY_P && cube->started && !cube->ended)
-	{
-		cube->paused = !cube->paused;
-		cube->pause_dimmed = false;
-		cube->pause_overlay = false;
-		if (cube->paused)
-			mouse_capture_set(cube, 0);
-		else
-			mouse_capture_set(cube, 1);
-	}
+		toggle_pause(cube);
 	return (0);
 }
 

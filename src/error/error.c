@@ -16,3 +16,10 @@ void	print_error(const char *msg)
 {
 	ft_printf("Error\n%s\n", msg);
 }
+
+int	texture_path_error(t_texture *slot)
+{
+	free(slot->path);
+	slot->path = NULL;
+	return (print_error(ERR_BAD_TEXT_PATH), -1);
+}

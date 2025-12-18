@@ -68,3 +68,19 @@ void	keys_init(t_game *cube)
 		i++;
 	}
 }
+
+void	color_init(t_color *c)
+{
+	c->r = 0;
+	c->g = 0;
+	c->b = 0;
+	c->argb = 0;
+	c->is_set = false;
+}
+
+void	map_init(t_map *m)
+{
+	m->grid = NULL;
+	m->width = 0;
+	m->height = 0;
+}
