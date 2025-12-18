@@ -131,7 +131,7 @@
 
 //Doors
 # define DOOR_CELL				'D'
-# define DOOR_OPEN_SPEED			0.070f
+# define DOOR_OPEN_SPEED			0.020f
 # define DOOR_RADIUS				2.5f
 # define DOOR_THICK				0.9f
 
