@@ -6,7 +6,7 @@
 /*   By: alteixeira20 <paalexan@student.42porto.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 16:30:09 by alteixeira20      #+#    #+#             */
-/*   Updated: 2025/12/18 16:35:51 by alteixeira20     ###   ########.fr       */
+/*   Updated: 2025/12/18 16:40:39 by alteixeira20     ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 void	overlay_frame_helper(t_img *frame, int step)
 {
-	int		x;
-	int		y;
 	unsigned char	*px;
+	int				x;
+	int				y;
 
 	y = 0;
 	while (y < frame->h)
