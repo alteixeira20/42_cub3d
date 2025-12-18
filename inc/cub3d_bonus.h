@@ -401,10 +401,10 @@ typedef enum e_texid
 
 typedef struct s_blit_ctx
 {
-	t_game		*cube;
-	t_img		*img;
-	int			start_x;
-	int			start_y;
+	t_game			*cube;
+	t_img			*img;
+	int				start_x;
+	int				start_y;
 	unsigned int	trans;
 }	t_blit_ctx;
 
@@ -498,7 +498,7 @@ int				clampi(int v, int lo, int hi);
 
 // Error Handling
 void			print_error(const char *msg);
-int			texture_path_error(t_texture *slot);
+int				texture_path_error(t_texture *slot);
 
 // Cleanup Game
 void			clean_game(t_game *cube);
@@ -513,9 +513,9 @@ void			clean_doors(t_doors *doors);
 void			free3(char **a, char **b, char **c);
 void			render_destroy(t_game *cube);
 
-int			textures_load(t_game *cube);
+int				textures_load(t_game *cube);
 void			textures_destroy(t_game *cube);
-int			textures_precheck(t_game *cube);
+int				textures_precheck(t_game *cube);
 void			render_destroy_frame(t_render *r);
 void			render_destroy_end_screen(t_render *r);
 void			render_destroy_pause_screen(t_render *r);
@@ -568,7 +568,7 @@ void			hud_init(t_hud_ctx *ctx, t_img *frame);
 void			hud_draw_collected(t_game *cube);
 
 // Init Utils
-void	color_init(t_color *c);
-void	map_init(t_map *m);
+void			color_init(t_color *c);
+void			map_init(t_map *m);
 
 #endif
