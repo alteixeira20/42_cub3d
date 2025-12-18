@@ -105,32 +105,57 @@ Errors and clean exit
 
 3) RAYCASTING CORE (MOST IMPORTANT)
 -----------------------------------
-Ray direction calculation
-- `camera_x = 2*x/SCR_W - 1`
-- `ray_dir = dir + plane * camera_x`
+Ray direction calculation (what each ray means)
+- `camera_x = 2*x/SCR_W - 1` converts screen column into camera space
+- `ray_dir_x = dir_x + plane_x * camera_x`
+- `ray_dir_y = dir_y + plane_y * camera_x`
   Code: `src/raycast.c` (`ray_setup`)
 
-DDA algorithm
-- `delta_x/y = fabs(1 / ray_dir_x/y)`
-- `ray_set_dir` sets `step_x/y` and initial `side_dist_x/y`
-- `ray_dda` advances the smallest side distance each step
+DDA setup (step sizes and first distances)
+- `delta_x = fabs(1 / ray_dir_x)` and `delta_y = fabs(1 / ray_dir_y)`
+  This is the distance the ray must travel to cross one x or y grid line.
+- If `ray_dir_x` or `ray_dir_y` is zero, the code uses a huge value
+  (`1e30`) to avoid division by zero and force stepping in the other axis.
+- `ray_set_dir` picks `step_x` / `step_y` (either +1 or -1)
+- It also computes the initial `side_dist_x` / `side_dist_y`
+  (distance from player to the first grid line in each axis)
   Code: `src/raycast.c`, `src/raycast_util.c`
+
+DDA loop (grid traversal)
+- In `ray_dda`, compare `side_dist_x` and `side_dist_y`
+- Move in the smaller one, then add the respective `delta`
+- Update `map_x/map_y` and mark `side` (0 for x-side, 1 for y-side)
+- Stop when the grid cell is a wall `'1'`
+- If the ray goes out of map bounds, the loop breaks safely
+  Code: `src/raycast.c`
 
 Horizontal vs vertical hit detection
 - `side == 0` => hit a vertical wall (x-side)
 - `side == 1` => hit a horizontal wall (y-side)
   Code: `src/raycast.c` (`ray_dda`)
 
-Wall distance calculation
-- `perp_dist` uses grid intersection and `ray_dir`
-- `line_h = SCR_H / perp_dist`
+Wall distance calculation (perpendicular distance)
+- If `side == 0`:
+  `perp_dist = (map_x - pos_x + (1 - step_x) * 0.5) / ray_dir_x`
+- If `side == 1`:
+  `perp_dist = (map_y - pos_y + (1 - step_y) * 0.5) / ray_dir_y`
+- `perp_dist` is clamped to a tiny value to avoid division issues
+- Wall height: `line_h = SCR_H / perp_dist`
   Code: `src/raycast.c` (`ray_compute_lines`)
 
+Draw range on screen
+- `draw_start = -line_h / 2 + SCR_H / 2`
+- `draw_end = line_h / 2 + SCR_H / 2`
+- Both are clamped to the window bounds
+  Code: `src/raycast.c`
+
 Why fish-eye happens
-- Raw ray length is longer at screen edges, so walls look stretched.
+- If you use the raw ray length, rays near screen edges are longer,
+  so walls look stretched.
 
 How this project avoids fish-eye
-- Uses perpendicular distance (`perp_dist`) for projection
+- Uses the perpendicular distance (`perp_dist`) for projection,
+  so wall height depends only on distance to the camera plane.
   Code: `src/raycast.c`
 
 ========================================================================
@@ -143,6 +168,8 @@ Wall orientation (N/S/E/W)
 
 Texture X coordinate
 - `wall_x` = exact hit position on the wall (fraction only)
+- If `side == 0`, `wall_x = pos_y + perp_dist * ray_dir_y`
+- If `side == 1`, `wall_x = pos_x + perp_dist * ray_dir_x`
 - `tex_x = wall_x * tex_w`
 - `tex_x` is flipped based on side and ray direction
   Code: `src/raycast.c` (`ray_texcoords_setup`)
@@ -150,6 +177,7 @@ Texture X coordinate
 Texture Y scaling
 - `step = tex_h / line_h`
 - `tex_pos` starts at the top of the wall slice
+- `tex_pos = (draw_start - SCR_H / 2 + line_h / 2) * step`
 - Increment by `step` each screen pixel
   Code: `src/raycast.c`
 
