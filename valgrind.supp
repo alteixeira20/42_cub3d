@@ -82,3 +82,26 @@
    fun:calloc
    obj:/usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so
 }
+
+# XCB writev noise (VERY common with mlx)
+{
+   xcb_writev_param
+   Memcheck:Param
+   writev(vector[0])
+   obj:/usr/lib/x86_64-linux-gnu/libxcb.so.*
+}
+
+# XCB reachable allocations
+{
+   xcb_still_reachable
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   obj:/usr/lib/x86_64-linux-gnu/libxcb.so.*
+}
+
+{
+   mlx_so_still_reachable
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   obj:*libmlx*.so*
+}

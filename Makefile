@@ -46,8 +46,13 @@ MLX       	= $(MLX_DIR)/libmlx.a
 MLX_LIBS  	= -L$(MLX_DIR) -lmlx -lXext -lX11 -lm -lbsd
 
 # Valgrind
-VALGRIND = valgrind --leak-check=full --show-leak-kinds=all \
-           --suppressions=valgrind.supp --track-origins=yes
+VALGRIND = valgrind \
+	   --leak-check=full \
+	   --show-leak-kinds=all \
+	   --track-origins=yes \
+	   --suppressions=$(PWD)/valgrind.supp \
+	   --gen-suppressions=no
+
 
 # **************************************************************************** #
 #                                                                              #
