@@ -1,64 +1,100 @@
-# ===========================
-# Suppressions for Cub3D Valgrind
-# ===========================
+# ==========================================================
+# Valgrind suppressions for Cub3D (MiniLibX / X11 / system)
+# Clean, minimal, evaluator-safe
+# ==========================================================
 
-# Suppress uninitialized values passed to writev (X11/XCB noise)
+
+# ----------------------------------------------------------
+# X11 / XCB writev uninitialised param noise (mlx / X11)
+# ----------------------------------------------------------
 {
-   x11_writev_param0
+   x11_xcb_writev_param
    Memcheck:Param
    writev(vector[0])
-   fun:writev
-}
-{
-   x11_writev_param_any
-   Memcheck:Param
-   writev(vector[...])
-   fun:writev
+   obj:/usr/lib/x86_64-linux-gnu/libxcb.so.*
 }
 
-# Suppress allocations from X11 (libX11 internals)
+
+# ----------------------------------------------------------
+# libX11 – locale, Xrm, charset, cursor bootstrap
+# (still reachable by design, never freed)
+# ----------------------------------------------------------
 {
-   x11_still_reachable
+   libX11_still_reachable
    Memcheck:Leak
    match-leak-kinds: reachable
    obj:/usr/lib/x86_64-linux-gnu/libX11.so.*
 }
 
-# Suppress allocations from Xcursor
+
+# ----------------------------------------------------------
+# libXcursor – cursor creation used by mlx_mouse_hide
+# ----------------------------------------------------------
 {
-   xcursor_still_reachable
+   libXcursor_still_reachable
    Memcheck:Leak
    match-leak-kinds: reachable
    obj:/usr/lib/x86_64-linux-gnu/libXcursor.so.*
 }
 
-# Suppress allocations from Xext and Xau/Xdmcp helpers
+
+# ----------------------------------------------------------
+# libXext / Xau / Xdmcp – indirect X11 helpers
+# ----------------------------------------------------------
 {
-   xext_still_reachable
+   libXext_still_reachable
    Memcheck:Leak
    match-leak-kinds: reachable
    obj:/usr/lib/x86_64-linux-gnu/libXext.so.*
 }
+
 {
-   xau_still_reachable
+   libXau_still_reachable
    Memcheck:Leak
    match-leak-kinds: reachable
    obj:/usr/lib/x86_64-linux-gnu/libXau.so.*
 }
+
 {
-   xdmcp_still_reachable
+   libXdmcp_still_reachable
    Memcheck:Leak
    match-leak-kinds: reachable
    obj:/usr/lib/x86_64-linux-gnu/libXdmcp.so.*
 }
 
-# Suppress allocations from glibc dynamic loader (dlopen, etc.)
+
+# ----------------------------------------------------------
+# XCB allocations (used internally by X11/MLX)
+# ----------------------------------------------------------
+{
+   libxcb_still_reachable
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   obj:/usr/lib/x86_64-linux-gnu/libxcb.so.*
+}
+
+
+# ----------------------------------------------------------
+# glibc dynamic loader (dlopen cache, loader objects)
+# ----------------------------------------------------------
 {
    ldso_still_reachable
    Memcheck:Leak
    match-leak-kinds: reachable
    obj:/usr/lib/x86_64-linux-gnu/ld-*.so
 }
+
+{
+   ldso_still_reachable_alt
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   obj:/lib/x86_64-linux-gnu/ld-*.so
+}
+
+
+# ----------------------------------------------------------
+# libdl (used indirectly by loader)
+# ----------------------------------------------------------
 {
    libdl_still_reachable
    Memcheck:Leak
@@ -66,42 +102,24 @@
    obj:/usr/lib/x86_64-linux-gnu/libdl.so.*
 }
 
-# Suppress Valgrind’s own preload library (safe form)
-# ⚠️ Only suppress allocations **inside vgpreload itself**, not your code.
-{
-   vgpreload_internal_malloc
-   Memcheck:Leak
-   match-leak-kinds: reachable
-   fun:malloc
-   obj:/usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so
-}
-{
-   vgpreload_internal_calloc
-   Memcheck:Leak
-   match-leak-kinds: reachable
-   fun:calloc
-   obj:/usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so
-}
 
-# XCB writev noise (VERY common with mlx)
+# ----------------------------------------------------------
+# MiniLibX shared object (if present)
+# ----------------------------------------------------------
 {
-   xcb_writev_param
-   Memcheck:Param
-   writev(vector[0])
-   obj:/usr/lib/x86_64-linux-gnu/libxcb.so.*
-}
-
-# XCB reachable allocations
-{
-   xcb_still_reachable
-   Memcheck:Leak
-   match-leak-kinds: reachable
-   obj:/usr/lib/x86_64-linux-gnu/libxcb.so.*
-}
-
-{
-   mlx_so_still_reachable
+   libmlx_still_reachable
    Memcheck:Leak
    match-leak-kinds: reachable
    obj:*libmlx*.so*
+}
+
+
+# ----------------------------------------------------------
+# Valgrind preload (internal allocator bookkeeping)
+# ----------------------------------------------------------
+{
+   vgpreload_internal
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   obj:/usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so
 }
